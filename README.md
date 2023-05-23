@@ -108,6 +108,9 @@ https://nccasia.github.io/ncc-react-basic/
 
 https://www.freecodecamp.org/news/how-to-write-cleaner-react-code/
 
+## Best Practices
+https://najm-eddine-zaga.medium.com/18-best-practices-for-react-617e23ed7f2c
+
 ## Working Process
 
 [View details](https://ops.nccsoft.vn/DefaultCollection/ncc-front-end-training/_wiki/wikis/ncc-front-end-training.wiki/448/About)
