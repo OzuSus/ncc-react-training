@@ -14,7 +14,12 @@ steps:
     export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-    nvm use 20
+    if [[ $(nvm ls | grep v20) == "" ]]; then
+      nvm install v20
+    else
+      nvm use v20
+    fi
+
     npm i
     npm run lint
 
