@@ -14,7 +14,7 @@ yarn prepare
 - Filter by status: All/Completed/Active
 - Counter for each status. All: `3 active items / 10 items`; Completed: `7 completed items / 10 items`, Active: `3 active items / 10 items`.
 - Style by yourself, *do not* use external UI lib like Material-UI, AntDesign...
-    + Use SCSS Module or CSS Module
+    + Use CSS Module
     + Can follow a design in the internet
     + Have to follow the principle in some example UI design theme. (Ex: https://element.eleme.io/#/en-US/theme/preview)
 
@@ -26,6 +26,8 @@ yarn prepare
 
 4. Recommend Library 
 - Axios (Create axios instance)
+
+5. Have to pass eslint before commit. Can use ESlint extension in VScode to check 
 
 ## [NCC React basic checklist](https://nccasia.github.io/ncc-react-basic/)
 
