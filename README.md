@@ -4,7 +4,8 @@
 
 ### Create TimeSheet App
 
-0. 0. Install and prepare
+0. Install and prepare
+
 ```
 yarn
 
@@ -13,7 +14,7 @@ yarn prepare
 
 1. Finish component design before working on TaskManagement and Project Management Feature. Follow this expample:
 
-``` jsx
+```jsx
 // <!-- Task Page -->
 
 <CardComponent>
@@ -38,22 +39,21 @@ yarn prepare
   {/* etc... */}
   <CreateOrEditDialog></CreateOrEditDialog>
 </CardComponent>
-
 ```
 
 2. Current timesheet app:
 
-- Sample app: http://training-timesheet.nccsoft.vn 
-- Swagger: http://training-api-timesheet.nccsoft.vn 
+- Sample app: http://training-timesheet.nccsoft.vn
+- Swagger: http://training-api-timesheet.nccsoft.vn
 - Account: `admindev/123qwe`
 
 3. Reuse current backend api and rebuild 3 features: Authentication, Project Manager
 
 - Login/Logout
 - [Project Manager](http://dev.timesheet.nccsoft.vn/app/main/projects)
-    - Project Create/Edit should be a separated page. Then we will have 4 child page: General/Team/Tasks/Notification. Use nested route.
-    - Use step UI for 4 child pages: General/Team/Tasks/Notification
-    - Project View should have one more tab, it's Team tab to show members in project. It's the same as Team in Project Create/Edit
+  - Project Create/Edit should be a separated page. Then we will have 4 child page: General/Team/Tasks/Notification. Use nested route.
+  - Use step UI for 4 child pages: General/Team/Tasks/Notification
+  - Project View should have one more tab, it's Team tab to show members in project. It's the same as Team in Project Create/Edit
 - Add unit test for project feature. Read more in [Jest](https://jestjs.io/docs/getting-started)
 - Use context and useReducer() hook for state sharing.
 
@@ -65,7 +65,8 @@ yarn prepare
 
 5. Recommended Library
 
-- [Axios](https://github.com/axios/axios) for http request
+- [Redux](https://redux.js.org/introduction/getting-started) or [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction) for global state management
+- [Axios](https://github.com/axios/axios) or [RTK Query](https://redux-toolkit.js.org/rtk-query/overview) for http request
 - [react-router-dom](https://reactrouter.com/web/guides/quick-start) for routing
 - [react-hook-form](https://react-hook-form.com/get-started) or [formik](https://formik.org/docs/overview) for form handling
 - [yup](https://github.com/jquense/yup) for validation
@@ -73,7 +74,7 @@ yarn prepare
 
 6. Structure/Architecture
 
-Read more in 
+Read more in
 
 - https://reactjs.org/docs/faq-structure.html
 - https://engineering.opsgenie.com/how-to-organize-react-files-before-its-messed-up-c85387f691be
@@ -93,12 +94,11 @@ You can chose once of the following:
 
 7. Recommended Pattern
 
-    - https://www.patterns.dev/posts/#design-patterns
+- https://www.patterns.dev/posts/#design-patterns
 
 8. Recommended template
 
-  - https://material-ui.com/store/
-
+- https://material-ui.com/store/
 
 ## [NCC React basic checklist](https://nccasia.github.io/ncc-react-basic/)
 
@@ -109,6 +109,7 @@ https://nccasia.github.io/ncc-react-basic/
 https://www.freecodecamp.org/news/how-to-write-cleaner-react-code/
 
 ## Best Practices
+
 https://najm-eddine-zaga.medium.com/18-best-practices-for-react-617e23ed7f2c
 
 ## Working Process
@@ -123,7 +124,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `npm start`
+### `yarn start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -131,12 +132,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
+### `yarn test`
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+### `yarn build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -146,7 +147,7 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### `yarn eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
