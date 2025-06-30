@@ -1,10 +1,11 @@
-import "./App.css";
+import './App.css';
+import ReactIcon from './assets/react.svg?react';
 
 function App(): JSX.Element {
   return (
     <div className="App">
       <header className="App-header">
-        <img src="/logo512.png" className="App-logo" alt="logo" />
+        <ReactIcon width={512} height={512} />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
