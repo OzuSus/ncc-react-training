@@ -1,4 +1,4 @@
-import { createAppStore } from '../../app-core/store-setup.ts';
+import { createAppStore } from '@/app-core/store-setup.ts';
 
 export interface IUser {
   id: number;

@@ -4,8 +4,8 @@ import {
   createRouter,
   redirect,
 } from '@tanstack/react-router';
-import { AppRoutesConfig } from '../@types/route.ts';
-import { useAuthStore } from '../../features/auth/useAuthStore.ts';
+import { useAuthStore } from '@/features/auth/useAuthStore.ts';
+import { AppRoutesConfig } from '@/app-core/@types/route.ts';
 
 const rootRoute = createRootRoute({});
 export const tanstackRouterMapping = (routesConfig: AppRoutesConfig[]) => {
