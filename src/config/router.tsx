@@ -1,9 +1,9 @@
-import AuthLayout from './layouts/auth';
+import AuthLayout from '../layouts/auth';
 // import { DashboardLayout } from './layouts/dashboard/dashboard.tsx';
 import { lazy } from 'react';
-import type { AppRoutesConfig } from './config/routeConfig.ts';
-import { tanstackRouterMapping } from './config/tanstackRouterMapping.tsx';
-import DashboardLayout from './layouts/dashboard/dashboard.tsx';
+import { tanstackRouterMapping } from '../app-core/routing/tanstackRouterMapping.tsx';
+import DashboardLayout from '../layouts/dashboard/dashboard.tsx';
+import { AppRoutesConfig } from '../app-core/@types/route.ts';
 
 export const routes: AppRoutesConfig[] = [
   {
@@ -14,7 +14,7 @@ export const routes: AppRoutesConfig[] = [
       {
         key: 'dashboard',
         path: 'dashboard',
-        component: lazy(() => import('./layouts/dashboard/dashboard.tsx')),
+        component: lazy(() => import('../layouts/dashboard/dashboard.tsx')),
         authority: [],
         crumb: 'Dashboarddddd',
       },
@@ -27,7 +27,7 @@ export const routes: AppRoutesConfig[] = [
       {
         key: 'sign-in',
         path: 'sign-in',
-        component: lazy(() => import('./layouts/auth')),
+        component: lazy(() => import('../layouts/auth')),
         authority: [],
       },
     ],

@@ -2,8 +2,10 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
+  redirect,
 } from '@tanstack/react-router';
-import type { AppRoutesConfig } from './routeConfig';
+import { AppRoutesConfig } from '../@types/route.ts';
+import { useAuthStore } from '../../features/auth/useAuthStore.ts';
 
 const rootRoute = createRootRoute({});
 export const tanstackRouterMapping = (routesConfig: AppRoutesConfig[]) => {
@@ -12,6 +14,19 @@ export const tanstackRouterMapping = (routesConfig: AppRoutesConfig[]) => {
       getParentRoute: () => rootRoute,
       path: group.prefix,
       component: () => group.layout,
+      beforeLoad: () => {
+        const { user } = useAuthStore.getState();
+        if (group.isPrivate && !user) {
+          throw redirect({
+            to: '/auth/sign-in',
+          });
+        }
+        if (group.prefix === 'auth' && user) {
+          throw redirect({
+            to: '/app/dashboard',
+          });
+        }
+      },
     });
 
     const childRoutes = group.children.map((child) => {
