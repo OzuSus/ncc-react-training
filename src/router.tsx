@@ -1,62 +1,37 @@
-import {
-  createRouter,
-  createRootRoute,
-  createRoute,
-  redirect,
-} from '@tanstack/react-router';
-import { useAuthStore } from './features/auth/useAuthStore.ts';
-import { AuthLayout } from './layouts/auth';
-import { DashboardLayout } from './layouts/dashboard/dashboard.tsx';
+import AuthLayout from './layouts/auth';
+// import { DashboardLayout } from './layouts/dashboard/dashboard.tsx';
+import { lazy } from 'react';
+import type { AppRoutesConfig } from './config/routeConfig.ts';
+import { tanstackRouterMapping } from './config/tanstackRouterMapping.tsx';
+import DashboardLayout from './layouts/dashboard/dashboard.tsx';
 
-const rootRoute = createRootRoute();
-const indexRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/',
-  beforeLoad: () => {
-    const { user } = useAuthStore.getState();
-    if (user) {
-      throw redirect({
-        to: '/dashboard',
-      });
-    }
-    throw redirect({
-      to: '/login',
-    });
+export const routes: AppRoutesConfig[] = [
+  {
+    prefix: 'app',
+    layout: <DashboardLayout />,
+    isPrivate: true,
+    children: [
+      {
+        key: 'dashboard',
+        path: 'dashboard',
+        component: lazy(() => import('./layouts/dashboard/dashboard.tsx')),
+        authority: [],
+        crumb: 'Dashboarddddd',
+      },
+    ],
   },
-});
-
-const loginRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/login',
-  beforeLoad: () => {
-    const { user } = useAuthStore.getState();
-    if (user) {
-      throw redirect({
-        to: '/dashboard',
-      });
-    }
+  {
+    prefix: 'auth',
+    layout: <AuthLayout />,
+    children: [
+      {
+        key: 'sign-in',
+        path: 'sign-in',
+        component: lazy(() => import('./layouts/auth')),
+        authority: [],
+      },
+    ],
   },
-  component: AuthLayout,
-});
+];
 
-const dashboardRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/dashboard',
-  beforeLoad: () => {
-    const { user } = useAuthStore.getState();
-    if (!user) {
-      throw redirect({
-        to: '/login',
-      });
-    }
-  },
-  component: DashboardLayout,
-});
-
-const routeTree = rootRoute.addChildren([
-  indexRoute,
-  loginRoute,
-  dashboardRoute,
-]);
-
-export const router = createRouter({ routeTree });
+export const { router } = tanstackRouterMapping(routes);

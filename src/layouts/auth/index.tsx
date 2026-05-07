@@ -1,7 +1,7 @@
-import { useNavigate } from '@tanstack/react-router';
+import { Outlet, useNavigate } from '@tanstack/react-router';
 import { useAuthStore } from '../../features/auth/useAuthStore.ts';
 
-export const AuthLayout = () => {
+export default function AuthLayout() {
   const setUser = useAuthStore((s) => s.setUser);
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export const AuthLayout = () => {
       emailAddress: 'duoc.phungvan@ncc.asia',
     });
     navigate({
-      to: '/dashboard',
+      to: '/app/dashboard',
     });
   };
 
@@ -22,6 +22,7 @@ export const AuthLayout = () => {
     <div>
       Login Page
       <button onClick={handleLogin}>Login</button>
+      <Outlet />
     </div>
   );
-};
+}

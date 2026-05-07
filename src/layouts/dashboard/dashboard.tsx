@@ -1,3 +1,10 @@
-export const DashboardLayout = () => {
-  return <div>Dashboard Page</div>;
-};
+import { Outlet } from '@tanstack/react-router';
+
+export default function DashboardLayout() {
+  return (
+    <div>
+      <div>Dashboard</div>
+      <Outlet />
+    </div>
+  );
+}
