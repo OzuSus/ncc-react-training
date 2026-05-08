@@ -11,13 +11,11 @@ export const routes: AppRoutesConfig[] = [
     isPrivate: true,
     children: [
       {
-        key: 'dashboard',
-        path: 'dashboard',
-        component: lazy(
-          () => import('@/features/components/dashboard/dashboard.tsx'),
-        ),
+        key: 'home',
+        path: 'home',
+        component: lazy(() => import('@/pages/home')),
         authority: [],
-        crumb: 'Dashboarddddd',
+        crumb: 'Homeeee',
       },
     ],
   },
@@ -28,7 +26,7 @@ export const routes: AppRoutesConfig[] = [
       {
         key: 'sign-in',
         path: 'sign-in',
-        component: lazy(() => import('@/features/components/form/signIn.tsx')),
+        component: lazy(() => import('@/pages/signIn')),
         authority: [],
       },
     ],

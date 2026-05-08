@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/features/auth/useAuthStore.ts';
 
-export default function AuthLayout() {
+export default function SignIn() {
   const setUser = useAuthStore((s) => s.setUser);
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export default function AuthLayout() {
       emailAddress: 'duoc.phungvan@ncc.asia',
     });
     navigate({
-      to: '/app/dashboard',
+      to: '/app/home',
     });
   };
 

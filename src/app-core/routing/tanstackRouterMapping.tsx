@@ -23,7 +23,7 @@ export const tanstackRouterMapping = (routesConfig: AppRoutesConfig[]) => {
         }
         if (group.prefix === 'auth' && user) {
           throw redirect({
-            to: '/app/dashboard',
+            to: '/app/home',
           });
         }
       },
