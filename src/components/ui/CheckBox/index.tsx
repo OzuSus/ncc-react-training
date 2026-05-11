@@ -11,7 +11,7 @@ interface ICheckBoxProps extends CheckboxProps {
   label: string;
 }
 
-export function CheckboxComponent({ label, ...restProps }: ICheckBoxProps) {
+export function CustomCheckbox({ label, ...restProps }: ICheckBoxProps) {
   return (
     <FormControlLabel
       control={
@@ -47,4 +47,4 @@ export function CheckboxComponent({ label, ...restProps }: ICheckBoxProps) {
   );
 }
 
-export default memo(CheckboxComponent);
+export default memo(CustomCheckbox);

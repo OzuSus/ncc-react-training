@@ -6,11 +6,11 @@ import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import InfoIcon from '@mui/icons-material/Info';
-import { ButtonComponent } from '@/components/ui/Button/index.tsx';
+import { CustomButton } from '@/components/ui/Button/index.tsx';
 
 const meta: Meta<typeof ButtonComponent> = {
   title: 'Components/Button',
-  component: ButtonComponent,
+  component: CustomButton,
   tags: ['autodocs'],
   args: {
     onClick: fn(),

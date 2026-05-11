@@ -2,7 +2,7 @@ import * as React from 'react';
 import { memo } from 'react';
 import { Typography, TypographyProps } from '@mui/material';
 
-export function TypographyComponent({
+export function CustomTypography({
   children,
   sx,
   color = 'black',
@@ -25,4 +25,4 @@ export function TypographyComponent({
   );
 }
 
-export default memo(TypographyComponent);
+export default memo(CustomTypography);

@@ -5,7 +5,7 @@ interface ITextFieldProps extends TextFieldProps {
   label?: string;
 }
 
-export function TextFieldComponent({
+export function CustomTextField({
   label,
   type = 'text',
   sx,
@@ -42,4 +42,4 @@ export function TextFieldComponent({
   );
 }
 
-export default memo(TextFieldComponent);
+export default memo(CustomTextField);

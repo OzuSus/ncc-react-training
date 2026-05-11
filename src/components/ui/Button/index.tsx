@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Button, ButtonProps } from '@mui/material';
 
-export function ButtonComponent({
+export function CustomButton({
   children,
   color = 'primary',
   variant = 'contained',
@@ -41,4 +41,4 @@ export function ButtonComponent({
   );
 }
 
-export default memo(ButtonComponent);
+export default memo(CustomButton);
