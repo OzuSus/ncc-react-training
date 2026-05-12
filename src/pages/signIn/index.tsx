@@ -4,24 +4,20 @@ import { Controller, useForm } from 'react-hook-form';
 import { Box, Stack, IconButton } from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-import { useAuthStore } from '@/features/auth/useAuthStore.ts';
 import { CustomTypography } from '@/components/ui/Typography';
 import { CustomTextField } from '@/components/ui/TextField';
 import { CustomButton } from '@/components/ui/Button';
 import { CustomCheckbox } from '@/components/ui/CheckBox';
-import { getUserByAuth } from '@/features/mock.ts';
+import { errorMessages } from '@/constants/errors.ts';
+import { useAuthMutation } from '@/features/auth/useAuthQuery.ts';
 
-type SignInFormValues = {
+type TPrefix = {
   email: string;
   password: string;
   rememberMe: boolean;
 };
 
-const emailRegex = /^[a-zA-Z0-9.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]/;
-
 export default function SignIn() {
-  const setUser = useAuthStore((s) => s.setUser);
-
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState<string>('');
@@ -30,26 +26,24 @@ export default function SignIn() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignInFormValues>({
+  } = useForm<TPrefix>({
     mode: 'onBlur',
     reValidateMode: 'onChange',
   });
 
-  const onSubmit = async (values: SignInFormValues) => {
+  const authMutation = useAuthMutation();
+  const onSubmit = async (values: TPrefix) => {
     setAuthError('');
-    const user = getUserByAuth(values.email, values.password);
-    if (!user) {
-      setAuthError('Email or password is incorrect');
-      return;
+    try {
+      await authMutation.mutateAsync({
+        userNameOrEmailAddress: values.email,
+        password: values.password,
+        rememberClient: values.rememberMe,
+      });
+      navigate({ to: '/app/home' });
+    } catch (err) {
+      setAuthError(err?.message || errorMessages.auth.incorrectEmailOrPassword);
     }
-    setUser({
-      id: user.id,
-      name: user.name,
-      surname: user.surname,
-      userName: user.userName,
-      emailAddress: user.emailAddress,
-    });
-    navigate({ to: '/app/home' });
   };
 
   return (
@@ -75,18 +69,14 @@ export default function SignIn() {
           name="email"
           control={control}
           rules={{
-            required: 'Email is required',
-            pattern: {
-              value: emailRegex,
-              message: 'Email is not valid',
-            },
+            required: errorMessages.email.required,
           }}
           render={({ field }) => (
             <CustomTextField
               {...field}
-              type={'email'}
-              label="Email Address"
-              placeholder="Email address"
+              type={'text'}
+              label="Email or Username"
+              placeholder="email or username"
               error={!!errors.email}
               helperText={errors.email?.message}
               fullWidth
@@ -104,7 +94,7 @@ export default function SignIn() {
         <Controller
           name="password"
           control={control}
-          rules={{ required: 'Password is required' }}
+          rules={{ required: errorMessages.password.required }}
           render={({ field }) => (
             <CustomTextField
               {...field}
