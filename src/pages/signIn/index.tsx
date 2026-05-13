@@ -10,6 +10,7 @@ import { CustomButton } from '@/components/ui/Button';
 import { CustomCheckbox } from '@/components/ui/CheckBox';
 import { errorMessages } from '@/constants/errors.ts';
 import { useAuthMutation } from '@/features/auth/hooks/useAuthQuery.ts';
+import { ErrorAlert } from '@/components/share/errorNotify';
 
 type TPrefix = {
   email: string;
@@ -42,9 +43,8 @@ export default function SignIn() {
       });
       navigate({ to: '/app/home' });
     } catch (err) {
-      setAuthError(
-        err?.message || errorMessages.AUTH.INCORECT_EMAIL_OR_PASSWORD,
-      );
+      console.error(err);
+      setAuthError(errorMessages.AUTH.INCORECT_EMAIL_OR_PASSWORD);
     }
   };
 
@@ -57,15 +57,6 @@ export default function SignIn() {
           >
             Login
           </CustomTypography>
-          {authError ? (
-            <CustomTypography
-              sx={{ fontSize: 16, fontWeight: 400, color: 'error.main' }}
-            >
-              {authError}
-            </CustomTypography>
-          ) : (
-            ''
-          )}
         </Box>
         <Controller
           name="email"
@@ -143,6 +134,7 @@ export default function SignIn() {
             )}
           />
         </Box>
+        <ErrorAlert message={authError} />
         <Box>
           <CustomButton
             type="submit"
