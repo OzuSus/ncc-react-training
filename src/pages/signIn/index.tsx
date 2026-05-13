@@ -9,7 +9,7 @@ import { CustomTextField } from '@/components/ui/TextField';
 import { CustomButton } from '@/components/ui/Button';
 import { CustomCheckbox } from '@/components/ui/CheckBox';
 import { errorMessages } from '@/constants/errors.ts';
-import { useAuthStore } from '@/features/auth/useAuthStore.ts';
+import { useAuthMutation } from '@/features/auth/hooks/useAuthQuery.ts';
 
 type TPrefix = {
   email: string;
@@ -21,8 +21,8 @@ export default function SignIn() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState<string>('');
-  const { login } = useAuthStore();
 
+  const { mutateAsync: login } = useAuthMutation();
   const {
     control,
     handleSubmit,
