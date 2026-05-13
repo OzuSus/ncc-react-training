@@ -9,6 +9,7 @@ export function CustomTextField({
   label,
   type = 'text',
   sx,
+  slotProps,
   ...restProps
 }: ITextFieldProps) {
   return (
@@ -36,6 +37,7 @@ export function CustomTextField({
           },
           sx,
         ]}
+        slotProps={slotProps}
         {...restProps}
       />
     </Box>

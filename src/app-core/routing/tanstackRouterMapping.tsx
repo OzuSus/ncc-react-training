@@ -4,8 +4,8 @@ import {
   createRouter,
   redirect,
 } from '@tanstack/react-router';
-import { useAuthStore } from '@/features/auth/useAuthStore.ts';
 import { AppRoutesConfig } from '@/app-core/@types/route.ts';
+import Cookies from 'js-cookie';
 
 const rootRoute = createRootRoute({});
 export const tanstackRouterMapping = (routesConfig: AppRoutesConfig[]) => {
@@ -15,16 +15,12 @@ export const tanstackRouterMapping = (routesConfig: AppRoutesConfig[]) => {
       path: group.prefix,
       component: () => group.layout,
       beforeLoad: () => {
-        const { user } = useAuthStore.getState();
-        if (group.isPrivate && !user) {
-          throw redirect({
-            to: '/auth/sign-in',
-          });
+        const token = Cookies.get('accessToken');
+        if (group.isPrivate && !token) {
+          throw redirect({ to: '/auth/sign-in' });
         }
-        if (group.prefix === 'auth' && user) {
-          throw redirect({
-            to: '/app/home',
-          });
+        if (group.prefix === 'auth' && token) {
+          throw redirect({ to: '/app/home' });
         }
       },
     });
