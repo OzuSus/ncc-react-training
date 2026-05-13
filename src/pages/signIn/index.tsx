@@ -9,7 +9,7 @@ import { CustomTextField } from '@/components/ui/TextField';
 import { CustomButton } from '@/components/ui/Button';
 import { CustomCheckbox } from '@/components/ui/CheckBox';
 import { errorMessages } from '@/constants/errors.ts';
-import { useAuthMutation } from '@/features/auth/useAuthQuery.ts';
+import { useAuthMutation } from '@/features/auth/hooks/useAuthQuery.ts';
 
 type TPrefix = {
   email: string;
@@ -42,7 +42,9 @@ export default function SignIn() {
       });
       navigate({ to: '/app/home' });
     } catch (err) {
-      setAuthError(err?.message || errorMessages.auth.incorrectEmailOrPassword);
+      setAuthError(
+        err?.message || errorMessages.AUTH.INCORECT_EMAIL_OR_PASSWORD,
+      );
     }
   };
 
@@ -69,7 +71,7 @@ export default function SignIn() {
           name="email"
           control={control}
           rules={{
-            required: errorMessages.email.required,
+            required: errorMessages.EMAIL.REQUIRED,
           }}
           render={({ field }) => (
             <CustomTextField
@@ -94,7 +96,7 @@ export default function SignIn() {
         <Controller
           name="password"
           control={control}
-          rules={{ required: errorMessages.password.required }}
+          rules={{ required: errorMessages.PASSWORD.REQUIRED }}
           render={({ field }) => (
             <CustomTextField
               {...field}

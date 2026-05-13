@@ -1,12 +1,12 @@
 export const errorMessages = {
-  auth: {
-    incorrectEmailOrPassword: 'Email or password is incorrect',
+  AUTH: {
+    INCORECT_EMAIL_OR_PASSWORD: 'Email or password is incorrect',
   },
-  email: {
-    required: 'Email or username is required',
-    invalid: 'Email is not valid',
+  EMAIL: {
+    REQUIRED: 'Email or username is required',
+    INVALID: 'Email is not valid',
   },
-  password: {
-    required: 'Password is required',
+  PASSWORD: {
+    REQUIRED: 'Password is required',
   },
 };

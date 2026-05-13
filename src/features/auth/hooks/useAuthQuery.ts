@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
-import { TAuthBody, useAuthStore } from '@/features/auth/useAuthStore.ts';
+import { useAuthStore } from '@/features/auth/useAuthStore.ts';
+import { TAuthBody } from '@/features/auth/api/login.ts';
 
 export function useAuthMutation() {
   return useMutation({

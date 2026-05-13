@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { Outlet, useNavigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/features/auth/useAuthStore.ts';
-import { useFetchMeQuery } from '@/features/auth/useAuthQuery.ts';
+import { useFetchMeQuery } from '@/features/auth/hooks/useAuthQuery.ts';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
