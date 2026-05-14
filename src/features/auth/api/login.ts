@@ -6,6 +6,9 @@ export type TAuthBody = {
   rememberClient: boolean;
 };
 export async function loginApi(body: TAuthBody) {
-  const { data } = await axiosInstance.post('/TokenAuth/Authenticate', body);
+  const { data } = await axiosInstance.post(
+    '/api/TokenAuth/Authenticate',
+    body,
+  );
   return data;
 }

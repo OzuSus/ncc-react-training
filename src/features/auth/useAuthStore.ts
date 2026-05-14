@@ -2,6 +2,7 @@ import { createAppStore } from '@/app-core/store-setup.ts';
 import Cookies from 'js-cookie';
 import { loginApi, TAuthBody } from '@/features/auth/api/login.ts';
 import { fetchMeApi } from '@/features/auth/api/fetchMe.ts';
+import { fetchUserConfigPermission } from '@/features/auth/api/fetchUserConfigApi.ts';
 export interface IUser {
   id: number;
   name: string;
@@ -31,10 +32,12 @@ interface IAuthState {
   login: (body: TAuthBody) => Promise<void>;
   fetchMe: () => Promise<IUser>;
   logout: () => void;
+  permissions: string[];
 }
 
 const initialState: IAuthState = {
   user: null,
+  permissions: [],
 };
 
 export const useAuthStore = createAppStore<IAuthState>(
@@ -49,6 +52,7 @@ export const useAuthStore = createAppStore<IAuthState>(
       Cookies.remove('encryptedAccessToken');
       set((state) => {
         state.user = null;
+        state.permissions = [];
       });
     },
     login: async (body) => {
@@ -76,10 +80,18 @@ export const useAuthStore = createAppStore<IAuthState>(
       });
     },
     fetchMe: async () => {
-      const user = await fetchMeApi();
+      const [user, configPermission] = await Promise.all([
+        fetchMeApi(),
+        fetchUserConfigPermission(),
+      ]);
+      const grantedPermissions =
+        configPermission.result.auth.grantedPermissions;
+      const permissions = Object.keys(grantedPermissions);
       set((state) => {
         state.user = user.result.user;
+        state.permissions = permissions;
       });
+      console.log(configPermission);
       return user;
     },
   }),
