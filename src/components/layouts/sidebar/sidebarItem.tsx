@@ -1,3 +1,4 @@
+import { memo, useCallback, useMemo } from 'react';
 import {
   Box,
   Collapse,
@@ -21,7 +22,7 @@ type TSidebarItemProps = {
 };
 const isActive = (pathname: string, path?: string) =>
   !!path && (pathname === path || pathname.startsWith(path + '/'));
-export default function SidebarItem({
+export function SidebarItem({
   item,
   parentPath = '/app',
   level = 0,
@@ -34,24 +35,41 @@ export default function SidebarItem({
     select: (s) => s.location.pathname,
   });
 
-  const fullPath = item.path ? `${parentPath}/${item.path}` : `${parentPath}`;
-  const hasChildren = !!item.children?.length;
-  const isOpen = openSideBar[parentKey] === item.key;
+  const fullPath = useMemo(
+    () => (item.path ? `${parentPath}/${item.path}` : `${parentPath}`),
+    [item.path, parentPath],
+  );
+  const hasChildren = useMemo(() => !!item.children?.length, [item.children]);
+  const isOpen = useMemo(
+    () => openSideBar[parentKey] === item.key,
+    [openSideBar, parentKey, item.key],
+  );
 
-  const active = hasChildren
-    ? item.children.some((child) =>
-        isActive(pathname, child.path ? `${fullPath}/${child.path}` : fullPath),
-      )
-    : isActive(pathname, fullPath);
+  const active = useMemo(
+    () =>
+      hasChildren
+        ? item.children.some((child) =>
+            isActive(
+              pathname,
+              child.path ? `${fullPath}/${child.path}` : fullPath,
+            ),
+          )
+        : isActive(pathname, fullPath),
+    [hasChildren, item.children, pathname, fullPath],
+  );
+
+  const handleClick = useCallback(() => {
+    if (hasChildren) {
+      onToggle(parentKey, item.key);
+      return;
+    }
+    navigate({ to: fullPath });
+  }, [hasChildren, onToggle, parentKey, item.key, navigate, fullPath]);
 
   return (
     <>
       <ListItemButton
-        onClick={() =>
-          hasChildren
-            ? onToggle(parentKey, item.key)
-            : fullPath && navigate({ to: fullPath })
-        }
+        onClick={handleClick}
         sx={{
           mx: 1,
           mt: 0.5,
@@ -122,3 +140,5 @@ export default function SidebarItem({
     </>
   );
 }
+
+export default memo(SidebarItem);

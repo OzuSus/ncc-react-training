@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Box, List } from '@mui/material';
 import { filterSidebarByPermission, sidebarData } from '@/config/sidebar';
 import SidebarItem from './SidebarItem';
@@ -16,11 +16,12 @@ export default function Sidebar({ permissions = [] }: TSidebarProps) {
     '': SidebarData[0]?.key ?? null,
   });
 
-  const toggle = (parentKey: string, itemKey: string) =>
+  const toggle = useCallback((parentKey: string, itemKey: string) => {
     setOpenSideBar((prev) => ({
       ...prev,
       [parentKey]: prev[parentKey] === itemKey ? null : itemKey,
     }));
+  }, []);
 
   return (
     <Box

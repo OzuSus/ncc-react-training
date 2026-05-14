@@ -1,8 +1,6 @@
 import { createAppStore } from '@/app-core/store-setup.ts';
 import Cookies from 'js-cookie';
-import { loginApi, TAuthBody } from '@/features/auth/api/login.ts';
-import { fetchMeApi } from '@/features/auth/api/fetchMe.ts';
-import { fetchUserConfigPermission } from '@/features/auth/api/fetchUserConfigApi.ts';
+
 export interface IUser {
   id: number;
   name: string;
@@ -28,11 +26,9 @@ export interface IUser {
 
 interface IAuthState {
   user: IUser | null;
-  setUser: (user: IUser | null) => void;
-  login: (body: TAuthBody) => Promise<void>;
-  fetchMe: () => Promise<IUser>;
-  logout: () => void;
   permissions: string[];
+  setUser: (user: IUser, permissions: string[]) => void;
+  logout: () => void;
 }
 
 const initialState: IAuthState = {
@@ -43,9 +39,10 @@ const initialState: IAuthState = {
 export const useAuthStore = createAppStore<IAuthState>(
   (set) => ({
     ...initialState,
-    setUser: (user) =>
+    setUser: (user, permissions) =>
       set((state) => {
         state.user = user;
+        state.permissions = permissions;
       }),
     logout: () => {
       Cookies.remove('accessToken');
@@ -54,45 +51,6 @@ export const useAuthStore = createAppStore<IAuthState>(
         state.user = null;
         state.permissions = [];
       });
-    },
-    login: async (body) => {
-      const data = await loginApi(body);
-      if (!data?.success) {
-        throw new Error(data?.error?.message || 'Login failed');
-      }
-      const accessToken = data?.result?.accessToken;
-      const encryptedAccessToken = data?.result?.encryptedAccessToken;
-      const secure = window.location.protocol === 'https';
-      const expireInSeconds = data?.result?.expireInSeconds;
-      Cookies.set('accessToken', accessToken, {
-        sameSite: 'strict',
-        secure,
-        expires: expireInSeconds / 60 / 60 / 24,
-      });
-      Cookies.set('encryptedAccessToken', encryptedAccessToken, {
-        sameSite: 'strict',
-        secure,
-        expires: expireInSeconds / 60 / 60 / 24,
-      });
-
-      set((state) => {
-        state.user = { id: data?.result?.userId };
-      });
-    },
-    fetchMe: async () => {
-      const [user, configPermission] = await Promise.all([
-        fetchMeApi(),
-        fetchUserConfigPermission(),
-      ]);
-      const grantedPermissions =
-        configPermission.result.auth.grantedPermissions;
-      const permissions = Object.keys(grantedPermissions);
-      set((state) => {
-        state.user = user.result.user;
-        state.permissions = permissions;
-      });
-      console.log(configPermission);
-      return user;
     },
   }),
   'user',

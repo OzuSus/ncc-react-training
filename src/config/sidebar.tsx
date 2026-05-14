@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import EventNoteSharpIcon from '@mui/icons-material/EventNoteSharp';
 import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp';
+import { PERMISSIONS } from '@/app-core/permission/constant.ts';
 
 export interface ISidebarItem {
   key: string;
@@ -28,25 +29,31 @@ export const sidebarData: ISidebarItem[] = [
         key: 'teacher',
         text: 'Teacher',
         path: 'teacher',
-        permissions: ['MyTimesheet.View'],
+        permissions: [PERMISSIONS['MyTimesheet.View']],
         children: [
           {
             key: 'teacher-list',
             text: 'List',
             path: 'list',
-            permissions: ['MyTimesheet.View'],
+            permissions: [PERMISSIONS['MyTimesheet.View']],
           },
           {
             key: 'teacher-list',
             text: 'Apply',
             path: 'Apply',
-            permissions: ['Admin.Tasks.AddNew', 'Admin'],
+            permissions: [
+              PERMISSIONS['Admin.Tasks.AddNew'],
+              PERMISSIONS['Admin'],
+            ],
           },
           {
             key: 'teacher-add',
             text: 'Add',
             path: 'add',
-            permissions: ['Admin.Tasks.AddNew', 'Admin'],
+            permissions: [
+              PERMISSIONS['Admin.Tasks.AddNew'],
+              PERMISSIONS['Admin'],
+            ],
           },
         ],
       },
@@ -54,25 +61,28 @@ export const sidebarData: ISidebarItem[] = [
         key: 'student',
         text: 'Student',
         path: 'student',
-        permissions: ['MyTimesheet.View'],
+        permissions: [PERMISSIONS['MyTimesheet.View']],
         children: [
           {
             key: 'student-list',
             text: 'List',
             path: 'list',
-            permissions: ['MyTimesheet.View'],
+            permissions: [PERMISSIONS['MyTimesheet.View']],
           },
           {
             key: 'student-Apply',
             text: 'Apply',
             path: 'Apply',
-            permissions: ['MyTimesheet.View'],
+            permissions: [PERMISSIONS['MyTimesheet.View']],
           },
           {
             key: 'student-Add',
             text: 'Add',
             path: 'Add',
-            permissions: ['Admin.Tasks.AddNew', 'Admin'],
+            permissions: [
+              PERMISSIONS['Admin.Tasks.AddNew'],
+              PERMISSIONS['Admin'],
+            ],
           },
         ],
       },
@@ -80,19 +90,22 @@ export const sidebarData: ISidebarItem[] = [
         key: 'course',
         text: 'Course',
         path: 'course',
-        permissions: ['MyTimesheet.View'],
+        permissions: [PERMISSIONS['MyTimesheet.View']],
         children: [
           {
             key: 'course-view',
             text: 'View',
             path: 'view',
-            permissions: ['MyTimesheet.View'],
+            permissions: [PERMISSIONS['MyTimesheet.View']],
           },
           {
             key: 'course-add',
             text: 'Add',
             path: 'add',
-            permissions: ['Admin.Tasks.AddNew', ''],
+            permissions: [
+              PERMISSIONS['Admin.Tasks.AddNew'],
+              PERMISSIONS['Admin'],
+            ],
           },
         ],
       },
@@ -100,19 +113,22 @@ export const sidebarData: ISidebarItem[] = [
         key: 'pricing',
         text: 'Pricing',
         path: 'pricing',
-        permissions: ['Retro.RetroDetail.Import'],
+        permissions: [PERMISSIONS['Retro.View']],
       },
       {
         key: 'site',
         text: 'Site',
         path: 'site',
-        permissions: ['Retro.RetroDetail.Import'],
+        permissions: [PERMISSIONS['Retro.ChangeStatus']],
       },
       {
         key: 'setting',
         text: 'Setting',
         path: 'setting',
-        permissions: ['Admin.Users.Edit', 'Admin.LeaveTypes.View'],
+        permissions: [
+          PERMISSIONS['Admin.Users.Edit'],
+          PERMISSIONS['Admin.Clients.Edit'],
+        ],
       },
     ],
   },
@@ -121,31 +137,43 @@ export const sidebarData: ISidebarItem[] = [
     text: 'Membership',
     icon: <PeopleAltSharpIcon />,
     path: 'membership',
-    permissions: ['Admin.Tasks.View', 'Admin.Roles'],
+    permissions: [PERMISSIONS['Admin.Tasks.View'], PERMISSIONS['Admin.Roles']],
     children: [
       {
         key: 'membership-dashboard',
         text: 'Dashboard',
         path: 'dashboard',
-        permissions: ['Admin.Tasks.View', 'Admin.Roles'],
+        permissions: [
+          PERMISSIONS['Admin.Tasks.View'],
+          PERMISSIONS['Admin.Roles'],
+        ],
       },
       {
         key: 'membership-list',
         text: 'List',
         path: 'list',
-        permissions: ['Admin.Tasks.View', 'Admin.Roles'],
+        permissions: [
+          PERMISSIONS['Admin.Tasks.View'],
+          PERMISSIONS['Admin.Roles'],
+        ],
       },
       {
         key: 'membership-pricing',
         text: 'Pricing',
         path: 'pricing',
-        permissions: ['Admin.Tasks.View', 'Admin.Roles'],
+        permissions: [
+          PERMISSIONS['Admin.Tasks.View'],
+          PERMISSIONS['Admin.Roles'],
+        ],
       },
       {
         key: 'membership-setting',
         text: 'Setting',
         path: 'setting',
-        permissions: ['Admin.Tasks.View', 'Admin.Roles'],
+        permissions: [
+          PERMISSIONS['Admin.Tasks.View'],
+          PERMISSIONS['Admin.Roles'],
+        ],
       },
     ],
   },
