@@ -1,14 +1,15 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Box, List } from '@mui/material';
-import { filterSidebarByPermission, sidebarData } from '@/config/sidebar';
+import { sidebarData } from '@/config/sidebar';
 import SidebarItem from './SidebarItem';
+import { sidebarBuilder } from '@/app-core/permission/helper.ts';
 
 type TSidebarProps = {
   permissions?: string[];
 };
 export default function Sidebar({ permissions = [] }: TSidebarProps) {
   const SidebarData = useMemo(
-    () => filterSidebarByPermission(sidebarData, permissions),
+    () => sidebarBuilder(sidebarData, permissions),
     [permissions],
   );
 

@@ -12,14 +12,14 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { ISidebarItem } from '@/config/sidebar';
 
-type TSidebarItemProps = {
+interface ISidebarItemProps {
   item: ISidebarItem;
   parentPath?: string;
   level?: number;
   parentKey?: string;
   openSideBar: Record<string, string>;
   onToggle: (parentKey: string, itemKey: string) => void;
-};
+}
 const isActive = (pathname: string, path?: string) =>
   !!path && (pathname === path || pathname.startsWith(path + '/'));
 export function SidebarItem({
@@ -29,7 +29,7 @@ export function SidebarItem({
   parentKey = '',
   openSideBar,
   onToggle,
-}: TSidebarItemProps) {
+}: ISidebarItemProps) {
   const navigate = useNavigate();
   const pathname = useRouterState({
     select: (s) => s.location.pathname,

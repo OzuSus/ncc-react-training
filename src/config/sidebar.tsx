@@ -1,8 +1,34 @@
 import type { ReactNode } from 'react';
-
 import EventNoteSharpIcon from '@mui/icons-material/EventNoteSharp';
-import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp';
 import { PERMISSIONS } from '@/app-core/permission/constant.ts';
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import GroupWorkIcon from '@mui/icons-material/GroupWork';
+import GroupIcon from '@mui/icons-material/Group';
+import SellIcon from '@mui/icons-material/Sell';
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
+import ImportContactsRoundedIcon from '@mui/icons-material/ImportContactsRounded';
+import DateRangeRoundedIcon from '@mui/icons-material/DateRangeRounded';
+import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+import ViewListRoundedIcon from '@mui/icons-material/ViewListRounded';
+import SettingsAccessibilityRoundedIcon from '@mui/icons-material/SettingsAccessibilityRounded';
+import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
+import SettingsIcon from '@mui/icons-material/Settings';
+import UpdateIcon from '@mui/icons-material/Update';
+import AssessmentSharpIcon from '@mui/icons-material/AssessmentSharp';
+import EventBusySharpIcon from '@mui/icons-material/EventBusySharp';
+import InsertInvitationSharpIcon from '@mui/icons-material/InsertInvitationSharp';
+import RuleSharpIcon from '@mui/icons-material/RuleSharp';
+import AccessAlarmSharpIcon from '@mui/icons-material/AccessAlarmSharp';
+import GroupsSharpIcon from '@mui/icons-material/GroupsSharp';
+import SupervisedUserCircleSharpIcon from '@mui/icons-material/SupervisedUserCircleSharp';
+import RateReviewSharpIcon from '@mui/icons-material/RateReviewSharp';
+import DescriptionSharpIcon from '@mui/icons-material/DescriptionSharp';
+import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import AddchartOutlinedIcon from '@mui/icons-material/AddchartOutlined';
 
 export interface ISidebarItem {
   key: string;
@@ -15,189 +41,238 @@ export interface ISidebarItem {
 
 export const sidebarData: ISidebarItem[] = [
   {
-    key: 'online-courses',
-    text: 'Online Courses',
-    path: '',
-    icon: <EventNoteSharpIcon />,
+    key: 'My profile',
+    text: 'My profile',
+    path: 'my-profile',
+    icon: <AccountBoxIcon />,
+    permissions: [PERMISSIONS['MyProfile']],
+  },
+  {
+    key: 'Admin',
+    text: 'Admin',
+    path: 'admin',
+    icon: <GroupWorkIcon />,
+    permissions: [PERMISSIONS['Admin']],
     children: [
       {
-        key: 'dashboard',
-        text: 'Dashboard',
-        path: 'home',
+        key: 'User',
+        text: 'User',
+        path: 'user',
+        icon: <GroupIcon />,
+        permissions: [PERMISSIONS['Admin.Users']],
       },
       {
-        key: 'teacher',
-        text: 'Teacher',
-        path: 'teacher',
-        permissions: [PERMISSIONS['MyTimesheet.View']],
-        children: [
-          {
-            key: 'teacher-list',
-            text: 'List',
-            path: 'list',
-            permissions: [PERMISSIONS['MyTimesheet.View']],
-          },
-          {
-            key: 'teacher-list',
-            text: 'Apply',
-            path: 'Apply',
-            permissions: [
-              PERMISSIONS['Admin.Tasks.AddNew'],
-              PERMISSIONS['Admin'],
-            ],
-          },
-          {
-            key: 'teacher-add',
-            text: 'Add',
-            path: 'add',
-            permissions: [
-              PERMISSIONS['Admin.Tasks.AddNew'],
-              PERMISSIONS['Admin'],
-            ],
-          },
-        ],
+        key: 'Role',
+        text: 'Role',
+        path: 'role',
+        icon: <SellIcon />,
+        permissions: [PERMISSIONS['Admin.Roles']],
       },
       {
-        key: 'student',
-        text: 'Student',
-        path: 'student',
-        permissions: [PERMISSIONS['MyTimesheet.View']],
-        children: [
-          {
-            key: 'student-list',
-            text: 'List',
-            path: 'list',
-            permissions: [PERMISSIONS['MyTimesheet.View']],
-          },
-          {
-            key: 'student-Apply',
-            text: 'Apply',
-            path: 'Apply',
-            permissions: [PERMISSIONS['MyTimesheet.View']],
-          },
-          {
-            key: 'student-Add',
-            text: 'Add',
-            path: 'Add',
-            permissions: [
-              PERMISSIONS['Admin.Tasks.AddNew'],
-              PERMISSIONS['Admin'],
-            ],
-          },
-        ],
+        key: 'Configuration',
+        text: 'Configuration',
+        path: 'configuration',
+        icon: <SettingsApplicationsIcon />,
+        permissions: [PERMISSIONS['Admin.Configuration']],
       },
       {
-        key: 'course',
-        text: 'Course',
-        path: 'course',
-        permissions: [PERMISSIONS['MyTimesheet.View']],
-        children: [
-          {
-            key: 'course-view',
-            text: 'View',
-            path: 'view',
-            permissions: [PERMISSIONS['MyTimesheet.View']],
-          },
-          {
-            key: 'course-add',
-            text: 'Add',
-            path: 'add',
-            permissions: [
-              PERMISSIONS['Admin.Tasks.AddNew'],
-              PERMISSIONS['Admin'],
-            ],
-          },
-        ],
+        key: 'Client',
+        text: 'Client',
+        path: 'client',
+        icon: <EventNoteSharpIcon />,
+        permissions: [PERMISSIONS['Admin.Clients']],
       },
       {
-        key: 'pricing',
-        text: 'Pricing',
-        path: 'pricing',
-        permissions: [PERMISSIONS['Retro.View']],
+        key: 'Task',
+        text: 'Task',
+        path: 'task',
+        icon: <ImportContactsRoundedIcon />,
+        permissions: [PERMISSIONS['Admin.Tasks']],
       },
       {
-        key: 'site',
-        text: 'Site',
-        path: 'site',
-        permissions: [PERMISSIONS['Retro.ChangeStatus']],
+        key: 'Leave types',
+        text: 'Leave types',
+        path: 'leave-types',
+        icon: <DateRangeRoundedIcon />,
+        permissions: [PERMISSIONS['MyAbsenceDay']],
       },
       {
-        key: 'setting',
-        text: 'Setting',
-        path: 'setting',
-        permissions: [
-          PERMISSIONS['Admin.Users.Edit'],
-          PERMISSIONS['Admin.Clients.Edit'],
-        ],
+        key: 'Branch',
+        text: 'Branch',
+        path: 'branch',
+        icon: <ApartmentRoundedIcon />,
+        permissions: [PERMISSIONS['Admin.Configuration']],
+      },
+      {
+        key: 'Position',
+        text: 'Position',
+        path: 'position',
+        icon: <DescriptionRoundedIcon />,
+        permissions: [PERMISSIONS['Admin.Configuration']],
+      },
+      {
+        key: 'Capabilities',
+        text: 'Capabilities',
+        path: 'capabilities',
+        icon: <ViewListRoundedIcon />,
+        permissions: [PERMISSIONS['Admin.Configuration']],
+      },
+      {
+        key: 'capability Setting',
+        text: 'capability setting',
+        path: 'capability-setting',
+        icon: <SettingsAccessibilityRoundedIcon />,
+        permissions: [PERMISSIONS['Admin.Configuration']],
+      },
+      {
+        key: 'Off day setting',
+        text: 'Off day setting',
+        path: 'off-day',
+        icon: <DateRangeRoundedIcon />,
+        permissions: [PERMISSIONS['DayOff']],
+      },
+      {
+        key: 'Overtime setting',
+        text: 'Overtime setting',
+        path: 'overtime-setting',
+        icon: <AccessTimeRoundedIcon />,
+        permissions: [PERMISSIONS['Report.OverTime']],
+      },
+      {
+        key: 'Audit log',
+        text: 'Audit log',
+        path: 'auditlog',
+        icon: <SettingsIcon />,
+        permissions: [PERMISSIONS['Admin.Configuration']],
+      },
+      {
+        key: 'Background job',
+        text: 'Background job',
+        path: 'background-job',
+        icon: <UpdateIcon />,
+        permissions: [PERMISSIONS['Admin.Configuration']],
       },
     ],
   },
   {
-    key: 'membership',
-    text: 'Membership',
-    icon: <PeopleAltSharpIcon />,
-    path: 'membership',
-    permissions: [PERMISSIONS['Admin.Tasks.View'], PERMISSIONS['Admin.Roles']],
+    key: 'Project',
+    text: 'Projects',
+    path: 'projects',
+    icon: <AssessmentSharpIcon />,
+    permissions: [PERMISSIONS['Project']],
+  },
+  {
+    key: 'My timesheets',
+    text: 'My timesheets',
+    path: 'home',
+    icon: <AccessAlarmIcon />,
+    permissions: [PERMISSIONS['MyTimesheet']],
+  },
+  {
+    key: 'Absence Day',
+    text: 'My request ',
+    path: 'absence-day',
+    icon: <EventBusySharpIcon />,
+    permissions: [PERMISSIONS['MyAbsenceDay']],
+  },
+  {
+    key: 'My working time',
+    text: 'My working time',
+    path: 'my-working-time',
+    icon: <InsertInvitationSharpIcon />,
+    permissions: [PERMISSIONS['MyWorkingTime']],
+  },
+  {
+    key: 'Manage timesheet',
+    text: 'Manage timesheet',
+    path: 'timesheets',
+    icon: <DateRangeRoundedIcon />,
+    permissions: [PERMISSIONS['Timesheet']],
+  },
+  {
+    key: 'Manage request absence ',
+    text: 'Manage request',
+    path: 'off-day-project',
+    icon: <RuleSharpIcon />,
+    permissions: [PERMISSIONS['Admin.Configuration.WorkingDay']],
+  },
+  {
+    key: 'Manage working time',
+    text: 'Manage working time',
+    path: 'manage-working-times',
+    icon: <AccessAlarmSharpIcon />,
+    permissions: [PERMISSIONS['Admin.Configuration.WorkingDay']],
+  },
+  {
+    key: 'Team woringking calender',
+    text: 'Team woringking calender',
+    path: 'off-day-project-for-user',
+    icon: <GroupsSharpIcon />,
+    permissions: [PERMISSIONS['MyWorkingTime']],
+  },
+  {
+    key: 'Timesheets monitoring',
+    text: 'Timesheets monitoring',
+    path: 'timesheets-supervisior',
+    icon: <SupervisedUserCircleSharpIcon />,
+    permissions: [PERMISSIONS['Admin.Configuration.WorkingDay']],
+  },
+  {
+    key: 'Retro',
+    text: 'Retro',
+    path: 'retro',
+    icon: <EventNoteSharpIcon />,
+    permissions: [PERMISSIONS['Retro']],
+  },
+  {
+    key: 'Review intern',
+    text: 'Review intern',
+    path: 'review',
+    icon: <RateReviewSharpIcon />,
+    permissions: [PERMISSIONS['Report']],
+  },
+  {
+    key: 'Report',
+    text: 'Report',
+    path: 'report',
+    icon: <DescriptionSharpIcon />,
+    permissions: [PERMISSIONS['Report']],
     children: [
       {
-        key: 'membership-dashboard',
-        text: 'Dashboard',
-        path: 'dashboard',
-        permissions: [
-          PERMISSIONS['Admin.Tasks.View'],
-          PERMISSIONS['Admin.Roles'],
-        ],
+        key: 'Intern info',
+        text: 'Intern info',
+        path: 'interns-info',
+        icon: <DescriptionSharpIcon />,
+        permissions: [PERMISSIONS['Report.InternsInfo']],
       },
       {
-        key: 'membership-list',
-        text: 'List',
-        path: 'list',
-        permissions: [
-          PERMISSIONS['Admin.Tasks.View'],
-          PERMISSIONS['Admin.Roles'],
-        ],
+        key: 'Normal working',
+        text: 'Normal working',
+        path: 'normal-working',
+        icon: <WorkOutlineOutlinedIcon />,
+        permissions: [PERMISSIONS['Report.NormalWorking']],
       },
       {
-        key: 'membership-pricing',
-        text: 'Pricing',
-        path: 'pricing',
-        permissions: [
-          PERMISSIONS['Admin.Tasks.View'],
-          PERMISSIONS['Admin.Roles'],
-        ],
+        key: 'Over time',
+        text: 'Over time',
+        path: 'over-time',
+        icon: <DateRangeOutlinedIcon />,
+        permissions: [PERMISSIONS['Report.NormalWorking']],
       },
       {
-        key: 'membership-setting',
-        text: 'Setting',
-        path: 'setting',
-        permissions: [
-          PERMISSIONS['Admin.Tasks.View'],
-          PERMISSIONS['Admin.Roles'],
-        ],
+        key: 'Tardiness',
+        text: 'Tardiness',
+        path: 'tardiness-leave-early',
+        icon: <WysiwygOutlinedIcon />,
+        permissions: [PERMISSIONS['Report.NormalWorking']],
+      },
+      {
+        key: 'Komu tracker',
+        text: 'Komu tracker',
+        path: 'komu-tracker',
+        icon: <AddchartOutlinedIcon />,
+        permissions: [PERMISSIONS['Report']],
       },
     ],
   },
 ];
-
-const hasPermission = (
-  itemPermissions: string[] = [],
-  userPermissions: string[],
-) => {
-  if (!itemPermissions.length) return true;
-  return itemPermissions.some((permission) =>
-    userPermissions.includes(permission),
-  );
-};
-export const filterSidebarByPermission = (
-  items: ISidebarItem[],
-  userPermissions: string[],
-): ISidebarItem[] => {
-  return items
-    .filter((item) => hasPermission(item.permissions, userPermissions))
-    .map((item) => ({
-      ...item,
-      children: item.children
-        ? filterSidebarByPermission(item.children, userPermissions)
-        : [],
-    }));
-};
