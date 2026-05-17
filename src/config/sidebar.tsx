@@ -67,6 +67,29 @@ export const sidebarData: ISidebarItem[] = [
         path: 'role',
         icon: <SellIcon />,
         permissions: [PERMISSIONS['Admin.Roles']],
+        children: [
+          {
+            key: 'My working time',
+            text: 'My working time',
+            path: 'my-working-time',
+            icon: <InsertInvitationSharpIcon />,
+            permissions: [PERMISSIONS['MyWorkingTime']],
+          },
+          {
+            key: 'Manage timesheet',
+            text: 'Manage timesheet',
+            path: 'timesheets',
+            icon: <DateRangeRoundedIcon />,
+            permissions: [PERMISSIONS['Timesheet']],
+          },
+          {
+            key: 'Manage request absence ',
+            text: 'Manage request',
+            path: 'off-day-project',
+            icon: <RuleSharpIcon />,
+            permissions: [PERMISSIONS['Admin.Configuration.WorkingDay']],
+          },
+        ],
       },
       {
         key: 'Configuration',

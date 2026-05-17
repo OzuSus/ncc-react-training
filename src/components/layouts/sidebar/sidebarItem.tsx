@@ -76,19 +76,38 @@ export function SidebarItem({
           py: 0.9,
           borderRadius: 2,
           pl: 2 + level * 4,
-          bgcolor: isOpen ? 'rgba(25,118,210,0.07)' : '',
-          '&.Mui-selected': {
-            bgcolor: 'rgba(25,118,210,0.08)',
+          cursor: 'pointer',
+          bgcolor: isOpen ? '#f0f5ff' : 'transparent',
+          '&:hover': {
+            bgcolor:
+              hasChildren || level === 0
+                ? isOpen
+                  ? '#e9f0ff'
+                  : '#f3f5f780'
+                : 'transparent',
           },
-          '&.Mui-selected:hover': {
-            bgcolor: 'rgba(25,118,210,0.12)',
+          '&:active': {
+            bgcolor:
+              hasChildren || level === 0
+                ? isOpen
+                  ? '#dce8ff'
+                  : '#f3f5f7cc'
+                : 'transparent',
+          },
+          '&.Mui-focusVisible': {
+            bgcolor:
+              isOpen || (active && !hasChildren) ? '#f0f5ff' : 'transparent',
+          },
+          '& .MuiTouchRipple-ripple .MuiTouchRipple-child': {
+            backgroundColor: '#1a8cff !important',
           },
         }}
       >
         <ListItemIcon
           sx={{
             minWidth: 32,
-            color: active ? 'primary.main' : 'text.secondary',
+            color:
+              (active && !hasChildren) || isOpen ? '#4680ff' : 'text.secondary',
           }}
         >
           {item.icon ?? (
@@ -97,7 +116,7 @@ export function SidebarItem({
                 width: 5,
                 height: 5,
                 borderRadius: '50%',
-                bgcolor: active ? 'primary.main' : '#9ca3af',
+                bgcolor: active && !hasChildren ? '#4680ff' : '#9ca3af',
               }}
             />
           )}
@@ -105,9 +124,9 @@ export function SidebarItem({
         <ListItemText
           sx={{
             '& .MuiListItemText-primary': {
-              fontSize: 16,
-              fontWeight: active ? 500 : 400,
-              color: active ? 'primary.main' : 'text.primary',
+              fontSize: 14,
+              fontWeight: active ? 500 : 300,
+              color: (active && !hasChildren) || isOpen ? '#4680ff' : '#5b6b79',
             },
           }}
         >
@@ -115,9 +134,9 @@ export function SidebarItem({
         </ListItemText>
         {hasChildren &&
           (isOpen ? (
-            <ExpandLessIcon fontSize="small" />
+            <ExpandLessIcon fontSize="small" sx={{ color: '#4680ff' }} />
           ) : (
-            <ExpandMoreIcon fontSize="small" />
+            <ExpandMoreIcon fontSize="small" sx={{ color: 'text.secondary' }} />
           ))}
       </ListItemButton>
       {hasChildren && (
