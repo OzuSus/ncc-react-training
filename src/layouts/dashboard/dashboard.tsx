@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import { Outlet, useNavigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/features/auth/useAuthStore.ts';
 import { useFetchMeQuery } from '@/features/auth/hooks/useAuthQuery.ts';
+import Sidebar from '@/components/layouts/sidebar';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ export default function DashboardLayout() {
 
   const token = Cookies.get('accessToken');
   const { isError } = useFetchMeQuery();
-
+  const { permissions } = useAuthStore();
   useEffect(() => {
     if (!token) {
       logout();
@@ -27,9 +28,11 @@ export default function DashboardLayout() {
   if (!token) return null;
 
   return (
-    <div>
-      <div>Dashboard</div>
-      <Outlet />
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+      <Sidebar permissions={permissions} />
+      <div style={{ flex: 1, padding: 16 }}>
+        <Outlet />
+      </div>
     </div>
   );
 }
