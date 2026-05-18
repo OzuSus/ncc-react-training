@@ -28,7 +28,7 @@ export default function DashboardLayout() {
   if (!token) return null;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8f9fa' }}>
       <Sidebar permissions={permissions} />
       <div style={{ flex: 1, padding: 16 }}>
         <Outlet />

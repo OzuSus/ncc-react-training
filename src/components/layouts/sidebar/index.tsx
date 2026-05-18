@@ -85,7 +85,7 @@ export default function Sidebar({ permissions = [] }: TSidebarProps) {
         display: 'flex',
         flexDirection: 'column',
         borderRight: '1px solid #d7dbe7',
-        bgcolor: 'white',
+        bgcolor: '#f8f9fa',
         position: 'sticky',
         top: 0,
       }}
