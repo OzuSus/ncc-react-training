@@ -19,16 +19,13 @@ import CustomBadge from '@/components/ui/Badge';
 import { CustomTypography } from '@/components/ui/Typography';
 import { CustomButton } from '@/components/ui/Button';
 import { useProjectQuery } from '@/features/project/hooks/useProjectQuerry.ts';
-import {
-  IProject,
-  useProjectStore,
-} from '@/features/project/useProjectStore.ts';
 import { formatDateUKType } from '@/utils/date/formatDateUKType.ts';
 import { PROJECT_TYPE } from '@/constants/projectType.ts';
+import { IProject } from '@/features/project/types.ts';
 
 export default function ManageProjects() {
-  useProjectQuery();
-  const projects = useProjectStore((state) => state.projects);
+  const { data: projects = [] } = useProjectQuery();
+
   const [actionsAnchor, setActionsAnchor] = useState(null);
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(
     {},
@@ -267,12 +264,7 @@ export default function ManageProjects() {
         </MenuItem>
         <MenuItem onClick={handleCloseMenu} sx={{ py: 1 }}>
           <ListItemIcon sx={{ minWidth: 32 }}>
-            <DeleteIcon
-              fontSize="small"
-              sx={{
-                color: '#dc2626',
-              }}
-            />
+            <DeleteIcon fontSize="small" />
           </ListItemIcon>
           <CustomTypography
             sx={{
