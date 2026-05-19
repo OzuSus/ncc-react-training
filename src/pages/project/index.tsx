@@ -1,8 +1,5 @@
 import { useMemo, useState } from 'react';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box,
   Container,
   ListItemIcon,
@@ -10,23 +7,19 @@ import {
   MenuItem,
   Paper,
 } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CustomBadge from '@/components/ui/Badge';
 import { CustomTypography } from '@/components/ui/Typography';
-import { CustomButton } from '@/components/ui/Button';
-import { useProjectQuery } from '@/features/project/hooks/useProjectQuerry.ts';
-import { formatDateUKType } from '@/utils/date/formatDateUKType.ts';
-import { PROJECT_TYPE } from '@/constants/projectType.ts';
+import { useProjectQuery } from '@/features/project/hooks/useProjectQuery.ts';
 import { IProject } from '@/features/project/types.ts';
+import ProjectGroup from '@/pages/project/components/ProjectGroup.tsx';
 
 export default function ManageProjects() {
   const { data: projects = [] } = useProjectQuery();
 
-  const [actionsAnchor, setActionsAnchor] = useState(null);
+  const [actionMenu, setActionMenu] = useState({ anchorEl: null });
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(
     {},
   );
@@ -52,13 +45,20 @@ export default function ManageProjects() {
     }));
   };
   const handleCloseMenu = () => {
-    setActionsAnchor(null);
+    setActionMenu({
+      anchorEl: null,
+    });
   };
-
   return (
     <Box sx={{ minHeight: '100vh', py: 3, bgcolor: '#f5f5f5' }}>
       <Container maxWidth="lg" sx={{ py: 2 }}>
-        <Paper elevation={1} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+        <Paper
+          elevation={1}
+          sx={{
+            borderRadius: 3,
+            overflow: 'hidden',
+          }}
+        >
           <Box
             sx={{
               display: 'flex',
@@ -70,167 +70,35 @@ export default function ManageProjects() {
             }}
           >
             <CustomTypography
-              sx={{ fontSize: 16, fontWeight: 600, color: '#222' }}
+              sx={{
+                fontSize: 16,
+                fontWeight: 600,
+                color: '#222',
+              }}
             >
               Manage Projects
             </CustomTypography>
           </Box>
           <Box sx={{ px: 2, py: 2 }}>
-            {groupedProjects.map((group, groupIndex) => (
-              <Accordion
+            {groupedProjects.map((group) => (
+              <ProjectGroup
                 key={group.clientId}
-                elevation={0}
+                group={group}
                 expanded={!!openAccordions[group.clientId]}
-                onChange={() => handleAccordionChange(group.clientId)}
-                sx={{
-                  mb: groupIndex < groupedProjects.length - 1 ? 2 : 0,
-                  background: 'transparent',
-                  '&::before': {
-                    display: 'none',
-                  },
-                  '&.Mui-expanded': {
-                    margin:
-                      groupIndex < groupedProjects.length - 1
-                        ? '0 0 16px 0'
-                        : 0,
-                  },
-                }}
-              >
-                <AccordionSummary
-                  expandIcon={<KeyboardArrowDownIcon />}
-                  sx={{
-                    background: '#e0e0e0',
-                    borderRadius: 2,
-                    px: 2,
-                    minHeight: '48px !important',
-                    height: 48,
-                    '&.Mui-expanded': {
-                      minHeight: '48px !important',
-                      borderBottomLeftRadius: 0,
-                      borderBottomRightRadius: 0,
-                    },
-                    '& .MuiAccordionSummary-content': {
-                      margin: '0 !important',
-                      display: 'flex',
-                      alignItems: 'center',
-                    },
-                    '& .MuiAccordionSummary-content.Mui-expanded': {
-                      margin: '0 !important',
-                    },
-                    '& .MuiAccordionSummary-expandIconWrapper': {
-                      alignSelf: 'center',
-                    },
-                  }}
-                >
-                  <CustomTypography
-                    sx={{
-                      fontSize: 16,
-                      fontWeight: 600,
-                      color: '#222',
-                    }}
-                  >
-                    {group.clientName}
-                  </CustomTypography>
-                </AccordionSummary>
-                {openAccordions[group.clientId] && (
-                  <AccordionDetails
-                    sx={{
-                      px: 0,
-                      py: 0,
-                      border: '1px solid #e0e0e0',
-                      borderTop: 'none',
-                      borderBottomLeftRadius: 8,
-                      borderBottomRightRadius: 8,
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {group.items.map((project, index) => (
-                      <Box
-                        key={project.id}
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          px: 2,
-                          py: 1.5,
-                          gap: 1,
-                          borderBottom:
-                            index < group.items.length - 1
-                              ? '1px solid #f0f0f0'
-                              : 'none',
-                          '&:hover': {
-                            background: '#fafafa',
-                          },
-                          transition: 'background 0.15s',
-                        }}
-                      >
-                        <CustomTypography
-                          sx={{
-                            fontSize: 14,
-                            fontWeight: 500,
-                            color: '#1D2630',
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          {project.name}
-                        </CustomTypography>
-                        <CustomBadge
-                          badgeVariant="projectManager"
-                          label={project.pms.join(', ')}
-                        />
-
-                        <CustomBadge
-                          badgeVariant="members"
-                          label={`${project.activeMember} members`}
-                        />
-                        <CustomBadge
-                          badgeVariant="type"
-                          label={PROJECT_TYPE[project.projectType]}
-                        />
-                        <CustomBadge
-                          badgeVariant="rangeDate"
-                          label={`${formatDateUKType(project.timeStart)} - ${formatDateUKType(project.timeEnd)}`}
-                        />
-                        <Box sx={{ flex: 1 }} />
-                        <CustomButton
-                          size="small"
-                          endIcon={
-                            <KeyboardArrowDownIcon
-                              sx={{
-                                fontSize: '16px !important',
-                              }}
-                            />
-                          }
-                          onClick={(e) => setActionsAnchor(e.currentTarget)}
-                          variant="text"
-                          sx={{
-                            color: '#555',
-                            fontWeight: 500,
-                            fontSize: 13,
-                            px: 1.5,
-                            border: '1px solid #ddd',
-                            borderRadius: 1,
-                            minWidth: 90,
-                            flexShrink: 0,
-                            '&:hover': {
-                              background: '#f0f0f0',
-                            },
-                          }}
-                        >
-                          Actions
-                        </CustomButton>
-                      </Box>
-                    ))}
-                  </AccordionDetails>
-                )}
-              </Accordion>
+                onToggle={() => handleAccordionChange(group.clientId)}
+                onOpenActions={(event) =>
+                  setActionMenu({
+                    anchorEl: event.currentTarget,
+                  })
+                }
+              />
             ))}
           </Box>
         </Paper>
       </Container>
-
       <Menu
-        anchorEl={actionsAnchor}
-        open={Boolean(actionsAnchor)}
+        anchorEl={actionMenu.anchorEl}
+        open={Boolean(actionMenu.anchorEl)}
         onClose={handleCloseMenu}
         slotProps={{
           paper: {
@@ -266,12 +134,7 @@ export default function ManageProjects() {
           <ListItemIcon sx={{ minWidth: 32 }}>
             <DeleteIcon fontSize="small" />
           </ListItemIcon>
-          <CustomTypography
-            sx={{
-              color: '#dc2626',
-              fontSize: 14,
-            }}
-          >
+          <CustomTypography sx={{ color: '#dc2626', fontSize: 14 }}>
             Delete
           </CustomTypography>
         </MenuItem>
