@@ -1,5 +1,4 @@
-import { axiosInstance } from '@/app-core/axiosInstance';
-import { IHttpResponse } from '@/app-core/@types/http';
+import { httpRequest } from '@/app-core/axiosInstance';
 import {
   IProjectResponse,
   IProjectsRequest,
@@ -8,13 +7,11 @@ import {
 export async function fetchProjectApi({
   status = 0,
   search = '',
-}: IProjectsRequest = {}): Promise<IHttpResponse<IProjectResponse[]>> {
-  const { data } = await axiosInstance.get<IHttpResponse<IProjectResponse[]>>(
+}: IProjectsRequest = {}) {
+  return httpRequest.get<IProjectResponse[]>(
     'api/services/app/Project/getAll',
     {
       params: { status, search },
     },
   );
-
-  return data;
 }
