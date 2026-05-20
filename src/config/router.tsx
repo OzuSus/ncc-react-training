@@ -17,6 +17,13 @@ export const routes: AppRoutesConfig[] = [
         authority: [],
         crumb: 'Homeeee',
       },
+      {
+        key: 'projects',
+        path: 'projects',
+        component: lazy(() => import('@/pages/project')),
+        authority: [],
+        crumb: 'project',
+      },
     ],
   },
   {

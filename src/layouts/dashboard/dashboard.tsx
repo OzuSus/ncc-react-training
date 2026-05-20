@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/features/auth/useAuthStore.ts';
 import { useFetchMeQuery } from '@/features/auth/hooks/useAuthQuery.ts';
 import Sidebar from '@/components/layouts/sidebar';
+import { Box } from '@mui/material';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
@@ -28,11 +29,11 @@ export default function DashboardLayout() {
   if (!token) return null;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <Box style={{ display: 'flex', minHeight: '100vh', background: '#f8f9fa' }}>
       <Sidebar permissions={permissions} />
-      <div style={{ flex: 1, padding: 16 }}>
+      <Box style={{ flex: 1, padding: 16 }}>
         <Outlet />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
