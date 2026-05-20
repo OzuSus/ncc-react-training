@@ -12,17 +12,56 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CustomTypography } from '@/components/ui/Typography';
-import { useProjectQuery } from '@/features/project/hooks/useProjectQuery.ts';
-import { IProject } from '@/features/project/types.ts';
-import ProjectGroup from '@/pages/project/sections/ProjectGroup.tsx';
+import {
+  useProjectQuery,
+  useProjectQuantityQuery,
+} from '@/features/project/hooks/useProjectQuery';
+import { IProject, ProjectStatus } from '@/features/project/types';
+import ProjectGroup from '@/pages/project/sections/ProjectGroup';
+import Filter, { TFilterOption } from '@/pages/project/sections/Filter';
+import { useDebounce } from '@/features/project/hooks/useDebounce';
+
+type TActionMenu = { anchorEl: HTMLElement | null };
 
 export default function ManageProjects() {
-  const { data: projects = [] } = useProjectQuery();
-
-  const [actionMenu, setActionMenu] = useState({ anchorEl: null });
+  const [actionMenu, setActionMenu] = useState<TActionMenu>({ anchorEl: null });
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(
     {},
   );
+  const [searchValue, setSearchValue] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('active');
+
+  const debouncedSearch = useDebounce(searchValue, 500);
+
+  const statusParam = useMemo<number | undefined>(() => {
+    if (statusFilter === 'active') return ProjectStatus.Active;
+    if (statusFilter === 'deactive') return ProjectStatus.Deactive;
+    return undefined;
+  }, [statusFilter]);
+
+  const { data: projects = [] } = useProjectQuery({
+    status: statusParam,
+    search: debouncedSearch,
+  });
+  const { data: quantities = [] } = useProjectQuantityQuery();
+
+  const filterOptions: TFilterOption[] = useMemo(() => {
+    const activeCount =
+      quantities.find((q) => q.status === ProjectStatus.Active)?.quantity ?? 0;
+    const deactiveCount =
+      quantities.find((q) => q.status === ProjectStatus.Deactive)?.quantity ??
+      0;
+    return [
+      { label: 'Active Projects', value: 'active', count: activeCount },
+      { label: 'Deactive Projects', value: 'deactive', count: deactiveCount },
+      {
+        label: 'All Projects',
+        value: 'all',
+        count: activeCount + deactiveCount,
+      },
+    ];
+  }, [quantities]);
+
   const groupedProjects = useMemo(() => {
     const grouped: Record<string, IProject[]> = {};
     for (const project of projects) {
@@ -79,6 +118,13 @@ export default function ManageProjects() {
               Manage Projects
             </CustomTypography>
           </Box>
+          <Filter
+            options={filterOptions}
+            selectedValue={statusFilter}
+            onSelectFilter={setStatusFilter}
+            searchValue={searchValue}
+            onSearchChange={setSearchValue}
+          />
           <Box sx={{ px: 2, py: 2 }}>
             {groupedProjects.map((group) => (
               <ProjectGroup

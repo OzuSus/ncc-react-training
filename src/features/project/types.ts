@@ -15,3 +15,8 @@ export interface IProject {
   timeEnd: string | null;
   id: number;
 }
+
+export interface IProjectQuantity {
+  status: number;
+  quantity: number;
+}

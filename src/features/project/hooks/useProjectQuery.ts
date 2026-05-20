@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchProjectApi } from '@/features/project/api/fetchProject';
-import { mapProject } from '@/features/project/mappers/projectMapper';
-import { IProject, ProjectStatus } from '@/features/project/types';
+import { fetchProjectQuantityApi } from '@/features/project/api/fetchProjectQuantity';
+import { IProject, IProjectQuantity } from '@/features/project/types';
+import { mapProject } from '@/features/project/mappers/projectMapper.ts';
 
 export interface IProjectsRequest {
   status?: number;
@@ -20,14 +21,24 @@ export interface IProjectResponse {
   timeEnd: string | null;
 }
 export function useProjectQuery({
-  status = ProjectStatus.Active,
+  status,
   search = '',
 }: IProjectsRequest = {}) {
   return useQuery<IProject[]>({
-    queryKey: ['projects'],
+    queryKey: ['projects', status, search],
     queryFn: async () => {
       const data = await fetchProjectApi({ status, search });
       return (data.result || []).map(mapProject);
+    },
+  });
+}
+
+export function useProjectQuantityQuery() {
+  return useQuery<IProjectQuantity[]>({
+    queryKey: ['projectQuantity'],
+    queryFn: async () => {
+      const data = await fetchProjectQuantityApi();
+      return data.result || [];
     },
   });
 }
