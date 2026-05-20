@@ -1,9 +1,7 @@
-import { IProjectResponse } from '@/features/project/hooks/useProjectQuery.ts';
-import { IProject } from '@/features/project/types.ts';
+import { IProjectResponse } from '@/features/project/hooks/useProjectQuery';
+import { IProject } from '@/features/project/types';
 
-export function mapProject(
-  project: IProjectResponse['result'][number],
-): IProject {
+export function mapProject(project: IProjectResponse): IProject {
   return {
     id: project.id,
     customerName: project.customerName,

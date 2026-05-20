@@ -1,25 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchProjectApi } from '@/features/project/api/fetchProject.ts';
-import { mapProject } from '@/features/project/mappers/projectMapper.ts';
-import { IProject } from '@/features/project/types.ts';
+import { fetchProjectApi } from '@/features/project/api/fetchProject';
+import { mapProject } from '@/features/project/mappers/projectMapper';
+import { IProject } from '@/features/project/types';
 
 export interface IProjectsRequest {
   status?: number;
   search?: string;
 }
 export interface IProjectResponse {
-  result: {
-    id: number;
-    customerName: string;
-    name: string;
-    code: string;
-    status: number;
-    pms: string[];
-    activeMember: number;
-    projectType: number;
-    timeStart: string;
-    timeEnd: string | null;
-  }[];
+  id: number;
+  customerName: string;
+  name: string;
+  code: string;
+  status: number;
+  pms: string[];
+  activeMember: number;
+  projectType: number;
+  timeStart: string;
+  timeEnd: string | null;
 }
 export function useProjectQuery({
   status = 0,
