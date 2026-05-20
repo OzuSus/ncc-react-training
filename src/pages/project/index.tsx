@@ -14,7 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { CustomTypography } from '@/components/ui/Typography';
 import { useProjectQuery } from '@/features/project/hooks/useProjectQuery.ts';
 import { IProject } from '@/features/project/types.ts';
-import ProjectGroup from '@/pages/project/components/ProjectGroup.tsx';
+import ProjectGroup from '@/pages/project/sections/ProjectGroup.tsx';
 
 export default function ManageProjects() {
   const { data: projects = [] } = useProjectQuery();

@@ -1,3 +1,8 @@
+export enum ProjectStatus {
+  Active = 0,
+  Deactive = 1,
+}
+
 export interface IProject {
   customerName: string;
   name: string;

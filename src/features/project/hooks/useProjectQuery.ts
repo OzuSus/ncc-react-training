@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchProjectApi } from '@/features/project/api/fetchProject';
 import { mapProject } from '@/features/project/mappers/projectMapper';
-import { IProject } from '@/features/project/types';
+import { IProject, ProjectStatus } from '@/features/project/types';
 
 export interface IProjectsRequest {
   status?: number;
@@ -20,7 +20,7 @@ export interface IProjectResponse {
   timeEnd: string | null;
 }
 export function useProjectQuery({
-  status = 0,
+  status = ProjectStatus.Active,
   search = '',
 }: IProjectsRequest = {}) {
   return useQuery<IProject[]>({

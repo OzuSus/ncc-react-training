@@ -13,6 +13,25 @@ axiosInstance.interceptors.request.use((config) => {
   }
   return config;
 });
+
+/**
+ *   HttpRequest function normalizes API responses and supports both
+ *   standard IHttpResponse wrapped responses and custom T responses.
+ * 1. default (standard API)
+ *    - Assumes response follows IHttpResponse<T> structure
+ *    - Config with default special = false
+ *    - Wrap data into IHttpResponse
+ *    Usage: const data = await httpRequest.get<User>('/users/1')
+ *    // data: IHttpResponse<User>
+ *
+ * 2. special (different API response from IHttpResponse)
+ *    - Used when API response does not follow IHttpResponse structure
+ *    - Config with special = true
+ *    - Returns response type T directly
+ *    Usage example:
+ *    const data = await httpRequest.get<User>('/users/1', { special: true })
+ *    // data: User
+ **/
 export const httpRequest = {
   get: async <T, S extends boolean = false>(
     url: string,

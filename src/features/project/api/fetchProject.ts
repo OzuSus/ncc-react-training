@@ -3,9 +3,10 @@ import {
   IProjectResponse,
   IProjectsRequest,
 } from '@/features/project/hooks/useProjectQuery';
+import { ProjectStatus } from '@/features/project/types.ts';
 
 export async function fetchProjectApi({
-  status = 0,
+  status = ProjectStatus.Active,
   search = '',
 }: IProjectsRequest = {}) {
   return httpRequest.get<IProjectResponse[]>(
