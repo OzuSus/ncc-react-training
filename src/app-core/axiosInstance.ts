@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
 import { IHttpResponse } from '@/app-core/@types/http';
 
@@ -14,11 +14,16 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 export const httpRequest = {
-  get: async <T>(
+  get: async <T, S extends boolean = false>(
     url: string,
-    config?: Parameters<typeof axiosInstance.get>[1],
-  ): Promise<IHttpResponse<T>> => {
-    const { data } = await axiosInstance.get<IHttpResponse<T>>(url, config);
-    return data;
+    config?: AxiosRequestConfig & { special?: S },
+  ): Promise<S extends true ? T : IHttpResponse<T>> => {
+    const { special, ...axiosConfig } = config || {};
+    const response = await axiosInstance.get(url, axiosConfig);
+    if (special) {
+      return response.data as T;
+    } else {
+      return response.data as IHttpResponse<T>;
+    }
   },
 };
