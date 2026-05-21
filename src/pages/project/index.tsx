@@ -6,23 +6,40 @@ import {
   Menu,
   MenuItem,
   Paper,
+  CircularProgress,
 } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CustomTypography } from '@/components/ui/Typography';
-import { useProjectQuery } from '@/features/project/hooks/useProjectQuery.ts';
-import { IProject } from '@/features/project/types.ts';
-import ProjectGroup from '@/pages/project/sections/ProjectGroup.tsx';
+import { CustomTypography } from '@/libs/components/ui/Typography';
+import { useProjectQuery } from '@/libs/features/project/hooks/useProjectQuery';
+import { IProject } from '@/libs/features/project/types';
+import ProjectGroup from '@/pages/project/sections/ProjectGroup';
+import Filter, { statusFilterMap } from '@/pages/project/sections/Filter';
+import { useDebounce } from '@/libs/hooks/useDebounce.ts';
 
 export default function ManageProjects() {
-  const { data: projects = [] } = useProjectQuery();
-
   const [actionMenu, setActionMenu] = useState({ anchorEl: null });
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(
     {},
   );
+  const [searchValue, setSearchValue] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('active');
+
+  const debouncedSearch = useDebounce(searchValue, 500);
+
+  const statusParam = useMemo<number | undefined>(() => {
+    return statusFilterMap[statusFilter]?.status;
+  }, [statusFilter]);
+
+  const { data: projects = [], isLoading: isLoadingProjects } = useProjectQuery(
+    {
+      status: statusParam,
+      search: debouncedSearch,
+    },
+  );
+
   const groupedProjects = useMemo(() => {
     const grouped: Record<string, IProject[]> = {};
     for (const project of projects) {
@@ -79,20 +96,30 @@ export default function ManageProjects() {
               Manage Projects
             </CustomTypography>
           </Box>
+          <Filter
+            selectedValue={statusFilter}
+            onSelectFilter={setStatusFilter}
+            searchValue={searchValue}
+            onSearchChange={setSearchValue}
+          />
           <Box sx={{ px: 2, py: 2 }}>
-            {groupedProjects.map((group) => (
-              <ProjectGroup
-                key={group.clientId}
-                group={group}
-                expanded={!!openAccordions[group.clientId]}
-                onToggle={() => handleAccordionChange(group.clientId)}
-                onOpenActions={(event) =>
-                  setActionMenu({
-                    anchorEl: event.currentTarget,
-                  })
-                }
-              />
-            ))}
+            {isLoadingProjects ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+                <CircularProgress size={32} />
+              </Box>
+            ) : (
+              groupedProjects.map((group) => (
+                <ProjectGroup
+                  key={group.clientId}
+                  group={group}
+                  expanded={!!openAccordions[group.clientId]}
+                  onToggle={() => handleAccordionChange(group.clientId)}
+                  onOpenActions={(event) =>
+                    setActionMenu({ anchorEl: event.currentTarget })
+                  }
+                />
+              ))
+            )}
           </Box>
         </Paper>
       </Container>

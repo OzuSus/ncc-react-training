@@ -1,28 +1,28 @@
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { CustomTypography } from '@/components/ui/Typography';
-import ProjectRow from './ProjectRow.tsx';
-import { IProject } from '@/features/project/types.ts';
+import { CustomTypography } from '@/libs/components/ui/Typography';
+import { IProject } from '@/libs/features/project/types.ts';
 import React from 'react';
+import ProjectRow from '@/pages/project/sections/ProjectRow.tsx';
 
-type TGroup = {
+interface IGroup {
   clientId: string;
   clientName: string;
   items: IProject[];
-};
-type TProjectGroupProps = {
-  group: TGroup;
+}
+interface IProjectGroupProps {
+  group: IGroup;
   expanded: boolean;
   onToggle: () => void;
   onOpenActions: () => void;
-};
+}
 
 export default function ProjectGroup({
   group,
   expanded,
   onToggle,
   onOpenActions,
-}: TProjectGroupProps) {
+}: IProjectGroupProps) {
   return (
     <Accordion
       elevation={0}

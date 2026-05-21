@@ -1,22 +1,22 @@
 import { Box } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import CustomBadge from '@/components/ui/Badge';
-import { CustomButton } from '@/components/ui/Button';
-import { CustomTypography } from '@/components/ui/Typography';
-import { PROJECT_TYPE } from '@/constants/projectType.ts';
-import { formatDateUKType } from '@/utils/date/formatDateUKType.ts';
-import { IProject } from '@/features/project/types.ts';
+import CustomBadge from '@/libs/components/ui/Badge';
+import { CustomButton } from '@/libs/components/ui/Button';
+import { CustomTypography } from '@/libs/components/ui/Typography';
+import { PROJECT_TYPE } from '@/libs/constants/projectType.ts';
+import { formatDateUKType } from '@/libs/utils/date/formatDateUKType.ts';
+import { IProject } from '@/libs/features/project/types.ts';
 import React from 'react';
 
-type TProjectRowProps = {
+interface IProjectRowProps {
   project: IProject;
   onOpenActions: () => void;
-};
+}
 
 export default function ProjectRow({
   project,
   onOpenActions,
-}: TProjectRowProps) {
+}: IProjectRowProps) {
   return (
     <Box
       sx={{

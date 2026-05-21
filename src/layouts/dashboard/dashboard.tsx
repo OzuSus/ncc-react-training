@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { Outlet, useNavigate } from '@tanstack/react-router';
-import { useAuthStore } from '@/features/auth/useAuthStore.ts';
-import { useFetchMeQuery } from '@/features/auth/hooks/useAuthQuery.ts';
-import Sidebar from '@/components/layouts/sidebar';
+import { useAuthStore } from '@/libs/features/auth/useAuthStore.ts';
+import { useFetchMeQuery } from '@/libs/features/auth/hooks/useAuthQuery.ts';
+import Sidebar from '@/libs/components/layouts/sidebar';
 import { Box } from '@mui/material';
 
 export default function DashboardLayout() {
