@@ -16,15 +16,16 @@ import {
   useProjectQuery,
   useProjectQuantityQuery,
 } from '@/features/project/hooks/useProjectQuery';
-import { IProject, ProjectStatus } from '@/features/project/types';
+import { IProject } from '@/features/project/types';
 import ProjectGroup from '@/pages/project/sections/ProjectGroup';
-import Filter, { TFilterOption } from '@/pages/project/sections/Filter';
+import Filter, {
+  TFilterOption,
+  statusFilterMap,
+} from '@/pages/project/sections/Filter';
 import { useDebounce } from '@/features/project/hooks/useDebounce';
 
-type TActionMenu = { anchorEl: HTMLElement | null };
-
 export default function ManageProjects() {
-  const [actionMenu, setActionMenu] = useState<TActionMenu>({ anchorEl: null });
+  const [actionMenu, setActionMenu] = useState({ anchorEl: null });
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(
     {},
   );
@@ -34,9 +35,7 @@ export default function ManageProjects() {
   const debouncedSearch = useDebounce(searchValue, 500);
 
   const statusParam = useMemo<number | undefined>(() => {
-    if (statusFilter === 'active') return ProjectStatus.Active;
-    if (statusFilter === 'deactive') return ProjectStatus.Deactive;
-    return undefined;
+    return statusFilterMap[statusFilter]?.status;
   }, [statusFilter]);
 
   const { data: projects = [] } = useProjectQuery({
@@ -46,20 +45,14 @@ export default function ManageProjects() {
   const { data: quantities = [] } = useProjectQuantityQuery();
 
   const filterOptions: TFilterOption[] = useMemo(() => {
-    const activeCount =
-      quantities.find((q) => q.status === ProjectStatus.Active)?.quantity ?? 0;
-    const deactiveCount =
-      quantities.find((q) => q.status === ProjectStatus.Deactive)?.quantity ??
-      0;
-    return [
-      { label: 'Active Projects', value: 'active', count: activeCount },
-      { label: 'Deactive Projects', value: 'deactive', count: deactiveCount },
-      {
-        label: 'All Projects',
-        value: 'all',
-        count: activeCount + deactiveCount,
-      },
-    ];
+    return Object.entries(statusFilterMap).map(([value, { label, status }]) => {
+      if (status === undefined) {
+        const total = quantities.reduce((sum, q) => sum + q.quantity, 0);
+        return { label, value, count: total };
+      }
+      const count = quantities.find((q) => q.status === status)?.quantity ?? 0;
+      return { label, value, count };
+    });
   }, [quantities]);
 
   const groupedProjects = useMemo(() => {

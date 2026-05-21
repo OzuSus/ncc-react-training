@@ -5,11 +5,21 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AddIcon from '@mui/icons-material/Add';
 import { CustomButton } from '@/components/ui/Button';
 import { CustomTypography } from '@/components/ui/Typography';
+import { ProjectStatus } from '@/features/project/types.ts';
 
 export type TFilterOption = {
   label: string;
   value: string;
   count: number;
+};
+
+export const statusFilterMap: Record<
+  string,
+  { label: string; status?: number }
+> = {
+  active: { label: 'Active Projects', status: ProjectStatus.Active },
+  deactive: { label: 'Deactive Projects', status: ProjectStatus.Deactive },
+  all: { label: 'All Projects', status: undefined },
 };
 
 type TFilterProps = {
@@ -29,7 +39,7 @@ export default function Filter({
 }: TFilterProps) {
   const [anchorEl, setAnchorEl] = useState(null);
   const selectedOption = options.find((o) => o.value === selectedValue);
-  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleCloseMenuSelect = () => {
