@@ -30,6 +30,8 @@ export function useProjectQuery({
       const data = await fetchProjectApi({ status, search });
       return (data.result || []).map(mapProject);
     },
+    staleTime: 0,
+    gcTime: 0,
   });
 }
 

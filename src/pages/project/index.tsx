@@ -6,6 +6,7 @@ import {
   Menu,
   MenuItem,
   Paper,
+  CircularProgress,
 } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
@@ -38,10 +39,12 @@ export default function ManageProjects() {
     return statusFilterMap[statusFilter]?.status;
   }, [statusFilter]);
 
-  const { data: projects = [] } = useProjectQuery({
-    status: statusParam,
-    search: debouncedSearch,
-  });
+  const { data: projects = [], isLoading: isLoadingProjects } = useProjectQuery(
+    {
+      status: statusParam,
+      search: debouncedSearch,
+    },
+  );
   const { data: quantities = [] } = useProjectQuantityQuery();
 
   const filterOptions: TFilterOption[] = useMemo(() => {
@@ -119,19 +122,23 @@ export default function ManageProjects() {
             onSearchChange={setSearchValue}
           />
           <Box sx={{ px: 2, py: 2 }}>
-            {groupedProjects.map((group) => (
-              <ProjectGroup
-                key={group.clientId}
-                group={group}
-                expanded={!!openAccordions[group.clientId]}
-                onToggle={() => handleAccordionChange(group.clientId)}
-                onOpenActions={(event) =>
-                  setActionMenu({
-                    anchorEl: event.currentTarget,
-                  })
-                }
-              />
-            ))}
+            {isLoadingProjects ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+                <CircularProgress size={32} />
+              </Box>
+            ) : (
+              groupedProjects.map((group) => (
+                <ProjectGroup
+                  key={group.clientId}
+                  group={group}
+                  expanded={!!openAccordions[group.clientId]}
+                  onToggle={() => handleAccordionChange(group.clientId)}
+                  onOpenActions={(event) =>
+                    setActionMenu({ anchorEl: event.currentTarget })
+                  }
+                />
+              ))
+            )}
           </Box>
         </Paper>
       </Container>
