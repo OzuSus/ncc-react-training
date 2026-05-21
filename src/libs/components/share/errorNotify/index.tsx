@@ -1,12 +1,12 @@
 import { Box } from '@mui/material';
 import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
-import { CustomTypography } from '@/components/ui/Typography';
+import { CustomTypography } from '@/libs/components/ui/Typography';
 
-type TErrorAlertProps = {
+interface IErrorAlertProps {
   message?: string;
-};
+}
 
-export function ErrorAlert({ message }: TErrorAlertProps) {
+export function ErrorAlert({ message }: IErrorAlertProps) {
   if (!message) return null;
   return (
     <Box

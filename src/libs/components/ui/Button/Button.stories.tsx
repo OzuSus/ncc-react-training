@@ -6,7 +6,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import InfoIcon from '@mui/icons-material/Info';
-import { CustomButton } from '@/components/ui/Button/index.tsx';
+import { CustomButton } from '@/libs/components/ui/Button/index.tsx';
 
 const meta: Meta<typeof ButtonComponent> = {
   title: 'Components/Button',

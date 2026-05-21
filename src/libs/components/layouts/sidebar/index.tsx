@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, List } from '@mui/material';
 import { sidebarData } from '@/config/sidebar';
-import SidebarItem from './SidebarItem';
 import { sidebarBuilder } from '@/app-core/permission/helper.ts';
 import { useRouterState } from '@tanstack/react-router';
+import { SidebarItem } from '@/libs/components/layouts/sidebar/sidebarItem.tsx';
 
 type OpenMenuMap = Record<string, string>;
 
-type TSidebarProps = {
+interface ISidebarProps {
   permissions?: string[];
-};
+}
 
-export default function Sidebar({ permissions = [] }: TSidebarProps) {
+export default function Sidebar({ permissions = [] }: ISidebarProps) {
   const menuItems = useMemo(
     () => sidebarBuilder(sidebarData, permissions),
     [permissions],

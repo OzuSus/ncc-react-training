@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
-import { useAuthStore } from '@/features/auth/useAuthStore.ts';
-import { loginApi, TAuthBody } from '@/features/auth/api/login.ts';
-import { fetchMeApi } from '@/features/auth/api/fetchMe.ts';
-import { fetchUserConfigPermission } from '@/features/auth/api/fetchUserConfigApi.ts';
+import { useAuthStore } from '@/libs/features/auth/useAuthStore.ts';
+import { loginApi, TAuthBody } from '@/libs/features/auth/api/login.ts';
+import { fetchMeApi } from '@/libs/features/auth/api/fetchMe.ts';
+import { fetchUserConfigPermission } from '@/libs/features/auth/api/fetchUserConfigApi.ts';
 
 export function useAuthMutation() {
   return useMutation({

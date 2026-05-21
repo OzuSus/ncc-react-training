@@ -2,7 +2,7 @@ import { httpRequest } from '@/app-core/axiosInstance';
 import {
   IProjectResponse,
   IProjectsRequest,
-} from '@/features/project/hooks/useProjectQuery';
+} from '@/libs/features/project/hooks/useProjectQuery';
 
 export async function fetchProjectApi({
   status,

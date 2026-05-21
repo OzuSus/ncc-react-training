@@ -4,19 +4,19 @@ import { Controller, useForm } from 'react-hook-form';
 import { Box, Stack, IconButton } from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-import { CustomTypography } from '@/components/ui/Typography';
-import { CustomTextField } from '@/components/ui/TextField';
-import { CustomButton } from '@/components/ui/Button';
-import { CustomCheckbox } from '@/components/ui/CheckBox';
-import { errorMessages } from '@/constants/errors.ts';
-import { useAuthMutation } from '@/features/auth/hooks/useAuthQuery.ts';
-import { ErrorAlert } from '@/components/share/errorNotify';
+import { CustomTypography } from '@/libs/components/ui/Typography';
+import { CustomTextField } from '@/libs/components/ui/TextField';
+import { CustomButton } from '@/libs/components/ui/Button';
+import { CustomCheckbox } from '@/libs/components/ui/CheckBox';
+import { errorMessages } from '@/libs/constants/errors.ts';
+import { useAuthMutation } from '@/libs/features/auth/hooks/useAuthQuery.ts';
+import { ErrorAlert } from '@/libs/components/share/errorNotify';
 
-type TPrefix = {
+interface IPrefix {
   email: string;
   password: string;
   rememberMe: boolean;
-};
+}
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -28,12 +28,12 @@ export default function SignIn() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<TPrefix>({
+  } = useForm<Prefix>({
     mode: 'onBlur',
     reValidateMode: 'onChange',
   });
 
-  const onSubmit = async (values: TPrefix) => {
+  const onSubmit = async (values: IPrefix) => {
     setAuthError('');
     try {
       await login({

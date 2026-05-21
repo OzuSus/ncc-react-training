@@ -12,18 +12,12 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CustomTypography } from '@/components/ui/Typography';
-import {
-  useProjectQuery,
-  useProjectQuantityQuery,
-} from '@/features/project/hooks/useProjectQuery';
-import { IProject } from '@/features/project/types';
+import { CustomTypography } from '@/libs/components/ui/Typography';
+import { useProjectQuery } from '@/libs/features/project/hooks/useProjectQuery';
+import { IProject } from '@/libs/features/project/types';
 import ProjectGroup from '@/pages/project/sections/ProjectGroup';
-import Filter, {
-  TFilterOption,
-  statusFilterMap,
-} from '@/pages/project/sections/Filter';
-import { useDebounce } from '@/features/project/hooks/useDebounce';
+import Filter, { statusFilterMap } from '@/pages/project/sections/Filter';
+import { useDebounce } from '@/libs/hooks/useDebounce.ts';
 
 export default function ManageProjects() {
   const [actionMenu, setActionMenu] = useState({ anchorEl: null });
@@ -45,18 +39,6 @@ export default function ManageProjects() {
       search: debouncedSearch,
     },
   );
-  const { data: quantities = [] } = useProjectQuantityQuery();
-
-  const filterOptions: TFilterOption[] = useMemo(() => {
-    return Object.entries(statusFilterMap).map(([value, { label, status }]) => {
-      if (status === undefined) {
-        const total = quantities.reduce((sum, q) => sum + q.quantity, 0);
-        return { label, value, count: total };
-      }
-      const count = quantities.find((q) => q.status === status)?.quantity ?? 0;
-      return { label, value, count };
-    });
-  }, [quantities]);
 
   const groupedProjects = useMemo(() => {
     const grouped: Record<string, IProject[]> = {};
@@ -115,7 +97,6 @@ export default function ManageProjects() {
             </CustomTypography>
           </Box>
           <Filter
-            options={filterOptions}
             selectedValue={statusFilter}
             onSelectFilter={setStatusFilter}
             searchValue={searchValue}

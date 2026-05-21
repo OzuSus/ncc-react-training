@@ -1,5 +1,5 @@
-import { IProjectResponse } from '@/features/project/hooks/useProjectQuery';
-import { IProject } from '@/features/project/types';
+import { IProjectResponse } from '@/libs/features/project/hooks/useProjectQuery';
+import { IProject } from '@/libs/features/project/types';
 
 export function mapProject(project: IProjectResponse): IProject {
   return {

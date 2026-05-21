@@ -1,6 +1,6 @@
 // eslint-disable-next-line storybook/no-renderer-packages
 import type { Meta, StoryObj } from '@storybook/react';
-import { CustomTextField } from '@/components/ui/TextField/index.tsx';
+import { CustomTextField } from '@/libs/components/ui/TextField/index.tsx';
 
 const meta: Meta<typeof TextFieldComponent> = {
   title: 'Components/TextField',

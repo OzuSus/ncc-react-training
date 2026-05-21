@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchProjectApi } from '@/features/project/api/fetchProject';
-import { fetchProjectQuantityApi } from '@/features/project/api/fetchProjectQuantity';
-import { IProject, IProjectQuantity } from '@/features/project/types';
-import { mapProject } from '@/features/project/mappers/projectMapper.ts';
+import { fetchProjectApi } from '@/libs/features/project/api/fetchProject';
+import { fetchProjectQuantityApi } from '@/libs/features/project/api/fetchProjectQuantity';
+import { IProject, IProjectQuantity } from '@/libs/features/project/types';
+import { mapProject } from '@/libs/features/project/mappers/projectMapper.ts';
 
 export interface IProjectsRequest {
   status?: number;

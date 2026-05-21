@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, InputAdornment, Menu, MenuItem, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AddIcon from '@mui/icons-material/Add';
-import { CustomButton } from '@/components/ui/Button';
-import { CustomTypography } from '@/components/ui/Typography';
-import { ProjectStatus } from '@/features/project/types.ts';
+import { CustomButton } from '@/libs/components/ui/Button';
+import { CustomTypography } from '@/libs/components/ui/Typography';
+import { ProjectStatus } from '@/libs/features/project/types';
+import { useProjectQuantityQuery } from '@/libs/features/project/hooks/useProjectQuery';
 
-export type TFilterOption = {
+export interface IFilterOption {
   label: string;
   value: string;
   count: number;
-};
+}
 
 export const statusFilterMap: Record<
   string,
@@ -22,23 +23,33 @@ export const statusFilterMap: Record<
   all: { label: 'All Projects', status: undefined },
 };
 
-type TFilterProps = {
-  options: TFilterOption[];
+interface IFilterProps {
   selectedValue: string;
   onSelectFilter: (value: string) => void;
   searchValue: string;
   onSearchChange: (value: string) => void;
-};
+}
 
 export default function Filter({
-  options,
   selectedValue,
   onSelectFilter,
   searchValue,
   onSearchChange,
-}: TFilterProps) {
+}: IFilterProps) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const selectedOption = options.find((o) => o.value === selectedValue);
+  const { data: quantities = [] } = useProjectQuantityQuery();
+
+  const filterOptions: IFilterOption[] = useMemo(() => {
+    return Object.entries(statusFilterMap).map(([value, { label, status }]) => {
+      if (status === undefined) {
+        const total = quantities.reduce((sum, q) => sum + q.quantity, 0);
+        return { label, value, count: total };
+      }
+      const count = quantities.find((q) => q.status === status)?.quantity ?? 0;
+      return { label, value, count };
+    });
+  }, [quantities]);
+  const selectedOption = filterOptions.find((o) => o.value === selectedValue);
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -134,7 +145,7 @@ export default function Filter({
           },
         }}
       >
-        {options.map((option) => (
+        {filterOptions.map((option) => (
           <MenuItem
             key={option.value}
             onClick={() => handleSelect(option.value)}

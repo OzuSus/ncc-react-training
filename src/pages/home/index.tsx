@@ -1,5 +1,5 @@
-import { useAuthStore } from '@/features/auth/useAuthStore.ts';
-import { CustomButton } from '@/components/ui/Button';
+import { useAuthStore } from '@/libs/features/auth/useAuthStore.ts';
+import { CustomButton } from '@/libs/components/ui/Button';
 
 export default function Home() {
   const { logout } = useAuthStore();
