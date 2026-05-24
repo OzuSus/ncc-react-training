@@ -10,4 +10,13 @@ export const errorMessages = {
   PASSWORD: {
     REQUIRED: 'Password is required',
   },
+  PROJECT: {
+    NAME: 'Project name is required',
+    CODE: 'Project code is required',
+    CLIENT: 'Client is required',
+  },
+  CLIENT: {
+    NAME: 'Client name is required',
+    CODE: 'Client code is required',
+  },
 };

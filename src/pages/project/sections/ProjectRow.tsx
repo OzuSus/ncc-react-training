@@ -3,7 +3,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CustomBadge from '@/libs/components/ui/Badge';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
-import { PROJECT_TYPE } from '@/libs/constants/projectType.ts';
+import { BADGE_PROJECT_TYPE } from '@/libs/constants/projectType.ts';
 import { formatDateUKType } from '@/libs/utils/date/formatDateUKType.ts';
 import { IProject } from '@/libs/features/project/types.ts';
 import React from 'react';
@@ -52,7 +52,7 @@ export default function ProjectRow({
       />
       <CustomBadge
         badgeVariant="type"
-        label={PROJECT_TYPE[project.projectType]}
+        label={BADGE_PROJECT_TYPE[project.projectType]}
       />
       <CustomBadge
         badgeVariant="rangeDate"

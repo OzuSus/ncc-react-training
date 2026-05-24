@@ -20,3 +20,20 @@ export interface IProjectQuantity {
   status: number;
   quantity: number;
 }
+
+export interface ICustomer {
+  id: number;
+  name: string;
+  code: string;
+  address?: string;
+}
+
+export enum ProjectType {
+  TM = 0,
+  FF = 1,
+  NonBill = 2,
+  ODC = 3,
+  Product = 4,
+  Training = 5,
+  NoSalary = 6,
+}
