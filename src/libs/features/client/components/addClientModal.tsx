@@ -13,12 +13,12 @@ import { toast } from 'react-toastify';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { CustomTextField } from '@/libs/components/ui/TextField';
-import { useSaveCustomerMutation } from '@/libs/features/project/hooks/useCustomerQuery';
+import { useCreateClientMutation } from '@/libs/features/client/hook/useClientQuery.ts';
 import { errorMessages } from '@/libs/constants/errors.ts';
 import { notify } from '@/libs/constants/notify.ts';
 import type { AxiosError } from 'axios';
 
-interface IAddNewClientModalProps {
+interface IAddClientModalProps {
   open: boolean;
   onClose: () => void;
 }
@@ -29,11 +29,11 @@ interface IAddClientForm {
   address: string;
 }
 
-export default function AddNewClientModal({
+export default function AddClientModal({
   open,
   onClose,
-}: IAddNewClientModalProps) {
-  const { mutate: saveCustomer } = useSaveCustomerMutation();
+}: IAddClientModalProps) {
+  const { mutate: createClient } = useCreateClientMutation();
   const { control, handleSubmit, reset } = useForm<IAddClientForm>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
@@ -52,7 +52,7 @@ export default function AddNewClientModal({
       code: data.code.trim(),
       address: data.address?.trim() || '',
     };
-    saveCustomer(payload, {
+    createClient(payload, {
       onSuccess: (res) => {
         if (res?.success === false) {
           toast.error(res?.error?.message || notify.CLIENT.CREATE_FAILED);
@@ -95,7 +95,7 @@ export default function AddNewClientModal({
       <DialogContent sx={{ pt: '8px !important' }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Box>
-            <CustomTypography sx={{ fontSize: 16, color: '#555', mb: 0.5 }}>
+            <CustomTypography sx={{ fontSize: 16, color: '#5B6B79', mb: 0.5 }}>
               Name <span style={{ color: '#e53935' }}>*</span>
             </CustomTypography>
             <Controller
@@ -110,9 +110,14 @@ export default function AddNewClientModal({
                   fullWidth
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
-                  variant="standard"
+                  size={'small'}
+                  placeholder={'Enter client name'}
                   sx={{
-                    '& .MuiInputBase-root': { minHeight: '35px' },
+                    '& .MuiInputBase-root': {
+                      minHeight: '45px',
+                      color: '#1d2630',
+                      fontSize: 14,
+                    },
                     '& .MuiFormHelperText-root': { ml: 0 },
                   }}
                 />
@@ -120,7 +125,7 @@ export default function AddNewClientModal({
             />
           </Box>
           <Box>
-            <CustomTypography sx={{ fontSize: 16, color: '#555', mb: 0.5 }}>
+            <CustomTypography sx={{ fontSize: 16, color: '#5B6B79', mb: 0.5 }}>
               Code <span style={{ color: '#e53935' }}>*</span>
             </CustomTypography>
             <Controller
@@ -135,9 +140,14 @@ export default function AddNewClientModal({
                   fullWidth
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
-                  variant="standard"
+                  size={'small'}
+                  placeholder={'Enter client code'}
                   sx={{
-                    '& .MuiInputBase-root': { minHeight: '35px' },
+                    '& .MuiInputBase-root': {
+                      minHeight: '45px',
+                      color: '#1d2630',
+                      fontSize: 14,
+                    },
                     '& .MuiFormHelperText-root': { ml: 0 },
                   }}
                 />
@@ -145,7 +155,7 @@ export default function AddNewClientModal({
             />
           </Box>
           <Box>
-            <CustomTypography sx={{ fontSize: 16, color: '#555', mb: 0.5 }}>
+            <CustomTypography sx={{ fontSize: 16, color: '#5B6B79', mb: 0.5 }}>
               Address
             </CustomTypography>
             <Controller
@@ -155,10 +165,14 @@ export default function AddNewClientModal({
                 <CustomTextField
                   {...field}
                   fullWidth
-                  size="small"
-                  variant="standard"
+                  size={'small'}
+                  placeholder={'Enter address'}
                   sx={{
-                    '& .MuiInputBase-root': { minHeight: '35px' },
+                    '& .MuiInputBase-root': {
+                      minHeight: '45px',
+                      color: '#1d2630',
+                      fontSize: 14,
+                    },
                     '& .MuiFormHelperText-root': { ml: 0 },
                   }}
                 />
@@ -176,8 +190,8 @@ export default function AddNewClientModal({
           onClick={handleSubmit(onSubmit)}
           size="small"
           sx={{
-            bgcolor: '#e53935',
-            '&:hover': { bgcolor: '#c62828' },
+            bgcolor: '#4680ff',
+            '&:hover': { bgcolor: '#3f78ff' },
             boxShadow: 'none',
           }}
         >

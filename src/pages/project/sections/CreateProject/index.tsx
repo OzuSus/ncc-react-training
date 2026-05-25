@@ -142,7 +142,7 @@ export default function CreateProjectModal({
                 fontWeight: 500,
               },
               '& .MuiTabs-indicator': {
-                bgcolor: '#e53935',
+                bgcolor: '#4680ff',
               },
             }}
           >
@@ -155,15 +155,19 @@ export default function CreateProjectModal({
           {activeTab === 0 && <TabGeneral />}
         </DialogContent>
         <DialogActions sx={{ px: 3, py: 2 }}>
-          <CustomButton variant="outlined" onClick={handleClose}>
+          <CustomButton
+            variant="outlined"
+            onClick={handleClose}
+            sx={{ borderColor: '#4680ff', color: '#4680ff' }}
+          >
             Cancel
           </CustomButton>
           <CustomButton
             variant="contained"
             onClick={methods.handleSubmit(onSubmit)}
             sx={{
-              bgcolor: '#e53935',
-              '&:hover': { bgcolor: '#c62828' },
+              bgcolor: '#4680ff',
+              '&:hover': { bgcolor: '#3f78ff' },
             }}
           >
             Save

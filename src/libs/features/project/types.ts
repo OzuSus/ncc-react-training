@@ -21,13 +21,6 @@ export interface IProjectQuantity {
   quantity: number;
 }
 
-export interface ICustomer {
-  id: number;
-  name: string;
-  code: string;
-  address?: string;
-}
-
 export enum ProjectType {
   TM = 0,
   FF = 1,

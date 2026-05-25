@@ -10,17 +10,17 @@ import AddIcon from '@mui/icons-material/Add';
 import { Controller, useFormContext } from 'react-hook-form';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
-import { useCustomerQuery } from '@/libs/features/project/hooks/useCustomerQuery';
+import { useClientQuery } from '@/libs/features/client/hook/useClientQuery.ts';
 import { CustomTextField } from '@/libs/components/ui/TextField';
 import FormRow from '@/pages/project/sections/CreateProject/Tab/TabGeneral/formRow.tsx';
-import AddNewClientModal from '@/pages/project/sections/CreateProject/Tab/TabGeneral/addNewClientModal.tsx';
 import { ICreateProjectForm } from '@/pages/project/sections/CreateProject';
 import { PROJECT_TYPES } from '@/libs/constants/projectType.ts';
 import { errorMessages } from '@/libs/constants/errors.ts';
+import AddClientModal from '@/libs/features/client/components/addClientModal.tsx';
 
 export default function TabGeneral() {
   const [openCreateNewClient, setOpenCreateNewClient] = useState(false);
-  const { data: customers = [] } = useCustomerQuery();
+  const { data: clients = [] } = useClientQuery();
   const { control } = useFormContext<ICreateProjectForm>();
 
   return (
@@ -32,13 +32,11 @@ export default function TabGeneral() {
             control={control}
             rules={{ required: 'Project customer is required!' }}
             render={({ field, fieldState }) => {
-              const selectedCustomer = customers.find(
-                (c) => c.id === field.value,
-              );
+              const selectedClient = clients.find((c) => c.id === field.value);
               return (
                 <Autocomplete
-                  value={selectedCustomer}
-                  options={customers}
+                  value={selectedClient}
+                  options={clients}
                   sx={{ width: 320 }}
                   isOptionEqualToValue={(opt, val) => opt.id === val.id}
                   getOptionLabel={(opt) => `${opt.name} - [${opt.code}]`}
@@ -88,8 +86,8 @@ export default function TabGeneral() {
             startIcon={<AddIcon />}
             onClick={() => setOpenCreateNewClient(true)}
             sx={{
-              bgcolor: '#e53935',
-              '&:hover': { bgcolor: '#c62828' },
+              bgcolor: '#4680ff',
+              '&:hover': { bgcolor: '#3f78ff' },
               boxShadow: 'none',
               borderRadius: 1.5,
               height: 40,
@@ -273,7 +271,7 @@ export default function TabGeneral() {
           )}
         />
       </FormRow>
-      <AddNewClientModal
+      <AddClientModal
         open={openCreateNewClient}
         onClose={() => setOpenCreateNewClient(false)}
       />
