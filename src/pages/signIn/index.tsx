@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { Controller, useForm } from 'react-hook-form';
-import { Box, Stack, IconButton } from '@mui/material';
+import { Box, Stack, IconButton, CircularProgress } from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { CustomTypography } from '@/libs/components/ui/Typography';
@@ -23,12 +23,12 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState<string>('');
 
-  const { mutateAsync: login } = useAuthMutation();
+  const { mutateAsync: login, isPending } = useAuthMutation();
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<Prefix>({
+  } = useForm<IPrefix>({
     mode: 'onBlur',
     reValidateMode: 'onChange',
   });
@@ -73,14 +73,8 @@ export default function SignIn() {
               error={!!errors.email}
               helperText={errors.email?.message}
               fullWidth
-              sx={{
-                '& .MuiFormHelperText-root': {
-                  ml: 0,
-                },
-              }}
-              onChange={(e) => {
-                field.onChange(e);
-              }}
+              disabled={isPending}
+              sx={{ '& .MuiFormHelperText-root': { ml: 0 } }}
             />
           )}
         />
@@ -97,6 +91,7 @@ export default function SignIn() {
               error={!!errors.password}
               helperText={errors.password?.message}
               fullWidth
+              disabled={isPending}
               sx={{
                 '& .MuiFormHelperText-root': {
                   ml: 0,
@@ -105,7 +100,10 @@ export default function SignIn() {
               slotProps={{
                 input: {
                   endAdornment: (
-                    <IconButton onClick={() => setShowPassword((v) => !v)}>
+                    <IconButton
+                      onClick={() => setShowPassword((v) => !v)}
+                      disabled={isPending}
+                    >
                       {showPassword ? (
                         <VisibilityOffOutlinedIcon />
                       ) : (
@@ -130,6 +128,7 @@ export default function SignIn() {
                 label="Keep me sign in"
                 checked={field.value}
                 onChange={(checked) => field.onChange(checked)}
+                disabled={isPending}
               />
             )}
           />
@@ -139,6 +138,12 @@ export default function SignIn() {
           <CustomButton
             type="submit"
             fullWidth
+            disabled={isPending}
+            startIcon={
+              isPending ? (
+                <CircularProgress size={16} sx={{ color: '#fff' }} />
+              ) : undefined
+            }
             sx={{
               py: 1.5,
               borderRadius: '10px',

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Dialog,
@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  type AlertColor,
+  CircularProgress,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Controller, useForm } from 'react-hook-form';
@@ -18,6 +18,7 @@ import { errorMessages } from '@/libs/constants/errors.ts';
 import { notify } from '@/libs/constants/notify.ts';
 import type { AxiosError } from 'axios';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
+import useSnackbar from '@/libs/hooks/useSnackbar.ts';
 
 interface IAddClientModalProps {
   open: boolean;
@@ -34,15 +35,8 @@ export default function AddClientModal({
   open,
   onClose,
 }: IAddClientModalProps) {
-  const { mutate: createClient } = useCreateClientMutation();
-  const [snack, setSnack] = useState({
-    open: false,
-    message: '',
-    alertColor: 'info' as AlertColor,
-  });
-  const showSnack = (alertColor: AlertColor, message: string) => {
-    setSnack({ open: true, alertColor, message });
-  };
+  const { mutate: createClient, isPending } = useCreateClientMutation();
+  const { snackbar, close, showError, showSuccess } = useSnackbar();
 
   const { control, handleSubmit, reset } = useForm<IAddClientForm>({
     mode: 'onBlur',
@@ -50,6 +44,7 @@ export default function AddClientModal({
     defaultValues: { name: '', code: '', address: '' },
   });
   const handleClose = () => {
+    if (isPending) return;
     reset({ name: '', code: '', address: '' });
     onClose();
   };
@@ -67,18 +62,15 @@ export default function AddClientModal({
     createClient(payload, {
       onSuccess: (res) => {
         if (res?.success === false) {
-          showSnack(
-            'error',
-            res?.error?.message || notify.CLIENT.CREATE_FAILED,
-          );
+          showError(res?.error?.message || notify.CLIENT.CREATE_FAILED);
           return;
         }
-        showSnack('success', notify.CLIENT.CREATE_SUCCESS);
+        showSuccess(notify.CLIENT.CREATE_SUCCESS);
         handleClose();
       },
       onError: (err: AxiosError) => {
-        const messgaeError = err.response?.data?.error?.message;
-        showSnack('error', messgaeError || notify.CLIENT.CREATE_FAILED);
+        const messageError = err.response?.data?.error?.message;
+        showError(messageError || notify.CLIENT.CREATE_FAILED);
       },
     });
   };
@@ -104,7 +96,7 @@ export default function AddClientModal({
           }}
         >
           New Client
-          <IconButton size="small" onClick={handleClose}>
+          <IconButton size="small" onClick={handleClose} disabled={isPending}>
             <CloseIcon fontSize="small" />
           </IconButton>
         </DialogTitle>
@@ -139,6 +131,7 @@ export default function AddClientModal({
                       },
                       '& .MuiFormHelperText-root': { ml: 0 },
                     }}
+                    disabled={isPending}
                   />
                 )}
               />
@@ -172,6 +165,7 @@ export default function AddClientModal({
                       },
                       '& .MuiFormHelperText-root': { ml: 0 },
                     }}
+                    disabled={isPending}
                   />
                 )}
               />
@@ -199,6 +193,7 @@ export default function AddClientModal({
                       },
                       '& .MuiFormHelperText-root': { ml: 0 },
                     }}
+                    disabled={isPending}
                   />
                 )}
               />
@@ -206,13 +201,24 @@ export default function AddClientModal({
           </Box>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
-          <CustomButton variant="outlined" onClick={handleClose} size="small">
+          <CustomButton
+            variant="outlined"
+            onClick={handleClose}
+            size="small"
+            disabled={isPending}
+          >
             Cancel
           </CustomButton>
           <CustomButton
             variant="contained"
             onClick={handleSubmit(onSubmit)}
             size="small"
+            disabled={isPending}
+            startIcon={
+              isPending ? (
+                <CircularProgress size={16} sx={{ color: '#fff' }} />
+              ) : undefined
+            }
             sx={{
               bgcolor: '#4680ff',
               '&:hover': { bgcolor: '#3f78ff' },
@@ -224,10 +230,12 @@ export default function AddClientModal({
         </DialogActions>
       </Dialog>
       <CustomSnackbar
-        open={snack.open}
-        message={snack.message}
-        alertColor={snack.alertColor}
-        onClose={() => setSnack((s) => ({ ...s, open: false }))}
+        open={snackbar.open}
+        message={snackbar.message}
+        alertColor={snackbar.alertColor}
+        autoHideDuration={snackbar.autoHideDuration}
+        position={snackbar.position}
+        onClose={close}
       />
     </>
   );

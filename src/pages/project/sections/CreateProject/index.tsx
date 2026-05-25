@@ -7,6 +7,7 @@ import {
   Tab,
   Tabs,
   IconButton,
+  CircularProgress,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -18,7 +19,7 @@ import TabGeneral from '@/pages/project/sections/CreateProject/Tab/TabGeneral/Ta
 import { notify } from '@/libs/constants/notify.ts';
 import type { AxiosError } from 'axios';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
-import type { AlertColor } from '@mui/material';
+import useSnackbar from '@/libs/hooks/useSnackbar.ts';
 
 export interface ICreateProjectForm {
   customerId: number | '';
@@ -43,14 +44,8 @@ export default function CreateProjectModal({
   onClose,
 }: ICreateProjectModalProps) {
   const [activeTab, setActiveTab] = useState(0);
-  const [snack, setSnack] = useState({
-    open: false,
-    message: '',
-    alertColor: 'info' as AlertColor,
-  });
-  const showSnack = (alertColor: AlertColor, message: string) => {
-    setSnack({ open: true, alertColor, message });
-  };
+  const { snackbar, close, showError, showSuccess } = useSnackbar();
+
   const methods = useForm<ICreateProjectForm>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
@@ -66,9 +61,10 @@ export default function CreateProjectModal({
     },
   });
 
-  const { mutate: saveProject } = useCreateProjectMutation();
+  const { mutate: saveProject, isPending } = useCreateProjectMutation();
 
   const handleClose = () => {
+    if (isPending) return;
     methods.reset();
     setActiveTab(0);
     onClose();
@@ -92,18 +88,15 @@ export default function CreateProjectModal({
       {
         onSuccess: (res) => {
           if (res?.success === false) {
-            showSnack(
-              'error',
-              res?.error?.message || notify.PROJECT.CREATE_FAILED,
-            );
+            showError(res?.error?.message || notify.PROJECT.CREATE_FAILED);
             return;
           }
-          showSnack('success', notify.PROJECT.CREATE_SUCCESS);
+          showSuccess(notify.PROJECT.CREATE_SUCCESS);
           handleClose();
         },
         onError: (err: AxiosError) => {
-          const messgaeError = err.response?.data?.error?.message;
-          showSnack('error', messgaeError || notify.CLIENT.CREATE_FAILED);
+          const messageError = err.response?.data?.error?.message;
+          showError(messageError || notify.CLIENT.CREATE_FAILED);
         },
       },
     );
@@ -134,7 +127,7 @@ export default function CreateProjectModal({
           <CustomTypography sx={{ fontSize: 18, fontWeight: 700 }}>
             Create Project
           </CustomTypography>
-          <IconButton onClick={handleClose} size="small">
+          <IconButton onClick={handleClose} size="small" disabled={isPending}>
             <CloseIcon />
           </IconButton>
         </Box>
@@ -171,6 +164,7 @@ export default function CreateProjectModal({
             <CustomButton
               variant="outlined"
               onClick={handleClose}
+              disabled={isPending}
               sx={{ borderColor: '#4680ff', color: '#4680ff' }}
             >
               Cancel
@@ -178,10 +172,13 @@ export default function CreateProjectModal({
             <CustomButton
               variant="contained"
               onClick={methods.handleSubmit(onSubmit)}
-              sx={{
-                bgcolor: '#4680ff',
-                '&:hover': { bgcolor: '#3f78ff' },
-              }}
+              disabled={isPending}
+              sx={{ bgcolor: '#4680ff', '&:hover': { bgcolor: '#3f78ff' } }}
+              startIcon={
+                isPending ? (
+                  <CircularProgress size={16} sx={{ color: '#fff' }} />
+                ) : undefined
+              }
             >
               Save
             </CustomButton>
@@ -189,10 +186,12 @@ export default function CreateProjectModal({
         </FormProvider>
       </Dialog>
       <CustomSnackbar
-        open={snack.open}
-        message={snack.message}
-        alertColor={snack.alertColor}
-        onClose={() => setSnack((s) => ({ ...s, open: false }))}
+        open={snackbar.open}
+        message={snackbar.message}
+        alertColor={snackbar.alertColor}
+        autoHideDuration={snackbar.autoHideDuration}
+        position={snackbar.position}
+        onClose={close}
       />
     </>
   );
