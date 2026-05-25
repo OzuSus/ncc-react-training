@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import type { AlertColor } from '@mui/material';
 import type { SnackbarPosition } from '@/libs/components/ui/Snackbar';
 
-export interface SnackbarState {
+export interface Snackbar {
   open: boolean;
   message: string;
   alertColor: AlertColor;
@@ -10,7 +10,7 @@ export interface SnackbarState {
   position?: SnackbarPosition;
 }
 
-const defaultState: SnackbarState = {
+const defaultState: Snackbar = {
   open: false,
   message: '',
   alertColor: 'info',
@@ -18,12 +18,12 @@ const defaultState: SnackbarState = {
 };
 
 export default function useSnackbar() {
-  const [snackbar, setSnackbar] = useState<SnackbarState>(defaultState);
+  const [snackbar, setSnackbar] = useState<Snackbar>(defaultState);
   const show = useCallback(
     (
       alertColor: AlertColor,
       message: string,
-      options?: Partial<Omit<SnackbarState, 'open' | 'message' | 'alertColor'>>,
+      options?: Partial<Omit<Snackbar, 'open' | 'message' | 'alertColor'>>,
     ) => {
       setSnackbar({
         open: true,
