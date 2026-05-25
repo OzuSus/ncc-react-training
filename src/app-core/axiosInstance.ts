@@ -45,4 +45,15 @@ export const httpRequest = {
       return response.data as IHttpResponse<T>;
     }
   },
+
+  post: async <T, S extends boolean = false>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig & { special?: S },
+  ): Promise<S extends true ? T : IHttpResponse<T>> => {
+    const { special, ...axiosConfig } = config || {};
+    const response = await axiosInstance.post(url, data, axiosConfig);
+    if (special) return response.data as T;
+    return response.data as IHttpResponse<T>;
+  },
 };

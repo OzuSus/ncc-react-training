@@ -7,6 +7,7 @@ import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { ProjectStatus } from '@/libs/features/project/types';
 import { useProjectQuantityQuery } from '@/libs/features/project/hooks/useProjectQuery';
+import CreateProjectModal from '@/pages/project/sections/CreateProject';
 
 export interface IFilterOption {
   label: string;
@@ -37,6 +38,7 @@ export default function Filter({
   onSearchChange,
 }: IFilterProps) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
   const { data: quantities = [] } = useProjectQuantityQuery();
 
   const filterOptions: IFilterOption[] = useMemo(() => {
@@ -62,145 +64,152 @@ export default function Filter({
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 2,
-        px: 2,
-        py: 2,
-        borderBottom: '1px solid #eee',
-      }}
-    >
-      <CustomButton
-        variant="contained"
-        startIcon={<AddIcon />}
+    <>
+      <Box
         sx={{
-          bgcolor: '#e53935',
-          '&:hover': { bgcolor: '#c62828' },
-          borderRadius: 2,
-          fontWeight: 600,
-          fontSize: 14,
-          px: 2.5,
-          height: 50,
-          whiteSpace: 'nowrap',
-          flexShrink: 0,
-          textTransform: 'none',
-          boxShadow: 'none',
-          lineHeight: 1,
-          minHeight: 'unset',
-        }}
-      >
-        New Project
-      </CustomButton>
-
-      <CustomButton
-        variant="outlined"
-        endIcon={
-          <KeyboardArrowDownIcon
-            sx={{
-              transition: 'transform 0.2s',
-              transform: anchorEl ? 'rotate(180deg)' : 'rotate(0deg)',
-            }}
-          />
-        }
-        onClick={handleOpenMenu}
-        sx={{
-          minWidth: 220,
-          height: 50,
-          minHeight: 'unset',
-          lineHeight: 1,
-          justifyContent: 'space-between',
-          border: `1px solid ${anchorEl ? '#4080f0' : '#c8d0e0'}`,
-          borderRadius: 2,
-          color: '#1d2630',
-          fontWeight: 400,
-          fontSize: 14,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
           px: 2,
-          bgcolor: '#fffefe',
-          boxShadow: 'none',
-          textTransform: 'none',
-          '&:hover': {
-            bgcolor: '#fffefe',
-            border: '1px solid #4080f0',
-          },
+          py: 2,
+          borderBottom: '1px solid #eee',
         }}
       >
-        {selectedOption.label} ({selectedOption.count})
-      </CustomButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenuSelect}
-        slotProps={{
-          paper: {
-            sx: {
-              minWidth: 220,
-              border: '1px solid #e8edf5',
-              borderRadius: 3,
-              boxShadow: '0px 4px 16px rgba(0,0,0,0.08)',
-              mt: 0.5,
-              py: 0.5,
-            },
-          },
-        }}
-      >
-        {filterOptions.map((option) => (
-          <MenuItem
-            key={option.value}
-            onClick={() => handleSelect(option.value)}
-            sx={{
-              fontSize: 14,
-              py: 1.2,
-              px: 2.5,
-              '&:hover': { bgcolor: '#f5f7fc' },
-            }}
-          >
-            <CustomTypography sx={{ fontSize: 14, color: '#333' }}>
-              {`${option.label} (${option.count})`}
-            </CustomTypography>
-          </MenuItem>
-        ))}
-      </Menu>
-
-      <TextField
-        value={searchValue}
-        onChange={(e) => onSearchChange(e.target.value)}
-        placeholder="Search by client or project name"
-        size="small"
-        fullWidth
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: '#aab4c8', fontSize: 18 }} />
-              </InputAdornment>
-            ),
-          },
-        }}
-        sx={{
-          flex: 1,
-          '& .MuiOutlinedInput-root': {
-            borderRadius: '10px',
+        <CustomButton
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => setOpenCreateModal(true)}
+          sx={{
+            bgcolor: '#4680ff',
+            '&:hover': { bgcolor: '#3f78ff' },
+            borderRadius: 2,
+            fontWeight: 600,
             fontSize: 14,
-            color: '#555',
-            bgcolor: '#fffefe',
+            px: 2.5,
             height: 50,
-            '& fieldset': {
-              borderColor: '#c8d0e0',
-              borderWidth: '1px',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
+            textTransform: 'none',
+            boxShadow: 'none',
+            lineHeight: 1,
+            minHeight: 'unset',
+          }}
+        >
+          New Project
+        </CustomButton>
+
+        <CustomButton
+          variant="outlined"
+          endIcon={
+            <KeyboardArrowDownIcon
+              sx={{
+                transition: 'transform 0.2s',
+                transform: anchorEl ? 'rotate(180deg)' : 'rotate(0deg)',
+              }}
+            />
+          }
+          onClick={handleOpenMenu}
+          sx={{
+            minWidth: 220,
+            height: 50,
+            minHeight: 'unset',
+            lineHeight: 1,
+            justifyContent: 'space-between',
+            border: `1px solid ${anchorEl ? '#4080f0' : '#c8d0e0'}`,
+            borderRadius: 2,
+            color: '#1d2630',
+            fontWeight: 400,
+            fontSize: 14,
+            px: 2,
+            bgcolor: '#fffefe',
+            boxShadow: 'none',
+            textTransform: 'none',
+            '&:hover': {
+              bgcolor: '#fffefe',
+              border: '1px solid #4080f0',
             },
-            '&:hover fieldset': {
-              borderColor: '#4080f0',
-              borderWidth: '1px',
+          }}
+        >
+          {selectedOption.label} ({selectedOption.count})
+        </CustomButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleCloseMenuSelect}
+          slotProps={{
+            paper: {
+              sx: {
+                minWidth: 220,
+                border: '1px solid #e8edf5',
+                borderRadius: 3,
+                boxShadow: '0px 4px 16px rgba(0,0,0,0.08)',
+                mt: 0.5,
+                py: 0.5,
+              },
             },
-            '&.Mui-focused fieldset': {
-              borderColor: '#4080f0',
-              borderWidth: '1.5px',
+          }}
+        >
+          {filterOptions.map((option) => (
+            <MenuItem
+              key={option.value}
+              onClick={() => handleSelect(option.value)}
+              sx={{
+                fontSize: 14,
+                py: 1.2,
+                px: 2.5,
+                '&:hover': { bgcolor: '#f5f7fc' },
+              }}
+            >
+              <CustomTypography sx={{ fontSize: 14, color: '#333' }}>
+                {`${option.label} (${option.count})`}
+              </CustomTypography>
+            </MenuItem>
+          ))}
+        </Menu>
+
+        <TextField
+          value={searchValue}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Search by client or project name"
+          size="small"
+          fullWidth
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: '#aab4c8', fontSize: 18 }} />
+                </InputAdornment>
+              ),
             },
-          },
-        }}
+          }}
+          sx={{
+            flex: 1,
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '10px',
+              fontSize: 14,
+              color: '#555',
+              bgcolor: '#fffefe',
+              height: 50,
+              '& fieldset': {
+                borderColor: '#c8d0e0',
+                borderWidth: '1px',
+              },
+              '&:hover fieldset': {
+                borderColor: '#4080f0',
+                borderWidth: '1px',
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: '#4080f0',
+                borderWidth: '1.5px',
+              },
+            },
+          }}
+        />
+      </Box>
+      <CreateProjectModal
+        open={openCreateModal}
+        onClose={() => setOpenCreateModal(false)}
       />
-    </Box>
+    </>
   );
 }

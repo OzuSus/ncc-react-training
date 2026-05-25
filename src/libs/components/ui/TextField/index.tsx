@@ -13,10 +13,8 @@ export function CustomTextField({
   ...restProps
 }: ITextFieldProps) {
   return (
-    <Box sx={{ mx: '16px' }}>
-      <Typography
-        sx={{ color: 'black', fontSize: '16px', fontWeight: 400, mb: '8px' }}
-      >
+    <Box>
+      <Typography sx={{ color: 'black', fontSize: '16px', fontWeight: 400 }}>
         {label}
       </Typography>
 
