@@ -23,18 +23,18 @@ interface IAddNewClientModalProps {
   onClose: () => void;
 }
 
-type AddClientForm = {
+interface IAddClientForm {
   name: string;
   code: string;
   address: string;
-};
+}
 
 export default function AddNewClientModal({
   open,
   onClose,
 }: IAddNewClientModalProps) {
   const { mutate: saveCustomer } = useSaveCustomerMutation();
-  const { control, handleSubmit, reset } = useForm<AddClientForm>({
+  const { control, handleSubmit, reset } = useForm<IAddClientForm>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     defaultValues: { name: '', code: '', address: '' },
@@ -46,7 +46,7 @@ export default function AddNewClientModal({
   useEffect(() => {
     if (open) reset({ name: '', code: '', address: '' });
   }, [open, reset]);
-  const onSubmit = (data: AddClientForm) => {
+  const onSubmit = (data: IAddClientForm) => {
     const payload = {
       name: data.name.trim(),
       code: data.code.trim(),

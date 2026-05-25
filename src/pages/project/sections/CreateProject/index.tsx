@@ -49,6 +49,9 @@ export default function CreateProjectModal({
       customerId: '',
       name: '',
       code: '',
+      timeStart: '',
+      timeEnd: '',
+      note: '',
       isAllUserBelongTo: false,
       projectType: ProjectType.FF,
     },
@@ -135,7 +138,7 @@ export default function CreateProjectModal({
                 fontWeight: 400,
               },
               '& .Mui-selected': {
-                color: '#271f1f',
+                color: '#191515',
                 fontWeight: 500,
               },
               '& .MuiTabs-indicator': {
