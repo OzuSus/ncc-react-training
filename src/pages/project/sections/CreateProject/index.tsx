@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { FormProvider, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { ProjectType } from '@/libs/features/project/types';
@@ -18,6 +17,8 @@ import { useCreateProjectMutation } from '@/libs/features/project/hooks/useCreat
 import TabGeneral from '@/pages/project/sections/CreateProject/Tab/TabGeneral/TabGeneral.tsx';
 import { notify } from '@/libs/constants/notify.ts';
 import type { AxiosError } from 'axios';
+import CustomSnackbar from '@/libs/components/ui/Snackbar';
+import type { AlertColor } from '@mui/material';
 
 export interface ICreateProjectForm {
   customerId: number | '';
@@ -42,6 +43,14 @@ export default function CreateProjectModal({
   onClose,
 }: ICreateProjectModalProps) {
   const [activeTab, setActiveTab] = useState(0);
+  const [snack, setSnack] = useState({
+    open: false,
+    message: '',
+    alertColor: 'info' as AlertColor,
+  });
+  const showSnack = (alertColor: AlertColor, message: string) => {
+    setSnack({ open: true, alertColor, message });
+  };
   const methods = useForm<ICreateProjectForm>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
@@ -83,97 +92,108 @@ export default function CreateProjectModal({
       {
         onSuccess: (res) => {
           if (res?.success === false) {
-            toast.error(res?.error?.message || notify.PROJECT.CREATE_FAILED);
+            showSnack(
+              'error',
+              res?.error?.message || notify.PROJECT.CREATE_FAILED,
+            );
             return;
           }
-          toast.success(notify.PROJECT.CREATE_SUCCESS);
+          showSnack('success', notify.PROJECT.CREATE_SUCCESS);
           handleClose();
         },
         onError: (err: AxiosError) => {
           const messgaeError = err.response?.data?.error?.message;
-          toast.error(messgaeError || notify.CLIENT.CREATE_FAILED);
+          showSnack('error', messgaeError || notify.CLIENT.CREATE_FAILED);
         },
       },
     );
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      maxWidth="md"
-      fullWidth
-      sx={{
-        '& .MuiDialog-paper': {
-          borderRadius: '15px !important',
-        },
-      }}
-    >
-      <Box
+    <>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="md"
+        fullWidth
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          py: 3,
-          px: 3,
+          '& .MuiDialog-paper': {
+            borderRadius: '15px !important',
+          },
         }}
       >
-        <CustomTypography sx={{ fontSize: 18, fontWeight: 700 }}>
-          Create Project
-        </CustomTypography>
-        <IconButton onClick={handleClose} size="small">
-          <CloseIcon />
-        </IconButton>
-      </Box>
-      <FormProvider {...methods}>
-        <Box sx={{ px: 3 }}>
-          <Tabs
-            value={activeTab}
-            onChange={(_, v) => setActiveTab(v)}
-            sx={{
-              '& .MuiTab-root': {
-                fontSize: 14,
-                textTransform: 'none',
-                color: '#7f7f7f',
-                fontWeight: 400,
-              },
-              '& .Mui-selected': {
-                color: '#131313',
-                fontWeight: 500,
-              },
-              '& .MuiTabs-indicator': {
-                bgcolor: '#4680ff',
-              },
-            }}
-          >
-            {TABS.map((tab) => (
-              <Tab key={tab} label={tab} />
-            ))}
-          </Tabs>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            py: 3,
+            px: 3,
+          }}
+        >
+          <CustomTypography sx={{ fontSize: 18, fontWeight: 700 }}>
+            Create Project
+          </CustomTypography>
+          <IconButton onClick={handleClose} size="small">
+            <CloseIcon />
+          </IconButton>
         </Box>
-        <DialogContent dividers>
-          {activeTab === 0 && <TabGeneral />}
-        </DialogContent>
-        <DialogActions sx={{ px: 3, py: 2 }}>
-          <CustomButton
-            variant="outlined"
-            onClick={handleClose}
-            sx={{ borderColor: '#4680ff', color: '#4680ff' }}
-          >
-            Cancel
-          </CustomButton>
-          <CustomButton
-            variant="contained"
-            onClick={methods.handleSubmit(onSubmit)}
-            sx={{
-              bgcolor: '#4680ff',
-              '&:hover': { bgcolor: '#3f78ff' },
-            }}
-          >
-            Save
-          </CustomButton>
-        </DialogActions>
-      </FormProvider>
-    </Dialog>
+        <FormProvider {...methods}>
+          <Box sx={{ px: 3 }}>
+            <Tabs
+              value={activeTab}
+              onChange={(_, v) => setActiveTab(v)}
+              sx={{
+                '& .MuiTab-root': {
+                  fontSize: 14,
+                  textTransform: 'none',
+                  color: '#7f7f7f',
+                  fontWeight: 400,
+                },
+                '& .Mui-selected': {
+                  color: '#131313',
+                  fontWeight: 500,
+                },
+                '& .MuiTabs-indicator': {
+                  bgcolor: '#4680ff',
+                },
+              }}
+            >
+              {TABS.map((tab) => (
+                <Tab key={tab} label={tab} />
+              ))}
+            </Tabs>
+          </Box>
+          <DialogContent dividers>
+            {activeTab === 0 && <TabGeneral />}
+          </DialogContent>
+          <DialogActions sx={{ px: 3, py: 2 }}>
+            <CustomButton
+              variant="outlined"
+              onClick={handleClose}
+              sx={{ borderColor: '#4680ff', color: '#4680ff' }}
+            >
+              Cancel
+            </CustomButton>
+            <CustomButton
+              variant="contained"
+              onClick={methods.handleSubmit(onSubmit)}
+              sx={{
+                bgcolor: '#4680ff',
+                '&:hover': { bgcolor: '#3f78ff' },
+              }}
+            >
+              Save
+            </CustomButton>
+          </DialogActions>
+        </FormProvider>
+      </Dialog>
+      <CustomSnackbar
+        open={snack.open}
+        message={snack.message}
+        alertColor={snack.alertColor}
+        onClose={() => setSnack((s) => ({ ...s, open: false }))}
+      />
+    </>
   );
 }
