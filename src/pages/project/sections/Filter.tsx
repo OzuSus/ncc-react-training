@@ -80,8 +80,8 @@ export default function Filter({
           startIcon={<AddIcon />}
           onClick={() => setOpenCreateModal(true)}
           sx={{
-            bgcolor: '#e53935',
-            '&:hover': { bgcolor: '#c62828' },
+            bgcolor: '#4680ff',
+            '&:hover': { bgcolor: '#3f78ff' },
             borderRadius: 2,
             fontWeight: 600,
             fontSize: 14,

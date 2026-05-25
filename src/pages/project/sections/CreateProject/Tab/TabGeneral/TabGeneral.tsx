@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Box,
   Checkbox,
+  CircularProgress,
   FormControlLabel,
   TextField,
   Autocomplete,
@@ -20,7 +21,7 @@ import AddClientModal from '@/libs/features/client/components/addClientModal.tsx
 
 export default function TabGeneral() {
   const [openCreateNewClient, setOpenCreateNewClient] = useState(false);
-  const { data: clients = [] } = useClientQuery();
+  const { data: clients = [], isLoading } = useClientQuery();
   const { control } = useFormContext<ICreateProjectForm>();
 
   return (
@@ -37,6 +38,8 @@ export default function TabGeneral() {
                 <Autocomplete
                   value={selectedClient}
                   options={clients}
+                  loading={isLoading}
+                  disabled={isLoading}
                   sx={{ width: 320 }}
                   isOptionEqualToValue={(opt, val) => opt.id === val.id}
                   getOptionLabel={(opt) => `${opt.name} - [${opt.code}]`}
@@ -47,7 +50,7 @@ export default function TabGeneral() {
                   renderInput={(params) => (
                     <CustomTextField
                       {...params}
-                      placeholder="Choose a client..."
+                      placeholder={'Choose a client...'}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                       sx={{
@@ -60,6 +63,20 @@ export default function TabGeneral() {
                         '& .MuiFormHelperText-root': {
                           ml: 0,
                         },
+                      }}
+                      InputProps={{
+                        ...(params.InputProps ?? {}),
+                        endAdornment: (
+                          <>
+                            {isLoading ? (
+                              <CircularProgress
+                                color="inherit"
+                                size={16}
+                                sx={{ mr: 1 }}
+                              />
+                            ) : null}
+                          </>
+                        ),
                       }}
                     />
                   )}
@@ -83,8 +100,15 @@ export default function TabGeneral() {
           />
           <CustomButton
             variant="contained"
-            startIcon={<AddIcon />}
+            startIcon={
+              isLoading ? (
+                <CircularProgress size={16} sx={{ color: '#fff' }} />
+              ) : (
+                <AddIcon />
+              )
+            }
             onClick={() => setOpenCreateNewClient(true)}
+            disabled={isLoading}
             sx={{
               bgcolor: '#4680ff',
               '&:hover': { bgcolor: '#3f78ff' },

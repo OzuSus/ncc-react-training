@@ -138,7 +138,7 @@ export default function CreateProjectModal({
                 fontWeight: 400,
               },
               '& .Mui-selected': {
-                color: '#191515',
+                color: '#131313',
                 fontWeight: 500,
               },
               '& .MuiTabs-indicator': {
