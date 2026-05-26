@@ -1,6 +1,8 @@
 import { httpRequest } from '@/app-core/axiosInstance';
-import { IMember } from '@/libs/features/member/types';
+import { IMemberResponse } from '@/libs/features/member/hooks/useMemberQuery.ts';
 
 export async function fetchMemberApi() {
-  return httpRequest.get<IMember[]>('api/services/app/User/GetUserNotPagging');
+  return httpRequest.get<IMemberResponse[]>(
+    'api/services/app/User/GetUserNotPagging',
+  );
 }

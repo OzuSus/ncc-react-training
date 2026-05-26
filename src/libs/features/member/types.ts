@@ -4,11 +4,16 @@ export interface IMember {
   emailAddress: string;
   isActive: boolean;
   type: number;
+  jobTitle: string | null;
+  level: number | null;
+  userCode: string | null;
+  avatarPath: string;
   avatarFullPath: string;
   branch: number;
   branchDisplayName: string;
   branchId: number;
   branchColor: string;
+  positionId: number;
   positionName: string;
 }
 export enum MemberType {
