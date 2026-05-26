@@ -11,11 +11,14 @@ const badgeColor: Record<TBadgeVariant, string> = {
 interface ICustomBadgeProps extends ChipProps {
   badgeVariant: TBadgeVariant;
   label: string;
+  bgColor?: string;
 }
 
 export default function CustomBadge({
   badgeVariant,
   label,
+  bgColor,
+  sx,
   ...rest
 }: ICustomBadgeProps) {
   return (
@@ -23,13 +26,14 @@ export default function CustomBadge({
       label={label}
       size="small"
       sx={{
-        background: badgeColor[badgeVariant],
+        background: bgColor ?? badgeColor[badgeVariant],
         color: '#fff',
         fontSize: 11,
         height: 22,
         fontWeight: 700,
         borderRadius: '20px',
         '& .MuiChip-label': { px: 1 },
+        ...sx,
       }}
       {...rest}
     />

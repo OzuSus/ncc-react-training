@@ -15,11 +15,24 @@ import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { ProjectType } from '@/libs/features/project/types';
 import { useCreateProjectMutation } from '@/libs/features/project/hooks/useCreateProjectQuery';
-import TabGeneral from '@/pages/project/sections/CreateProject/Tab/TabGeneral/TabGeneral.tsx';
-import { notify } from '@/libs/constants/notify.ts';
+import TabGeneral from '@/pages/project/sections/CreateProject/Tab/TabGeneral/TabGeneral';
+import TabTeam from '@/pages/project/sections/CreateProject/Tab/TabTeam/TabTeam';
+import { notify } from '@/libs/constants/notify';
 import type { AxiosError } from 'axios';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
-import useSnackbar from '@/libs/hooks/useSnackbar.ts';
+import useSnackbar from '@/libs/hooks/useSnackbar';
+import { MemberRole } from '@/libs/features/member/types.ts';
+import { ErrorSweetAlert } from '@/libs/utils/alert/sweetAlert.ts';
+import { errorMessages } from '@/libs/constants/errors.ts';
+
+export interface IProjectMember {
+  userId: number;
+  type: number;
+  emailAddress: string;
+  avatarFullPath: string;
+  branchDisplayName: string;
+  userType: number;
+}
 
 export interface ICreateProjectForm {
   customerId: number | '';
@@ -30,9 +43,10 @@ export interface ICreateProjectForm {
   note: string;
   isAllUserBelongTo: boolean;
   projectType: number;
+  members: IProjectMember[];
 }
 
-const TABS = ['General'];
+const TABS = ['General', 'Team'];
 
 interface ICreateProjectModalProps {
   open: boolean;
@@ -58,6 +72,7 @@ export default function CreateProjectModal({
       note: '',
       isAllUserBelongTo: false,
       projectType: ProjectType.FF,
+      members: [],
     },
   });
 
@@ -70,10 +85,19 @@ export default function CreateProjectModal({
     onClose();
   };
 
-  const onSubmit = (data: ICreateProjectForm) => {
+  const onSubmit = async (data: ICreateProjectForm) => {
+    if (!data.members || data.members.length === 0) {
+      await ErrorSweetAlert(errorMessages.TEAM.REQUIRED_AT_LEAST_1);
+      return;
+    }
+    const hasPM = data.members.some((m) => m.type === MemberRole.PM);
+    if (!hasPM) {
+      await ErrorSweetAlert(errorMessages.TEAM.REQUIRED_PM);
+      return;
+    }
     saveProject(
       {
-        customerId: data.customerId,
+        customerId: data.customerId as number,
         name: data.name,
         code: data.code,
         timeStart: data.timeStart || undefined,
@@ -82,7 +106,11 @@ export default function CreateProjectModal({
         isAllUserBelongTo: data.isAllUserBelongTo,
         projectType: data.projectType,
         projectTargetUsers: [],
-        users: [{ isTemp: false, type: 1, userId: 1 }],
+        users: data.members.map((m) => ({
+          userId: m.userId,
+          type: m.type,
+          isTemp: m.isTemp,
+        })),
         tasks: [{ taskId: 2, billable: true }],
       },
       {
@@ -96,7 +124,7 @@ export default function CreateProjectModal({
         },
         onError: (err: AxiosError) => {
           const messageError = err.response?.data?.error?.message;
-          showError(messageError || notify.CLIENT.CREATE_FAILED);
+          showError(messageError || notify.PROJECT.CREATE_FAILED);
         },
       },
     );
@@ -157,8 +185,13 @@ export default function CreateProjectModal({
               ))}
             </Tabs>
           </Box>
-          <DialogContent dividers>
-            {activeTab === 0 && <TabGeneral />}
+          <DialogContent dividers sx={{ p: 0, minHeight: 460 }}>
+            {activeTab === 0 && (
+              <Box sx={{ px: 3, py: 2 }}>
+                <TabGeneral />
+              </Box>
+            )}
+            {activeTab === 1 && <TabTeam />}
           </DialogContent>
           <DialogActions sx={{ px: 3, py: 2 }}>
             <CustomButton
