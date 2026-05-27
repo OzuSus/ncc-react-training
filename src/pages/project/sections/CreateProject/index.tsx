@@ -22,8 +22,9 @@ import type { AxiosError } from 'axios';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
 import useSnackbar from '@/libs/hooks/useSnackbar';
 import { MemberRole } from '@/libs/features/member/types.ts';
-import { ErrorSweetAlert } from '@/libs/utils/alert/sweetAlert.ts';
 import { errorMessages } from '@/libs/constants/errors.ts';
+import { useAlertDialog } from '@/libs/hooks/useAlert.ts';
+import AlertDialog from '@/libs/components/ui/Alert';
 
 export interface IProjectMember {
   userId: number;
@@ -59,6 +60,7 @@ export default function CreateProjectModal({
 }: ICreateProjectModalProps) {
   const [activeTab, setActiveTab] = useState(0);
   const { snackbar, close, showError, showSuccess } = useSnackbar();
+  const { alert, showAlert, handleClose: handleAlertClose } = useAlertDialog();
 
   const methods = useForm<ICreateProjectForm>({
     mode: 'onBlur',
@@ -87,12 +89,12 @@ export default function CreateProjectModal({
 
   const onSubmit = async (data: ICreateProjectForm) => {
     if (!data.members || data.members.length === 0) {
-      await ErrorSweetAlert(errorMessages.TEAM.REQUIRED_AT_LEAST_1);
+      showAlert(errorMessages.TEAM.REQUIRED_AT_LEAST_1);
       return;
     }
     const hasPM = data.members.some((m) => m.type === MemberRole.PM);
     if (!hasPM) {
-      await ErrorSweetAlert(errorMessages.TEAM.REQUIRED_PM);
+      showAlert(errorMessages.TEAM.REQUIRED_PM);
       return;
     }
     saveProject(
@@ -218,6 +220,12 @@ export default function CreateProjectModal({
           </DialogActions>
         </FormProvider>
       </Dialog>
+      <AlertDialog
+        open={alert.open}
+        text={alert.text}
+        variant={alert.variant}
+        onClose={handleAlertClose}
+      />
       <CustomSnackbar
         open={snackbar.open}
         message={snackbar.message}
