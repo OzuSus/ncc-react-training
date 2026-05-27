@@ -1,21 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import {
-  Autocomplete,
-  Box,
-  Checkbox,
-  CircularProgress,
-  Collapse,
-  FormControlLabel,
-  InputAdornment,
-  MenuItem,
-  Select,
-  TextField,
-} from '@mui/material';
+import { Box, CircularProgress, Collapse } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import SearchIcon from '@mui/icons-material/Search';
 import { useController, useFormContext } from 'react-hook-form';
-import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import type {
   ICreateProjectForm,
@@ -23,15 +10,14 @@ import type {
 } from '@/pages/project/sections/CreateProject';
 import { useMemberQuery } from '@/libs/features/member/hooks/useMemberQuery';
 import { useBranchQuery } from '@/libs/features/branch/hooks/useBranchQuery';
-import type { IMember } from '@/libs/features/member/types';
-import { useDebounce } from '@/libs/hooks/useDebounce';
-import { MEMBER_TYPE_OPTIONS } from '@/libs/constants/member.ts';
-import type { MemberLookupMap } from '@/libs/features/member/types';
-import { BranchFilterValue } from '@/libs/features/branch/types';
-import SelectedMemberRow from '@/pages/project/sections/CreateProject/Tab/TabTeam/SelectedMemberRow.tsx';
-import AvailableUserRow from '@/pages/project/sections/CreateProject/Tab/TabTeam/AvailableUserRow.tsx';
-import { CustomTextField } from '@/libs/components/ui/TextField';
+import type { IMember, MemberLookupMap } from '@/libs/features/member/types';
 import { MemberRole } from '@/libs/features/member/types';
+import { useDebounce } from '@/libs/hooks/useDebounce';
+import type { BranchFilterValue } from '@/libs/features/branch/types';
+import { SelectedMemberRow } from '@/pages/project/sections/CreateProject/Tab/TabTeam/SelectedMemberRow.tsx';
+import { AvailableUserRow } from '@/pages/project/sections/CreateProject/Tab/TabTeam/AvailableUserRow.tsx';
+import SelectedMemberFilterToolbar from '@/pages/project/sections/CreateProject/Tab/TabTeam/SelectedMemberFilterToolbar.tsx';
+import SelectTeamFilterToolbar from '@/pages/project/sections/CreateProject/Tab/TabTeam/SelectTeamFilterToolbar.tsx';
 
 export default function TabTeam() {
   const { control } = useFormContext<ICreateProjectForm>();
@@ -48,7 +34,6 @@ export default function TabTeam() {
   const [showInactive, setShowInactive] = useState(false);
   const [leftSearch, setLeftSearch] = useState('');
   const debouncedLeftSearch = useDebounce(leftSearch, 150);
-
   const [branchFilter, setBranchFilter] = useState<BranchFilterValue>('all');
   const [typeFilter, setTypeFilter] = useState<number>(-1);
   const [rightSearch, setRightSearch] = useState('');
@@ -123,9 +108,8 @@ export default function TabTeam() {
     [members, membersField],
   );
   const handleRemoveMember = useCallback(
-    (userId: number) => {
-      membersField.onChange(members.filter((m) => m.userId !== userId));
-    },
+    (userId: number) =>
+      membersField.onChange(members.filter((m) => m.userId !== userId)),
     [members, membersField],
   );
   const handleUpdateMember = useCallback(
@@ -175,97 +159,20 @@ export default function TabTeam() {
           )}
         </Box>
         <Collapse in={leftOpen}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-              px: 3,
-              py: 1.5,
-              flexWrap: 'wrap',
-            }}
-          >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  checked={showDeactive}
-                  onChange={(e) => setShowDeactive(e.target.checked)}
-                />
-              }
-              label={
-                <CustomTypography sx={{ fontSize: 14 }}>
-                  Show deactive member
-                </CustomTypography>
-              }
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  checked={showInactive}
-                  onChange={(e) => setShowInactive(e.target.checked)}
-                />
-              }
-              label={
-                <CustomTypography sx={{ fontSize: 14 }}>
-                  Show Inactive user
-                </CustomTypography>
-              }
-            />
-            <CustomTextField
-              size="small"
-              placeholder="Search by name, email"
-              value={leftSearch}
-              onChange={(e) => setLeftSearch(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon sx={{ fontSize: 16, color: '#aaa' }} />
-                  </InputAdornment>
-                ),
-              }}
-              sx={{
-                '& .MuiInputBase-root': {
-                  minHeight: '20px',
-                  color: '#1d2630',
-                  fontSize: 14,
-                },
-                minWidth: 350,
-              }}
-            />
-            {!showAddPanel ? (
-              <CustomButton
-                variant="contained"
-                onClick={() => setShowAddPanel(true)}
-                sx={{
-                  bgcolor: '#4680ff',
-                  '&:hover': { bgcolor: '#3f78ff' },
-                  fontSize: 13,
-                  height: 36,
-                }}
-              >
-                Add users
-              </CustomButton>
-            ) : (
-              <CustomButton
-                variant="contained"
-                onClick={() => setShowAddPanel(false)}
-                sx={{
-                  bgcolor: '#4680ff',
-                  '&:hover': { bgcolor: '#3f78ff' },
-                  fontSize: 13,
-                  height: 36,
-                }}
-              >
-                Exit add
-              </CustomButton>
-            )}
-          </Box>
-
+          <SelectedMemberFilterToolbar
+            showDeactive={showDeactive}
+            showInactive={showInactive}
+            leftSearch={leftSearch}
+            showAddPanel={showAddPanel}
+            onShowDeactiveChange={setShowDeactive}
+            onShowInactiveChange={setShowInactive}
+            onSearchChange={setLeftSearch}
+            onToggleAddPanel={() => setShowAddPanel((p) => !p)}
+          />
           <Box>
             {displayMembers.map((member) => (
               <SelectedMemberRow
+                key={member.userId}
                 member={member}
                 onRemove={handleRemoveMember}
                 onUpdate={handleUpdateMember}
@@ -297,107 +204,16 @@ export default function TabTeam() {
             )}
           </Box>
           <Collapse in={rightOpen}>
-            <Box
-              sx={{
-                px: 2,
-                py: 1.5,
-                display: 'flex',
-                gap: 1,
-                alignItems: 'center',
-                flexWrap: 'wrap',
-              }}
-            >
-              <Box>
-                <CustomTypography sx={{ fontSize: 11, color: '#888', mb: 0.3 }}>
-                  Branch
-                </CustomTypography>
-                <Autocomplete
-                  size="small"
-                  options={branchOptions}
-                  getOptionLabel={(opt) => opt.name}
-                  value={
-                    branchOptions.find((o) => o.id === branchFilter) ??
-                    branchOptions[0]
-                  }
-                  onChange={(_, newVal) =>
-                    setBranchFilter((newVal?.id ?? 'all') as BranchFilterValue)
-                  }
-                  disableClearable
-                  loading={loadingBranches}
-                  sx={{ width: 110 }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      size="small"
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          height: 35,
-                          fontSize: 13,
-                        },
-                      }}
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                          <>
-                            {loadingBranches && (
-                              <CircularProgress color="inherit" size={14} />
-                            )}
-                          </>
-                        ),
-                      }}
-                    />
-                  )}
-                  renderOption={(props, option) => (
-                    <Box
-                      component="li"
-                      {...props}
-                      key={option.id}
-                      sx={{ fontSize: 13 }}
-                    >
-                      {option.name}
-                    </Box>
-                  )}
-                  ListboxProps={{ style: { maxHeight: 220 } }}
-                  isOptionEqualToValue={(opt, val) => opt.id === val.id}
-                />
-              </Box>
-              <Box>
-                <CustomTypography sx={{ fontSize: 11, color: '#888', mb: 0.3 }}>
-                  Type
-                </CustomTypography>
-                <Select
-                  size="small"
-                  value={typeFilter}
-                  onChange={(e) => setTypeFilter(Number(e.target.value))}
-                  sx={{ fontSize: 13, height: 35, minWidth: 60 }}
-                >
-                  {MEMBER_TYPE_OPTIONS.map((opt) => (
-                    <MenuItem
-                      key={opt.value}
-                      value={opt.value}
-                      sx={{ fontSize: 13 }}
-                    >
-                      {opt.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </Box>
-              <Box sx={{ flex: 1, mt: 2 }}>
-                <CustomTextField
-                  size="small"
-                  placeholder="Search by name, email"
-                  value={rightSearch}
-                  onChange={(e) => setRightSearch(e.target.value)}
-                  sx={{
-                    '& .MuiInputBase-root': {
-                      minHeight: '18px',
-                      color: '#1d2630',
-                      fontSize: 14,
-                    },
-                  }}
-                />
-              </Box>
-            </Box>
+            <SelectTeamFilterToolbar
+              branchOptions={branchOptions}
+              branchFilter={branchFilter}
+              typeFilter={typeFilter}
+              rightSearch={rightSearch}
+              loadingBranches={loadingBranches}
+              onBranchChange={setBranchFilter}
+              onTypeChange={setTypeFilter}
+              onSearchChange={setRightSearch}
+            />
             <Box sx={{ overflowY: 'auto' }}>
               {loadingMembers ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
