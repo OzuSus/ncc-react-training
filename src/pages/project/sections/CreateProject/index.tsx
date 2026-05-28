@@ -25,6 +25,7 @@ import { MemberRole } from '@/libs/features/member/types.ts';
 import { errorMessages } from '@/libs/constants/errors.ts';
 import { useAlertDialog } from '@/libs/hooks/useAlert.ts';
 import AlertDialog from '@/libs/components/ui/Alert';
+import TabTasks from '@/pages/project/sections/CreateProject/Tab/TabTasks/TabTasks.tsx';
 
 export interface IProjectMember {
   userId: number;
@@ -33,6 +34,11 @@ export interface IProjectMember {
   avatarFullPath: string;
   branchDisplayName: string;
   userType: number;
+}
+export interface IProjectTask {
+  taskId: number;
+  billable: boolean;
+  name: string;
 }
 
 export interface ICreateProjectForm {
@@ -45,9 +51,10 @@ export interface ICreateProjectForm {
   isAllUserBelongTo: boolean;
   projectType: number;
   members: IProjectMember[];
+  tasks: IProjectTask[];
 }
 
-const TABS = ['General', 'Team'];
+const TABS = ['General', 'Team', 'Task'];
 
 interface ICreateProjectModalProps {
   open: boolean;
@@ -75,6 +82,7 @@ export default function CreateProjectModal({
       isAllUserBelongTo: false,
       projectType: ProjectType.FF,
       members: [],
+      tasks: [],
     },
   });
 
@@ -97,6 +105,10 @@ export default function CreateProjectModal({
       showAlert(errorMessages.TEAM.REQUIRED_PM);
       return;
     }
+    if (!data.tasks || data.tasks.length === 0) {
+      showAlert(errorMessages.TASK.REQUIRED_AT_LEAST_1);
+      return;
+    }
     saveProject(
       {
         customerId: data.customerId as number,
@@ -113,7 +125,10 @@ export default function CreateProjectModal({
           type: m.type,
           isTemp: m.isTemp,
         })),
-        tasks: [{ taskId: 2, billable: true }],
+        tasks: data.tasks.map((t) => ({
+          taskId: t.taskId,
+          billable: t.billable,
+        })),
       },
       {
         onSuccess: (res) => {
@@ -194,6 +209,7 @@ export default function CreateProjectModal({
               </Box>
             )}
             {activeTab === 1 && <TabTeam />}
+            {activeTab === 2 && <TabTasks />}
           </DialogContent>
           <DialogActions sx={{ px: 3, py: 2 }}>
             <CustomButton
