@@ -23,4 +23,7 @@ export const errorMessages = {
     REQUIRED_AT_LEAST_1: 'Project must have at least 1 member',
     REQUIRED_PM: 'Project must have at least 1 PM',
   },
+  TASK: {
+    REQUIRED_AT_LEAST_1: 'Project must have at least 1 task',
+  },
 };
