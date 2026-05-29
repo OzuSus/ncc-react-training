@@ -26,6 +26,7 @@ import { errorMessages } from '@/libs/constants/errors.ts';
 import { useAlertDialog } from '@/libs/hooks/useAlert.ts';
 import AlertDialog from '@/libs/components/ui/Alert';
 import TabTasks from '@/pages/project/sections/CreateProject/Tab/TabTasks/TabTasks.tsx';
+import TabNotification from '@/pages/project/sections/CreateProject/Tab/TabNotification/TabNotification.tsx';
 
 export interface IProjectMember {
   userId: number;
@@ -52,9 +53,15 @@ export interface ICreateProjectForm {
   projectType: number;
   members: IProjectMember[];
   tasks: IProjectTask[];
+  komuChannelId: string;
+  isNoticeKMSubmitTS: boolean;
+  isNoticeKMRequestOffDate: boolean;
+  isNoticeKMApproveRequestOffDate: boolean;
+  isNoticeKMRequestChangeWorkingTime: boolean;
+  isNoticeKMApproveChangeWorkingTime: boolean;
 }
 
-const TABS = ['General', 'Team', 'Task'];
+const TABS = ['General', 'Team', 'Task', 'Notification'];
 
 interface ICreateProjectModalProps {
   open: boolean;
@@ -83,6 +90,12 @@ export default function CreateProjectModal({
       projectType: ProjectType.FF,
       members: [],
       tasks: [],
+      komuChannelId: '',
+      isNoticeKMSubmitTS: false,
+      isNoticeKMRequestOffDate: false,
+      isNoticeKMApproveRequestOffDate: false,
+      isNoticeKMRequestChangeWorkingTime: false,
+      isNoticeKMApproveChangeWorkingTime: false,
     },
   });
 
@@ -129,6 +142,14 @@ export default function CreateProjectModal({
           taskId: t.taskId,
           billable: t.billable,
         })),
+        komuChannelId: data.komuChannelId || undefined,
+        isNoticeKMSubmitTS: data.isNoticeKMSubmitTS,
+        isNoticeKMRequestOffDate: data.isNoticeKMRequestOffDate,
+        isNoticeKMApproveRequestOffDate: data.isNoticeKMApproveRequestOffDate,
+        isNoticeKMRequestChangeWorkingTime:
+          data.isNoticeKMRequestChangeWorkingTime,
+        isNoticeKMApproveChangeWorkingTime:
+          data.isNoticeKMApproveChangeWorkingTime,
       },
       {
         onSuccess: (res) => {
@@ -210,6 +231,7 @@ export default function CreateProjectModal({
             )}
             {activeTab === 1 && <TabTeam />}
             {activeTab === 2 && <TabTasks />}
+            {activeTab === 3 && <TabNotification />}
           </DialogContent>
           <DialogActions sx={{ px: 3, py: 2 }}>
             <CustomButton
