@@ -30,3 +30,24 @@ export enum ProjectType {
   Training = 5,
   NoSalary = 6,
 }
+
+export interface IProjectDetail {
+  id: number;
+  name: string;
+  code: string;
+  status: number;
+  timeStart: string | null;
+  timeEnd: string | null;
+  note: string | null;
+  projectType: number;
+  customerId: number;
+  isAllUserBelongTo: boolean;
+  komuChannelId: string | null;
+  isNoticeKMSubmitTS: boolean;
+  isNoticeKMRequestOffDate: boolean;
+  isNoticeKMApproveRequestOffDate: boolean;
+  isNoticeKMRequestChangeWorkingTime: boolean;
+  isNoticeKMApproveChangeWorkingTime: boolean;
+  tasks: { taskId: number; billable: boolean; id: number }[];
+  users: { userId: number; type: number; isTemp: boolean; id: number }[];
+}

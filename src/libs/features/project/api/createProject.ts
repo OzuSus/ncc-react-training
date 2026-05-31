@@ -1,6 +1,7 @@
 import { httpRequest } from '@/app-core/axiosInstance';
 
 export interface ICreateProjectRequest {
+  id?: number;
   code: string;
   customerId: number;
   name: string;
