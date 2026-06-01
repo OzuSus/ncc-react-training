@@ -10,7 +10,7 @@ import React from 'react';
 
 interface IProjectRowProps {
   project: IProject;
-  onOpenActions: () => void;
+  onOpenActions: (event, projectId: number) => void;
 }
 
 export default function ProjectRow({
@@ -70,7 +70,7 @@ export default function ProjectRow({
             }}
           />
         }
-        onClick={(e) => onOpenActions(e)}
+        onClick={(e) => onOpenActions(e, project.id)}
         variant="text"
         sx={{
           color: '#555',

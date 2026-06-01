@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -13,101 +13,111 @@ import CloseIcon from '@mui/icons-material/Close';
 import { FormProvider, useForm } from 'react-hook-form';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
-import { ProjectType } from '@/libs/features/project/types';
 import { useCreateProjectMutation } from '@/libs/features/project/hooks/useCreateProjectQuery';
 import TabGeneral from '@/libs/features/project/components/projectForm/Tab/TabGeneral/TabGeneral';
 import TabTeam from '@/libs/features/project/components/projectForm/Tab/TabTeam/TabTeam';
+import TabTasks from '@/libs/features/project/components/projectForm/Tab/TabTasks/TabTasks';
+import TabNotification from '@/libs/features/project/components/projectForm/Tab/TabNotification/TabNotification';
 import { notify } from '@/libs/constants/notify';
 import type { AxiosError } from 'axios';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
 import useSnackbar from '@/libs/hooks/useSnackbar';
-import { MemberRole } from '@/libs/features/member/types.ts';
-import { errorMessages } from '@/libs/constants/errors.ts';
-import { useAlertDialog } from '@/libs/hooks/useAlert.ts';
+import { MemberRole } from '@/libs/features/member/types';
+import { errorMessages } from '@/libs/constants/errors';
+import { useAlertDialog } from '@/libs/hooks/useAlert';
 import AlertDialog from '@/libs/components/ui/Alert';
-import TabTasks from '@/libs/features/project/components/projectForm/Tab/TabTasks/TabTasks.tsx';
-import TabNotification from '@/libs/features/project/components/projectForm/Tab/TabNotification/TabNotification.tsx';
-
-export interface IProjectMember {
-  userId: number;
-  type: number;
-  emailAddress: string;
-  avatarFullPath: string;
-  branchDisplayName: string;
-  userType: number;
-}
-export interface IProjectTask {
-  taskId: number;
-  billable: boolean;
-  name: string;
-}
-
-export interface ICreateProjectForm {
-  customerId: number | '';
-  name: string;
-  code: string;
-  timeStart: string;
-  timeEnd: string;
-  note: string;
-  isAllUserBelongTo: boolean;
-  projectType: number;
-  members: IProjectMember[];
-  tasks: IProjectTask[];
-  komuChannelId: string;
-  isNoticeKMSubmitTS: boolean;
-  isNoticeKMRequestOffDate: boolean;
-  isNoticeKMApproveRequestOffDate: boolean;
-  isNoticeKMRequestChangeWorkingTime: boolean;
-  isNoticeKMApproveChangeWorkingTime: boolean;
-}
+import { useProjectDetailQuery } from '@/libs/features/project/hooks/useProjectDetailQuery';
+import { useMemberQuery } from '@/libs/features/member/hooks/useMemberQuery';
+import { useTaskQuery } from '@/libs/features/task/hooks/useTaskQuery';
+import type {
+  ICreateProjectForm,
+  IProjectMember,
+  IProjectTask,
+} from '@/pages/project/sections/CreateProject';
+import { formatDateUKType } from '@/libs/utils/date/formatDateUKType.ts';
 
 const TABS = ['General', 'Team', 'Task', 'Notification'];
 
-interface ICreateProjectModalProps {
+interface IEditProjectModalProps {
   open: boolean;
+  projectId: number | null;
   onClose: () => void;
 }
 
-export default function CreateProjectModal({
+export default function EditProjectModal({
   open,
+  projectId,
   onClose,
-}: ICreateProjectModalProps) {
+}: IEditProjectModalProps) {
   const [activeTab, setActiveTab] = useState(0);
   const { snackbar, close, showError, showSuccess } = useSnackbar();
   const { alert, showAlert, handleClose: handleAlertClose } = useAlertDialog();
+  const { data: projectDetail, isLoading: loadingDetail } =
+    useProjectDetailQuery(open ? projectId : null);
+  const { data: allMembers = [] } = useMemberQuery();
+  const { data: allTasks = [] } = useTaskQuery();
 
   const methods = useForm<ICreateProjectForm>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
-    defaultValues: {
-      customerId: '',
-      name: '',
-      code: '',
-      timeStart: '',
-      timeEnd: '',
-      note: '',
-      isAllUserBelongTo: false,
-      projectType: ProjectType.FF,
-      members: [],
-      tasks: [],
-      komuChannelId: '',
-      isNoticeKMSubmitTS: false,
-      isNoticeKMRequestOffDate: false,
-      isNoticeKMApproveRequestOffDate: false,
-      isNoticeKMRequestChangeWorkingTime: false,
-      isNoticeKMApproveChangeWorkingTime: false,
-    },
   });
+  useEffect(() => {
+    if (!projectDetail || !open) return;
+    const members: IProjectMember[] = projectDetail.users
+      .map((u) => {
+        const memberInfo = allMembers.find((m) => m.id === u.userId);
+        if (!memberInfo) return null;
+        return {
+          userId: u.userId,
+          type: u.type,
+          isTemp: u.isTemp,
+          name: memberInfo.name,
+          emailAddress: memberInfo.emailAddress,
+          avatarFullPath: memberInfo.avatarFullPath,
+          branchDisplayName: memberInfo.branchDisplayName,
+          branchColor: memberInfo.branchColor,
+          userType: memberInfo.type,
+        } as IProjectMember;
+      })
+      .filter(Boolean) as IProjectMember[];
 
+    const tasks: IProjectTask[] = projectDetail.tasks.map((t) => {
+      const taskInfo = allTasks.find((task) => task.id === t.taskId);
+      return {
+        taskId: t.taskId,
+        billable: t.billable,
+        name: taskInfo?.name ?? `Task ${t.taskId}`,
+      };
+    });
+    methods.reset({
+      customerId: projectDetail.customerId,
+      name: projectDetail.name,
+      code: projectDetail.code,
+      timeStart: formatDateUKType(projectDetail.timeStart),
+      timeEnd: formatDateUKType(projectDetail.timeEnd),
+      note: projectDetail.note ?? '',
+      isAllUserBelongTo: projectDetail.isAllUserBelongTo,
+      projectType: projectDetail.projectType,
+      members,
+      tasks,
+      komuChannelId: projectDetail.komuChannelId ?? '',
+      isNoticeKMSubmitTS: projectDetail.isNoticeKMSubmitTS,
+      isNoticeKMRequestOffDate: projectDetail.isNoticeKMRequestOffDate,
+      isNoticeKMApproveRequestOffDate:
+        projectDetail.isNoticeKMApproveRequestOffDate,
+      isNoticeKMRequestChangeWorkingTime:
+        projectDetail.isNoticeKMRequestChangeWorkingTime,
+      isNoticeKMApproveChangeWorkingTime:
+        projectDetail.isNoticeKMApproveChangeWorkingTime,
+    });
+  }, [projectDetail, allMembers, allTasks, open]);
   const { mutate: saveProject, isPending } = useCreateProjectMutation();
-
   const handleClose = () => {
     if (isPending) return;
     methods.reset();
     setActiveTab(0);
     onClose();
   };
-
   const onSubmit = async (data: ICreateProjectForm) => {
     if (!data.members || data.members.length === 0) {
       showAlert(errorMessages.TEAM.REQUIRED_AT_LEAST_1);
@@ -124,6 +134,8 @@ export default function CreateProjectModal({
     }
     saveProject(
       {
+        id: projectId!,
+        status: projectDetail?.status ?? 0,
         customerId: data.customerId as number,
         name: data.name,
         code: data.code,
@@ -133,6 +145,7 @@ export default function CreateProjectModal({
         isAllUserBelongTo: data.isAllUserBelongTo,
         projectType: data.projectType,
         projectTargetUsers: [],
+        isNotifyToKomu: false,
         users: data.members.map((m) => ({
           userId: m.userId,
           type: m.type,
@@ -142,7 +155,7 @@ export default function CreateProjectModal({
           taskId: t.taskId,
           billable: t.billable,
         })),
-        komuChannelId: data.komuChannelId || undefined,
+        komuChannelId: data.komuChannelId || null,
         isNoticeKMSubmitTS: data.isNoticeKMSubmitTS,
         isNoticeKMRequestOffDate: data.isNoticeKMRequestOffDate,
         isNoticeKMApproveRequestOffDate: data.isNoticeKMApproveRequestOffDate,
@@ -154,20 +167,19 @@ export default function CreateProjectModal({
       {
         onSuccess: (res) => {
           if (res?.success === false) {
-            showError(res?.error?.message || notify.PROJECT.CREATE_FAILED);
+            showError(res?.error?.message || notify.PROJECT.UPDATE_FAILED);
             return;
           }
-          showSuccess(notify.PROJECT.CREATE_SUCCESS);
+          showSuccess(notify.PROJECT.UPDATE_SUCCESS);
           handleClose();
         },
         onError: (err: AxiosError) => {
           const messageError = err.response?.data?.error?.message;
-          showError(messageError || notify.PROJECT.CREATE_FAILED);
+          showError(messageError || notify.PROJECT.UPDATE_FAILED);
         },
       },
     );
   };
-
   return (
     <>
       <Dialog
@@ -175,11 +187,7 @@ export default function CreateProjectModal({
         onClose={handleClose}
         maxWidth="md"
         fullWidth
-        sx={{
-          '& .MuiDialog-paper': {
-            borderRadius: '15px !important',
-          },
-        }}
+        sx={{ '& .MuiDialog-paper': { borderRadius: '15px !important' } }}
       >
         <Box
           sx={{
@@ -191,12 +199,13 @@ export default function CreateProjectModal({
           }}
         >
           <CustomTypography sx={{ fontSize: 18, fontWeight: 700 }}>
-            Create Project
+            Edit Project{projectDetail ? ` : ${projectDetail.name}` : ''}
           </CustomTypography>
           <IconButton onClick={handleClose} size="small" disabled={isPending}>
             <CloseIcon />
           </IconButton>
         </Box>
+
         <FormProvider {...methods}>
           <Box sx={{ px: 3 }}>
             <Tabs
@@ -209,13 +218,8 @@ export default function CreateProjectModal({
                   color: '#7f7f7f',
                   fontWeight: 400,
                 },
-                '& .Mui-selected': {
-                  color: '#131313',
-                  fontWeight: 500,
-                },
-                '& .MuiTabs-indicator': {
-                  bgcolor: '#4680ff',
-                },
+                '& .Mui-selected': { color: '#131313', fontWeight: 500 },
+                '& .MuiTabs-indicator': { bgcolor: '#4680ff' },
               }}
             >
               {TABS.map((tab) => (
@@ -223,16 +227,33 @@ export default function CreateProjectModal({
               ))}
             </Tabs>
           </Box>
+
           <DialogContent dividers sx={{ p: 0, minHeight: 460 }}>
-            {activeTab === 0 && (
-              <Box sx={{ px: 3, py: 2 }}>
-                <TabGeneral />
+            {loadingDetail ? (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  minHeight: 460,
+                }}
+              >
+                <CircularProgress size={32} />
               </Box>
+            ) : (
+              <>
+                {activeTab === 0 && (
+                  <Box sx={{ px: 3, py: 2 }}>
+                    <TabGeneral />
+                  </Box>
+                )}
+                {activeTab === 1 && <TabTeam />}
+                {activeTab === 2 && <TabTasks />}
+                {activeTab === 3 && <TabNotification />}
+              </>
             )}
-            {activeTab === 1 && <TabTeam />}
-            {activeTab === 2 && <TabTasks />}
-            {activeTab === 3 && <TabNotification />}
           </DialogContent>
+
           <DialogActions sx={{ px: 3, py: 2 }}>
             <CustomButton
               variant="outlined"
@@ -245,7 +266,7 @@ export default function CreateProjectModal({
             <CustomButton
               variant="contained"
               onClick={methods.handleSubmit(onSubmit)}
-              disabled={isPending}
+              disabled={isPending || loadingDetail}
               sx={{ bgcolor: '#4680ff', '&:hover': { bgcolor: '#3f78ff' } }}
               startIcon={
                 isPending ? (
@@ -266,11 +287,11 @@ export default function CreateProjectModal({
       />
       <CustomSnackbar
         open={snackbar.open}
-        message={snackbar.message}
-        alertColor={snackbar.alertColor}
+        onClose={close}
         autoHideDuration={snackbar.autoHideDuration}
         position={snackbar.position}
-        onClose={close}
+        alertColor={snackbar.alertColor}
+        message={snackbar.message}
       />
     </>
   );

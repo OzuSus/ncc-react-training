@@ -14,10 +14,10 @@ import type { IMember, MemberLookupMap } from '@/libs/features/member/types';
 import { MemberRole } from '@/libs/features/member/types';
 import { useDebounce } from '@/libs/hooks/useDebounce';
 import type { BranchFilterValue } from '@/libs/features/branch/types';
-import { SelectedMemberRow } from '@/pages/project/sections/CreateProject/Tab/TabTeam/SelectedMemberRow.tsx';
-import { AvailableUserRow } from '@/pages/project/sections/CreateProject/Tab/TabTeam/AvailableUserRow.tsx';
-import SelectedMemberFilterToolbar from '@/pages/project/sections/CreateProject/Tab/TabTeam/SelectedMemberFilterToolbar.tsx';
-import SelectTeamFilterToolbar from '@/pages/project/sections/CreateProject/Tab/TabTeam/SelectTeamFilterToolbar.tsx';
+import { SelectedMemberRow } from '@/libs/features/project/components/projectForm/Tab/TabTeam/SelectedMemberRow.tsx';
+import { AvailableUserRow } from '@/libs/features/project/components/projectForm/Tab/TabTeam/AvailableUserRow.tsx';
+import SelectedMemberFilterToolbar from '@/libs/features/project/components/projectForm/Tab/TabTeam/SelectedMemberFilterToolbar.tsx';
+import SelectTeamFilterToolbar from '@/libs/features/project/components/projectForm/Tab/TabTeam/SelectTeamFilterToolbar.tsx';
 
 export default function TabTeam() {
   const { control } = useFormContext<ICreateProjectForm>();

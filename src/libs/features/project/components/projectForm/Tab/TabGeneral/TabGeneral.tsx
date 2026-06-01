@@ -13,7 +13,7 @@ import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { useClientQuery } from '@/libs/features/client/hook/useClientQuery.ts';
 import { CustomTextField } from '@/libs/components/ui/TextField';
-import FormRow from '@/pages/project/sections/CreateProject/Tab/TabGeneral/formRow.tsx';
+import FormRow from '@/libs/features/project/components/projectForm/Tab/TabGeneral/formRow.tsx';
 import { ICreateProjectForm } from '@/pages/project/sections/CreateProject';
 import { PROJECT_TYPES } from '@/libs/constants/projectType.ts';
 import { errorMessages } from '@/libs/constants/errors.ts';
