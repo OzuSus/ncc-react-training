@@ -9,9 +9,9 @@ import type {
   IProjectTask,
 } from '@/pages/project/sections/CreateProject';
 import { useTaskQuery } from '@/libs/features/task/hooks/useTaskQuery';
-import { TaskHeader } from '@/pages/project/sections/CreateProject/Tab/TabTasks/TaskHeader.tsx';
-import { SelectedTaskRow } from '@/pages/project/sections/CreateProject/Tab/TabTasks/SelectedtaskRow.tsx';
-import AvailableTaskRow from '@/pages/project/sections/CreateProject/Tab/TabTasks/AvailableTaskRow.tsx';
+import { TaskHeader } from '@/libs/features/project/components/projectForm/Tab/TabTasks/TaskHeader.tsx';
+import { SelectedTaskRow } from '@/libs/features/project/components/projectForm/Tab/TabTasks/SelectedtaskRow.tsx';
+import AvailableTaskRow from '@/libs/features/project/components/projectForm/Tab/TabTasks/AvailableTaskRow.tsx';
 
 export default function TabTasks() {
   const { control } = useFormContext<ICreateProjectForm>();

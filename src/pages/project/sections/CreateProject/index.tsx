@@ -15,8 +15,8 @@ import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { ProjectType } from '@/libs/features/project/types';
 import { useCreateProjectMutation } from '@/libs/features/project/hooks/useCreateProjectQuery';
-import TabGeneral from '@/pages/project/sections/CreateProject/Tab/TabGeneral/TabGeneral';
-import TabTeam from '@/pages/project/sections/CreateProject/Tab/TabTeam/TabTeam';
+import TabGeneral from '@/libs/features/project/components/projectForm/Tab/TabGeneral/TabGeneral';
+import TabTeam from '@/libs/features/project/components/projectForm/Tab/TabTeam/TabTeam';
 import { notify } from '@/libs/constants/notify';
 import type { AxiosError } from 'axios';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
@@ -25,8 +25,8 @@ import { MemberRole } from '@/libs/features/member/types.ts';
 import { errorMessages } from '@/libs/constants/errors.ts';
 import { useAlertDialog } from '@/libs/hooks/useAlert.ts';
 import AlertDialog from '@/libs/components/ui/Alert';
-import TabTasks from '@/pages/project/sections/CreateProject/Tab/TabTasks/TabTasks.tsx';
-import TabNotification from '@/pages/project/sections/CreateProject/Tab/TabNotification/TabNotification.tsx';
+import TabTasks from '@/libs/features/project/components/projectForm/Tab/TabTasks/TabTasks.tsx';
+import TabNotification from '@/libs/features/project/components/projectForm/Tab/TabNotification/TabNotification.tsx';
 
 export interface IProjectMember {
   userId: number;
