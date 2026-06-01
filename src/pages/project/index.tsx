@@ -1,17 +1,6 @@
 import { useMemo, useState } from 'react';
-import {
-  Box,
-  Container,
-  ListItemIcon,
-  Menu,
-  MenuItem,
-  Paper,
-  CircularProgress,
-} from '@mui/material';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, Container, Paper, CircularProgress } from '@mui/material';
+
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { useProjectQuery } from '@/libs/features/project/hooks/useProjectQuery';
 import { IProject } from '@/libs/features/project/types';
@@ -19,6 +8,7 @@ import ProjectGroup from '@/pages/project/sections/ProjectGroup';
 import Filter, { statusFilterMap } from '@/pages/project/sections/Filter';
 import { useDebounce } from '@/libs/hooks/useDebounce.ts';
 import EditProjectModal from '@/pages/project/sections/EditProject';
+import ProjectActionsMenu from '@/pages/project/sections/ActionMenu.tsx';
 
 export default function ManageProjects() {
   const [actionMenu, setActionMenu] = useState({
@@ -130,49 +120,12 @@ export default function ManageProjects() {
           </Box>
         </Paper>
       </Container>
-      <Menu
+      <ProjectActionsMenu
         anchorEl={actionMenu.anchorEl}
         open={Boolean(actionMenu.anchorEl)}
         onClose={handleCloseMenu}
-        slotProps={{
-          paper: {
-            sx: {
-              border: '1px solid #e0e0e0',
-              borderRadius: 2,
-              minWidth: 128,
-              mt: 0.5,
-              boxShadow: '0px 2px 6px rgba(0,0,0,0.01)',
-            },
-          },
-        }}
-      >
-        <MenuItem onClick={handleEdit} sx={{ py: 1 }}>
-          <ListItemIcon sx={{ minWidth: 32 }}>
-            <EditOutlinedIcon fontSize="small" sx={{ color: '#555' }} />
-          </ListItemIcon>
-          <CustomTypography sx={{ fontSize: 14 }}>Edit</CustomTypography>
-        </MenuItem>
-        <MenuItem onClick={handleCloseMenu} sx={{ py: 1 }}>
-          <ListItemIcon sx={{ minWidth: 32 }}>
-            <VisibilityOutlinedIcon fontSize="small" sx={{ color: '#555' }} />
-          </ListItemIcon>
-          <CustomTypography sx={{ fontSize: 14 }}>View</CustomTypography>
-        </MenuItem>
-        <MenuItem onClick={handleCloseMenu} sx={{ py: 1 }}>
-          <ListItemIcon sx={{ minWidth: 32 }}>
-            <CloseIcon fontSize="small" sx={{ color: '#555' }} />
-          </ListItemIcon>
-          <CustomTypography sx={{ fontSize: 14 }}>Deactive</CustomTypography>
-        </MenuItem>
-        <MenuItem onClick={handleCloseMenu} sx={{ py: 1 }}>
-          <ListItemIcon sx={{ minWidth: 32 }}>
-            <DeleteIcon fontSize="small" />
-          </ListItemIcon>
-          <CustomTypography sx={{ color: '#dc2626', fontSize: 14 }}>
-            Delete
-          </CustomTypography>
-        </MenuItem>
-      </Menu>
+        onEdit={handleEdit}
+      />
       <EditProjectModal
         open={editProjectId !== null}
         projectId={editProjectId}
