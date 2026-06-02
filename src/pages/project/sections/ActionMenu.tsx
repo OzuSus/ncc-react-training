@@ -5,15 +5,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CustomTypography } from '@/libs/components/ui/Typography';
+import { ToggleActionStatus } from '@/libs/features/project/types.ts';
 
-export type ToggleAction = 'active' | 'deactive';
+// export type ToggleAction = 'active' | 'deactive';
 interface ProjectActionsMenuProps {
   anchorEl: null;
   open: boolean;
   onClose: () => void;
   onEdit: () => void;
   onView: () => void;
-  toggleAction: ToggleAction;
+  toggleAction: ToggleActionStatus;
   onToggle: () => void;
   onDelete: () => void;
 }
@@ -28,9 +29,12 @@ export default function ProjectActionsMenu({
   onToggle,
   onDelete,
 }: ProjectActionsMenuProps) {
-  const toggleLabel = toggleAction === 'active' ? 'Active' : 'Deactive';
+  const toggleLabel =
+    toggleAction === ToggleActionStatus.Active ? 'Active' : 'Deactive';
   const ToggleIcon =
-    toggleAction === 'active' ? CheckCircleOutlineOutlinedIcon : CloseIcon;
+    toggleAction === ToggleActionStatus.Active
+      ? CheckCircleOutlineOutlinedIcon
+      : CloseIcon;
   return (
     <Menu
       anchorEl={anchorEl}

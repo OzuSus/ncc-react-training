@@ -1,16 +1,17 @@
 import { useMemo, useState } from 'react';
-import { Box, Container, Paper, CircularProgress } from '@mui/material';
-
+import { Box, CircularProgress, Container, Paper } from '@mui/material';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { useProjectQuery } from '@/libs/features/project/hooks/useProjectQuery';
-import { IProject } from '@/libs/features/project/types';
+import {
+  ConfirmType,
+  IProject,
+  ToggleActionStatus,
+} from '@/libs/features/project/types';
 import ProjectGroup from '@/pages/project/sections/ProjectGroup';
 import Filter, { statusFilterMap } from '@/pages/project/sections/Filter';
 import { useDebounce } from '@/libs/hooks/useDebounce.ts';
 import EditProjectModal from '@/pages/project/sections/EditProject';
-import ProjectActionsMenu, {
-  type ToggleAction,
-} from '@/pages/project/sections/ActionMenu.tsx';
+import ProjectActionsMenu from '@/pages/project/sections/ActionMenu.tsx';
 import ViewProjectModal from '@/pages/project/sections/ViewProject';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
 import AlertDialog, { type AlertVariant } from '@/libs/components/ui/Alert';
@@ -21,8 +22,6 @@ import {
   useDeleteProjectMutation,
   useInactiveProjectMutation,
 } from '@/libs/features/project/hooks/useProjectActionQuery';
-
-type ConfirmType = 'delete' | 'inactive' | 'active';
 
 export default function ManageProjects() {
   const [actionMenu, setActionMenu] = useState<{
@@ -41,8 +40,9 @@ export default function ManageProjects() {
   );
   const [searchValue, setSearchValue] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('active');
-  const [editProjectId, setEditProjectId] = useState<number | null>(null);
-  const [viewProjectId, setViewProjectId] = useState<number | null>(null);
+
+  const [editProjectId, setEditProjectId] = useState(null);
+  const [viewProjectId, setViewProjectId] = useState(null);
   const debouncedSearch = useDebounce(searchValue, 500);
 
   const statusParam = useMemo<number | undefined>(() => {
@@ -62,7 +62,9 @@ export default function ManageProjects() {
   const groupedProjects = useMemo(() => {
     const grouped: Record<string, IProject[]> = {};
     for (const project of projects) {
-      if (!grouped[project.customerName]) grouped[project.customerName] = [];
+      if (!grouped[project.customerName]) {
+        grouped[project.customerName] = [];
+      }
       grouped[project.customerName].push(project);
     }
     return Object.entries(grouped).map(([clientName, items]) => ({
@@ -76,8 +78,9 @@ export default function ManageProjects() {
     setOpenAccordions((prev) => ({ ...prev, [clientId]: !prev[clientId] }));
   };
 
-  const handleCloseMenu = () =>
+  const handleCloseMenu = () => {
     setActionMenu({ anchorEl: null, projectId: null });
+  };
 
   const handleEdit = () => {
     if (actionMenu.projectId != null) setEditProjectId(actionMenu.projectId);
@@ -93,11 +96,20 @@ export default function ManageProjects() {
   const deleteMutation = useDeleteProjectMutation();
   const inactiveMutation = useInactiveProjectMutation();
   const activeMutation = useActiveProjectMutation();
+  const isProjectLoading =
+    isLoadingProjects ||
+    deleteMutation.isPending ||
+    inactiveMutation.isPending ||
+    activeMutation.isPending;
   const toggleAction: ToggleAction = useMemo(() => {
-    if (statusFilter === 'active') return 'deactive';
-    if (statusFilter === 'deactive') return 'active';
-    if (!selectedProject) return 'deactive';
-    return selectedProject.status === 1 ? 'active' : 'deactive';
+    if (statusFilter === ToggleActionStatus.Active)
+      return ToggleActionStatus.Deactive;
+    if (statusFilter === ToggleActionStatus.Deactive)
+      return ToggleActionStatus.Active;
+    if (!selectedProject) return ToggleActionStatus.Deactive;
+    return selectedProject.status === 1
+      ? ToggleActionStatus.Active
+      : ToggleActionStatus.Deactive;
   }, [statusFilter, selectedProject]);
   const openConfirm = (type: ConfirmType) => {
     setConfirmDialog({ open: true, type, projectId: actionMenu.projectId });
@@ -105,18 +117,18 @@ export default function ManageProjects() {
   };
 
   const confirmConfig = useMemo<{ text: string; variant: AlertVariant }>(() => {
-    if (confirmDialog.type === 'delete') {
-      return { text: 'Do you want to delete this project?', variant: 'error' };
+    if (confirmDialog.type === ConfirmType.DELETE) {
+      return { text: notify.CONFIRM.CONFIRM_DELETE, variant: 'error' };
     }
-    if (confirmDialog.type === 'inactive') {
+    if (confirmDialog.type === ConfirmType.INACTIVE) {
       return {
-        text: 'Do you want to deactive this project?',
+        text: notify.CONFIRM.CONFIRM_DEACTIVE,
         variant: 'warning',
       };
     }
-    if (confirmDialog.type === 'active') {
+    if (confirmDialog.type === ConfirmType.ACTIVE) {
       return {
-        text: 'Do you want to active this project?',
+        text: notify.CONFIRM.CONFIRM_ACTIVE,
         variant: 'warning',
       };
     }
@@ -127,7 +139,7 @@ export default function ManageProjects() {
     const id = confirmDialog.projectId;
     if (!confirmDialog.type || id == null) return;
 
-    if (confirmDialog.type === 'delete') {
+    if (confirmDialog.type === ConfirmType.DELETE) {
       deleteMutation.mutate(id, {
         onSuccess: () => showSuccess(notify.PROJECT.DELETE_SUCCESS),
         onError: () => showError(notify.PROJECT.DELETE_FAILED),
@@ -135,14 +147,14 @@ export default function ManageProjects() {
       return;
     }
 
-    if (confirmDialog.type === 'inactive') {
+    if (confirmDialog.type === ConfirmType.INACTIVE) {
       inactiveMutation.mutate(id, {
         onSuccess: () => showSuccess(notify.PROJECT.DEACTIVE_SUCCESS),
         onError: () => showError(notify.PROJECT.DEACTIVE_FAILED),
       });
       return;
     }
-    if (confirmDialog.type === 'active') {
+    if (confirmDialog.type === ConfirmType.ACTIVE) {
       activeMutation.mutate(id, {
         onSuccess: () => showSuccess(notify.PROJECT.ACTIVE_SUCCESS),
         onError: () => showError(notify.PROJECT.ACTIVE_FAILED),
@@ -178,9 +190,16 @@ export default function ManageProjects() {
             onSearchChange={setSearchValue}
           />
 
-          <Box sx={{ px: 2, py: 2 }}>
-            {isLoadingProjects ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+          <Box sx={{ px: 2, py: 2, position: 'relative', minHeight: 200 }}>
+            {isProjectLoading ? (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  py: 6,
+                }}
+              >
                 <CircularProgress size={32} />
               </Box>
             ) : (
@@ -199,7 +218,6 @@ export default function ManageProjects() {
           </Box>
         </Paper>
       </Container>
-
       <ProjectActionsMenu
         anchorEl={actionMenu.anchorEl}
         open={Boolean(actionMenu.anchorEl)}
@@ -214,19 +232,16 @@ export default function ManageProjects() {
         }}
         onDelete={() => openConfirm('delete')}
       />
-
       <EditProjectModal
         open={editProjectId !== null}
         projectId={editProjectId}
         onClose={() => setEditProjectId(null)}
       />
-
       <ViewProjectModal
         open={viewProjectId !== null}
         projectId={viewProjectId}
         onClose={() => setViewProjectId(null)}
       />
-
       <AlertDialog
         open={confirmDialog.open}
         text={confirmConfig.text}
@@ -242,7 +257,6 @@ export default function ManageProjects() {
           setConfirmDialog({ open: false, type: null, projectId: null });
         }}
       />
-
       <CustomSnackbar
         open={snackbar.open}
         message={snackbar.message}

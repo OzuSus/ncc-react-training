@@ -15,4 +15,9 @@ export const notify = {
     CREATE_SUCCESS: 'Client created successfully',
     CREATE_FAILED: 'Create client failed',
   },
+  CONFIRM: {
+    CONFIRM_DELETE: 'Do you want to delete this project ?',
+    CONFIRM_DEACTIVE: 'Do you want to deactive this project ?',
+    CONFIRM_ACTIVE: 'Do you want to active this project ?',
+  },
 };

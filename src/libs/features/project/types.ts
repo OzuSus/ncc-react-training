@@ -87,3 +87,12 @@ export interface IExportTimesheet {
   isShadow: boolean;
   id: number;
 }
+export enum ToggleActionStatus {
+  Active = 'active',
+  Deactive = 'deactive',
+}
+export enum ConfirmType {
+  DELETE = 'delete',
+  INACTIVE = 'inactive',
+  ACTIVE = 'active',
+}
