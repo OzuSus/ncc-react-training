@@ -10,6 +10,7 @@ interface ProjectActionsMenuProps {
   open: boolean;
   onClose: () => void;
   onEdit: () => void;
+  onView: () => void;
 }
 
 export default function ProjectActionsMenu({
@@ -17,6 +18,7 @@ export default function ProjectActionsMenu({
   open,
   onClose,
   onEdit,
+  onView,
 }: ProjectActionsMenuProps) {
   return (
     <Menu
@@ -42,7 +44,7 @@ export default function ProjectActionsMenu({
         <CustomTypography sx={{ fontSize: 14 }}>Edit</CustomTypography>
       </MenuItem>
 
-      <MenuItem onClick={onClose} sx={{ py: 1 }}>
+      <MenuItem onClick={onView} sx={{ py: 1 }}>
         <ListItemIcon sx={{ minWidth: 32 }}>
           <VisibilityOutlinedIcon fontSize="small" sx={{ color: '#555' }} />
         </ListItemIcon>

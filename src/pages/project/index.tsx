@@ -9,19 +9,55 @@ import Filter, { statusFilterMap } from '@/pages/project/sections/Filter';
 import { useDebounce } from '@/libs/hooks/useDebounce.ts';
 import EditProjectModal from '@/pages/project/sections/EditProject';
 import ProjectActionsMenu from '@/pages/project/sections/ActionMenu.tsx';
+import ViewProjectModal from '@/pages/project/sections/ViewProject';
+import CustomSnackbar from '@/libs/components/ui/Snackbar';
+import AlertDialog, { type AlertVariant } from '@/libs/components/ui/Alert';
+import useSnackbar from '@/libs/hooks/useSnackbar';
+import { notify } from '@/libs/constants/notify';
+import {
+  useDeleteProjectMutation,
+  useInactiveProjectMutation,
+} from '@/libs/features/project/hooks/useProjectActionQuery';
+
+type ConfirmType = 'delete' | 'inactive';
 
 export default function ManageProjects() {
-  const [actionMenu, setActionMenu] = useState({
-    anchorEl: null,
-    projectId: null,
-  });
+  const [actionMenu, setActionMenu] = useState<{
+    anchorEl: HTMLElement | null;
+    projectId: number | null;
+  }>({ anchorEl: null, projectId: null });
+
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    type: ConfirmType | null;
+    projectId: number | null;
+  }>({ open: false, type: null, projectId: null });
+
+  const confirmConfig = useMemo<{ text: string; variant: AlertVariant }>(() => {
+    if (confirmDialog.type === 'delete') {
+      return { text: 'Do you want to delete this project?', variant: 'error' };
+    }
+    if (confirmDialog.type === 'inactive') {
+      return {
+        text: 'Do you want to deactive this project?',
+        variant: 'warning',
+      };
+    }
+    return { text: '', variant: 'info' };
+  }, [confirmDialog.type]);
+
+  const { snackbar, showSuccess, showError, close } = useSnackbar();
+
+  const deleteMutation = useDeleteProjectMutation();
+  const inactiveMutation = useInactiveProjectMutation();
+
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(
     {},
   );
   const [searchValue, setSearchValue] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('active');
-
-  const [editProjectId, setEditProjectId] = useState(null);
+  const [editProjectId, setEditProjectId] = useState<number | null>(null);
+  const [viewProjectId, setViewProjectId] = useState<number | null>(null);
   const debouncedSearch = useDebounce(searchValue, 500);
 
   const statusParam = useMemo<number | undefined>(() => {
@@ -38,9 +74,7 @@ export default function ManageProjects() {
   const groupedProjects = useMemo(() => {
     const grouped: Record<string, IProject[]> = {};
     for (const project of projects) {
-      if (!grouped[project.customerName]) {
-        grouped[project.customerName] = [];
-      }
+      if (!grouped[project.customerName]) grouped[project.customerName] = [];
       grouped[project.customerName].push(project);
     }
     return Object.entries(grouped).map(([clientName, items]) => ({
@@ -51,28 +85,51 @@ export default function ManageProjects() {
   }, [projects]);
 
   const handleAccordionChange = (clientId: string) => {
-    setOpenAccordions((prev) => ({
-      ...prev,
-      [clientId]: !prev[clientId],
-    }));
+    setOpenAccordions((prev) => ({ ...prev, [clientId]: !prev[clientId] }));
   };
-  const handleCloseMenu = () => {
+
+  const handleCloseMenu = () =>
     setActionMenu({ anchorEl: null, projectId: null });
-  };
+
   const handleEdit = () => {
-    setEditProjectId(actionMenu.projectId);
+    if (actionMenu.projectId != null) setEditProjectId(actionMenu.projectId);
     handleCloseMenu();
   };
+
+  const handleView = () => {
+    if (actionMenu.projectId != null) setViewProjectId(actionMenu.projectId);
+    handleCloseMenu();
+  };
+
+  const openConfirm = (type: ConfirmType) => {
+    setConfirmDialog({ open: true, type, projectId: actionMenu.projectId });
+    handleCloseMenu();
+  };
+
+  const handleConfirm = () => {
+    const id = confirmDialog.projectId;
+    if (!confirmDialog.type || id == null) return;
+
+    if (confirmDialog.type === 'delete') {
+      deleteMutation.mutate(id, {
+        onSuccess: () => showSuccess(notify.PROJECT.DELETE_SUCCESS),
+        onError: () => showError(notify.PROJECT.DELETE_FAILED),
+      });
+      return;
+    }
+
+    if (confirmDialog.type === 'inactive') {
+      inactiveMutation.mutate(id, {
+        onSuccess: () => showSuccess(notify.PROJECT.DEACTIVE_SUCCESS),
+        onError: () => showError(notify.PROJECT.DEACTIVE_FAILED),
+      });
+    }
+  };
+
   return (
     <Box sx={{ minHeight: '100vh', py: 3, bgcolor: '#f5f5f5' }}>
       <Container maxWidth="lg" sx={{ py: 2 }}>
-        <Paper
-          elevation={1}
-          sx={{
-            borderRadius: 3,
-            overflow: 'hidden',
-          }}
-        >
+        <Paper elevation={1} sx={{ borderRadius: 3, overflow: 'hidden' }}>
           <Box
             sx={{
               display: 'flex',
@@ -84,21 +141,19 @@ export default function ManageProjects() {
             }}
           >
             <CustomTypography
-              sx={{
-                fontSize: 16,
-                fontWeight: 600,
-                color: '#222',
-              }}
+              sx={{ fontSize: 16, fontWeight: 600, color: '#222' }}
             >
               Manage Projects
             </CustomTypography>
           </Box>
+
           <Filter
             selectedValue={statusFilter}
             onSelectFilter={setStatusFilter}
             searchValue={searchValue}
             onSearchChange={setSearchValue}
           />
+
           <Box sx={{ px: 2, py: 2 }}>
             {isLoadingProjects ? (
               <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
@@ -120,16 +175,52 @@ export default function ManageProjects() {
           </Box>
         </Paper>
       </Container>
+
       <ProjectActionsMenu
         anchorEl={actionMenu.anchorEl}
         open={Boolean(actionMenu.anchorEl)}
         onClose={handleCloseMenu}
         onEdit={handleEdit}
+        onView={handleView}
+        onDeactive={() => openConfirm('inactive')}
+        onDelete={() => openConfirm('delete')}
       />
+
       <EditProjectModal
         open={editProjectId !== null}
         projectId={editProjectId}
         onClose={() => setEditProjectId(null)}
+      />
+
+      <ViewProjectModal
+        open={viewProjectId !== null}
+        projectId={viewProjectId}
+        onClose={() => setViewProjectId(null)}
+      />
+
+      <AlertDialog
+        open={confirmDialog.open}
+        text={confirmConfig.text}
+        variant={confirmConfig.variant}
+        confirmMode
+        confirmText="Yes"
+        cancelText="Cancel"
+        onClose={() =>
+          setConfirmDialog({ open: false, type: null, projectId: null })
+        }
+        onConfirm={() => {
+          handleConfirm();
+          setConfirmDialog({ open: false, type: null, projectId: null });
+        }}
+      />
+
+      <CustomSnackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        alertColor={snackbar.alertColor}
+        autoHideDuration={snackbar.autoHideDuration}
+        position={snackbar.position}
+        onClose={close}
       />
     </Box>
   );
