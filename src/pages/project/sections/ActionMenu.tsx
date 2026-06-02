@@ -7,7 +7,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { ToggleActionStatus } from '@/libs/features/project/types.ts';
 
-// export type ToggleAction = 'active' | 'deactive';
 interface ProjectActionsMenuProps {
   anchorEl: null;
   open: boolean;

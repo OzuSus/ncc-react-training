@@ -42,5 +42,7 @@ export function useProjectQuantityQuery() {
       const data = await fetchProjectQuantityApi();
       return data.result || [];
     },
+    gcTime: 0,
+    staleTime: 0,
   });
 }
