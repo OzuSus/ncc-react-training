@@ -2,15 +2,20 @@ import { ListItemIcon, Menu, MenuItem } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import CloseIcon from '@mui/icons-material/Close';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 
+export type ToggleAction = 'active' | 'deactive';
 interface ProjectActionsMenuProps {
   anchorEl: null;
   open: boolean;
   onClose: () => void;
   onEdit: () => void;
   onView: () => void;
+  toggleAction: ToggleAction;
+  onToggle: () => void;
+  onDelete: () => void;
 }
 
 export default function ProjectActionsMenu({
@@ -19,7 +24,13 @@ export default function ProjectActionsMenu({
   onClose,
   onEdit,
   onView,
+  toggleAction,
+  onToggle,
+  onDelete,
 }: ProjectActionsMenuProps) {
+  const toggleLabel = toggleAction === 'active' ? 'Active' : 'Deactive';
+  const ToggleIcon =
+    toggleAction === 'active' ? CheckCircleOutlineOutlinedIcon : CloseIcon;
   return (
     <Menu
       anchorEl={anchorEl}
@@ -51,14 +62,14 @@ export default function ProjectActionsMenu({
         <CustomTypography sx={{ fontSize: 14 }}>View</CustomTypography>
       </MenuItem>
 
-      <MenuItem onClick={onClose} sx={{ py: 1 }}>
+      <MenuItem onClick={onToggle} sx={{ py: 1 }}>
         <ListItemIcon sx={{ minWidth: 32 }}>
-          <CloseIcon fontSize="small" sx={{ color: '#555' }} />
+          <ToggleIcon fontSize="small" sx={{ color: '#555' }} />
         </ListItemIcon>
-        <CustomTypography sx={{ fontSize: 14 }}>Deactive</CustomTypography>
+        <CustomTypography sx={{ fontSize: 14 }}>{toggleLabel}</CustomTypography>
       </MenuItem>
 
-      <MenuItem onClick={onClose} sx={{ py: 1 }}>
+      <MenuItem onClick={onDelete} sx={{ py: 1 }}>
         <ListItemIcon sx={{ minWidth: 32 }}>
           <DeleteIcon fontSize="small" />
         </ListItemIcon>

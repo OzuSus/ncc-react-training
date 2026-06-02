@@ -8,23 +8,26 @@ import ProjectGroup from '@/pages/project/sections/ProjectGroup';
 import Filter, { statusFilterMap } from '@/pages/project/sections/Filter';
 import { useDebounce } from '@/libs/hooks/useDebounce.ts';
 import EditProjectModal from '@/pages/project/sections/EditProject';
-import ProjectActionsMenu from '@/pages/project/sections/ActionMenu.tsx';
+import ProjectActionsMenu, {
+  type ToggleAction,
+} from '@/pages/project/sections/ActionMenu.tsx';
 import ViewProjectModal from '@/pages/project/sections/ViewProject';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
 import AlertDialog, { type AlertVariant } from '@/libs/components/ui/Alert';
 import useSnackbar from '@/libs/hooks/useSnackbar';
 import { notify } from '@/libs/constants/notify';
 import {
+  useActiveProjectMutation,
   useDeleteProjectMutation,
   useInactiveProjectMutation,
 } from '@/libs/features/project/hooks/useProjectActionQuery';
 
-type ConfirmType = 'delete' | 'inactive';
+type ConfirmType = 'delete' | 'inactive' | 'active';
 
 export default function ManageProjects() {
   const [actionMenu, setActionMenu] = useState<{
-    anchorEl: HTMLElement | null;
-    projectId: number | null;
+    anchorEl: null;
+    projectId: number;
   }>({ anchorEl: null, projectId: null });
 
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -32,24 +35,6 @@ export default function ManageProjects() {
     type: ConfirmType | null;
     projectId: number | null;
   }>({ open: false, type: null, projectId: null });
-
-  const confirmConfig = useMemo<{ text: string; variant: AlertVariant }>(() => {
-    if (confirmDialog.type === 'delete') {
-      return { text: 'Do you want to delete this project?', variant: 'error' };
-    }
-    if (confirmDialog.type === 'inactive') {
-      return {
-        text: 'Do you want to deactive this project?',
-        variant: 'warning',
-      };
-    }
-    return { text: '', variant: 'info' };
-  }, [confirmDialog.type]);
-
-  const { snackbar, showSuccess, showError, close } = useSnackbar();
-
-  const deleteMutation = useDeleteProjectMutation();
-  const inactiveMutation = useInactiveProjectMutation();
 
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(
     {},
@@ -70,6 +55,9 @@ export default function ManageProjects() {
       search: debouncedSearch,
     },
   );
+  const selectedProject = useMemo(() => {
+    return projects.find((p) => p.id === actionMenu.projectId);
+  }, [projects, actionMenu.projectId]);
 
   const groupedProjects = useMemo(() => {
     const grouped: Record<string, IProject[]> = {};
@@ -101,10 +89,39 @@ export default function ManageProjects() {
     handleCloseMenu();
   };
 
+  const { snackbar, showSuccess, showError, close } = useSnackbar();
+  const deleteMutation = useDeleteProjectMutation();
+  const inactiveMutation = useInactiveProjectMutation();
+  const activeMutation = useActiveProjectMutation();
+  const toggleAction: ToggleAction = useMemo(() => {
+    if (statusFilter === 'active') return 'deactive';
+    if (statusFilter === 'deactive') return 'active';
+    if (!selectedProject) return 'deactive';
+    return selectedProject.status === 1 ? 'active' : 'deactive';
+  }, [statusFilter, selectedProject]);
   const openConfirm = (type: ConfirmType) => {
     setConfirmDialog({ open: true, type, projectId: actionMenu.projectId });
     handleCloseMenu();
   };
+
+  const confirmConfig = useMemo<{ text: string; variant: AlertVariant }>(() => {
+    if (confirmDialog.type === 'delete') {
+      return { text: 'Do you want to delete this project?', variant: 'error' };
+    }
+    if (confirmDialog.type === 'inactive') {
+      return {
+        text: 'Do you want to deactive this project?',
+        variant: 'warning',
+      };
+    }
+    if (confirmDialog.type === 'active') {
+      return {
+        text: 'Do you want to active this project?',
+        variant: 'warning',
+      };
+    }
+    return { text: '', variant: 'info' };
+  }, [confirmDialog.type]);
 
   const handleConfirm = () => {
     const id = confirmDialog.projectId;
@@ -122,6 +139,13 @@ export default function ManageProjects() {
       inactiveMutation.mutate(id, {
         onSuccess: () => showSuccess(notify.PROJECT.DEACTIVE_SUCCESS),
         onError: () => showError(notify.PROJECT.DEACTIVE_FAILED),
+      });
+      return;
+    }
+    if (confirmDialog.type === 'active') {
+      activeMutation.mutate(id, {
+        onSuccess: () => showSuccess(notify.PROJECT.ACTIVE_SUCCESS),
+        onError: () => showError(notify.PROJECT.ACTIVE_FAILED),
       });
     }
   };
@@ -182,7 +206,12 @@ export default function ManageProjects() {
         onClose={handleCloseMenu}
         onEdit={handleEdit}
         onView={handleView}
-        onDeactive={() => openConfirm('inactive')}
+        toggleAction={toggleAction}
+        onToggle={() => {
+          if (actionMenu.projectId == null) return;
+          if (toggleAction === 'active') openConfirm('active');
+          else openConfirm('inactive');
+        }}
         onDelete={() => openConfirm('delete')}
       />
 

@@ -56,4 +56,13 @@ export const httpRequest = {
     if (special) return response.data as T;
     return response.data as IHttpResponse<T>;
   },
+
+  delete: async <T, S extends boolean = false>(
+    url: string,
+    config?: AxiosRequestConfig & { special?: S },
+  ): Promise<S extends true ? T : IHttpResponse<T>> => {
+    const { special, ...axiosConfig } = config || {};
+    const response = await axiosInstance.delete(url, axiosConfig);
+    return special ? response.data : response.data;
+  },
 };
