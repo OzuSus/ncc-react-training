@@ -14,10 +14,6 @@ interface IAlertDialogProps {
   text: string;
   variant?: AlertVariant;
   onClose: () => void;
-  confirmMode?: boolean;
-  confirmText?: string;
-  cancelText?: string;
-  onConfirm?: () => void;
 }
 
 const variantConfig: Record<
@@ -51,10 +47,6 @@ export default function AlertDialog({
   text,
   variant = 'error',
   onClose,
-  confirmMode = false,
-  confirmText = 'Yes',
-  cancelText = 'Cancel',
-  onConfirm,
 }: IAlertDialogProps) {
   const config = variantConfig[variant];
   return (
@@ -79,18 +71,11 @@ export default function AlertDialog({
           }}
         >
           {config.icon}
-          {confirmMode && (
-            <CustomTypography
-              sx={{ fontSize: 22, fontWeight: 700, color: '#1d2630' }}
-            >
-              Are you sure?
-            </CustomTypography>
-          )}
           <CustomTypography
             sx={{
-              fontSize: confirmMode ? 14 : 20,
-              fontWeight: confirmMode ? 400 : 600,
-              color: confirmMode ? '#666' : '#1d2630',
+              fontSize: 20,
+              fontWeight: 600,
+              color: '#1d2630',
               textAlign: 'center',
             }}
           >
@@ -98,44 +83,18 @@ export default function AlertDialog({
           </CustomTypography>
         </Box>
       </DialogContent>
-      <DialogActions sx={{ justifyContent: 'center', pb: 2, gap: 1 }}>
-        {confirmMode ? (
-          <>
-            <CustomButton
-              variant="outlined"
-              onClick={onClose}
-              sx={{ minWidth: 100, color: '#555', borderColor: '#ccc' }}
-            >
-              {cancelText}
-            </CustomButton>
-            <CustomButton
-              variant="contained"
-              onClick={() => {
-                onConfirm?.();
-                onClose();
-              }}
-              sx={{
-                minWidth: 100,
-                bgcolor: config.color,
-                '&:hover': { bgcolor: config.color },
-              }}
-            >
-              {confirmText}
-            </CustomButton>
-          </>
-        ) : (
-          <CustomButton
-            variant="contained"
-            onClick={onClose}
-            sx={{
-              bgcolor: config.color,
-              '&:hover': { bgcolor: config.color },
-              minWidth: 80,
-            }}
-          >
-            OK
-          </CustomButton>
-        )}
+      <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
+        <CustomButton
+          variant="contained"
+          onClick={onClose}
+          sx={{
+            bgcolor: config.color,
+            '&:hover': { bgcolor: config.color },
+            minWidth: 80,
+          }}
+        >
+          OK
+        </CustomButton>
       </DialogActions>
     </Dialog>
   );

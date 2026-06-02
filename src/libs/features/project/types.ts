@@ -91,8 +91,3 @@ export enum ToggleActionStatus {
   Active = 'active',
   Deactive = 'deactive',
 }
-export enum ConfirmType {
-  DELETE = 'delete',
-  INACTIVE = 'inactive',
-  ACTIVE = 'active',
-}
