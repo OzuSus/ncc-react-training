@@ -4,7 +4,7 @@ trigger:
       - duocpv/timesheet_test_deploy_vercel
 
 pool:
-  vmImage: ubuntu-latest
+  vname: 'NCC Front End Training'
 
 variables:
   - group: vercel-secrets
