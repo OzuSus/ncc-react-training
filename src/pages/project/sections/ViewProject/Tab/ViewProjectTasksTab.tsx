@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import StatTable from '@/libs/features/project/components/viewProject/StatTable.tsx';
 

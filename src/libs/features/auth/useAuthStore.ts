@@ -31,7 +31,7 @@ interface IAuthState {
   logout: () => void;
 }
 
-const initialState: IAuthState = {
+const initialState: Pick<IAuthState, 'user' | 'permissions'> = {
   user: null,
   permissions: [],
 };

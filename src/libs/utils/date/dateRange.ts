@@ -1,6 +1,10 @@
 import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
+import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import { FilterDateRangeMode } from '@/libs/features/project/types.ts';
 
+dayjs.extend(isoWeek);
+dayjs.extend(quarterOfYear);
 export interface IDateRange {
   startDate: string | undefined;
   endDate: string | undefined;

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Box, Checkbox } from '@mui/material';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 

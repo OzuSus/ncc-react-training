@@ -1,6 +1,5 @@
-import React from 'react';
 import { Box, Checkbox, FormControlLabel } from '@mui/material';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, FieldPath, useFormContext } from 'react-hook-form';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { ICreateProjectForm } from '@/pages/project/sections/CreateProject';
 import { CustomTextField } from '@/libs/components/ui/TextField';
@@ -22,7 +21,7 @@ export default function TabNotification() {
       />
       {NOTIFICATION_OPTIONS.map(({ label, field }) => (
         <Controller
-          name={field}
+          name={field as FieldPath<ICreateProjectForm>}
           control={control}
           render={({ field: field }) => (
             <FormControlLabel

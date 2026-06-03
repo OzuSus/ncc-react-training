@@ -48,7 +48,7 @@ export function SidebarItem({
   const active = useMemo(
     () =>
       hasChildren
-        ? item.children.some((child) =>
+        ? item.children?.some((child) =>
             isActive(
               pathname,
               child.path ? `${fullPath}/${child.path}` : fullPath,
@@ -142,7 +142,7 @@ export function SidebarItem({
       {hasChildren && (
         <Collapse in={isOpen} timeout="auto" unmountOnExit>
           <List>
-            {item.children.map((child) => (
+            {item.children?.map((child) => (
               <SidebarItem
                 key={child.key}
                 item={child}

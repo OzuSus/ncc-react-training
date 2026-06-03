@@ -19,21 +19,21 @@ import DeactiveProjectModal from '@/libs/features/project/components/actionModal
 
 export default function ManageProjects() {
   const [actionMenu, setActionMenu] = useState<{
-    anchorEl: null;
-    projectId: number;
+    anchorEl: HTMLElement | null;
+    projectId: number | null;
   }>({ anchorEl: null, projectId: null });
 
-  const [deleteProject, setDeleteProject] = useState(null);
-  const [activeProject, setActiveProject] = useState(null);
-  const [deactiveProject, setDeactiveProject] = useState(null);
+  const [deleteProject, setDeleteProject] = useState<IProject | null>(null);
+  const [activeProject, setActiveProject] = useState<IProject | null>(null);
+  const [deactiveProject, setDeactiveProject] = useState<IProject | null>(null);
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(
     {},
   );
   const [searchValue, setSearchValue] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('active');
 
-  const [editProjectId, setEditProjectId] = useState(null);
-  const [viewProjectId, setViewProjectId] = useState(null);
+  const [editProjectId, setEditProjectId] = useState<number | null>(null);
+  const [viewProjectId, setViewProjectId] = useState<number | null>(null);
   const debouncedSearch = useDebounce(searchValue, 500);
 
   const statusParam = useMemo<number | undefined>(() => {
@@ -192,24 +192,30 @@ export default function ManageProjects() {
           onClose={() => setViewProjectId(null)}
         />
       )}
-      <DeleteProjectModal
-        open={deleteProject !== null}
-        project={deleteProject}
-        onClose={() => setDeleteProject(null)}
-        onDeleted={refetchProjectList}
-      />
-      <ActiveProjectModal
-        open={activeProject !== null}
-        project={activeProject}
-        onClose={() => setActiveProject(null)}
-        onProjectActivated={refetchProjectList}
-      />
-      <DeactiveProjectModal
-        open={deactiveProject !== null}
-        project={deactiveProject}
-        onClose={() => setDeactiveProject(null)}
-        onProjectDeactivated={refetchProjectList}
-      />
+      {deleteProject && (
+        <DeleteProjectModal
+          open
+          project={deleteProject}
+          onClose={() => setDeleteProject(null)}
+          onDeleted={refetchProjectList}
+        />
+      )}
+      {activeProject && (
+        <ActiveProjectModal
+          open
+          project={activeProject}
+          onClose={() => setActiveProject(null)}
+          onProjectActivated={refetchProjectList}
+        />
+      )}
+      {deactiveProject && (
+        <DeactiveProjectModal
+          open
+          project={deactiveProject}
+          onClose={() => setDeactiveProject(null)}
+          onProjectDeactivated={refetchProjectList}
+        />
+      )}
     </Box>
   );
 }

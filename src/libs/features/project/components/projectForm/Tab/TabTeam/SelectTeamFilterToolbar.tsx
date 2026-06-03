@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Autocomplete,
   Box,
@@ -13,7 +12,7 @@ import { MEMBER_TYPE_OPTIONS } from '@/libs/constants/member.ts';
 import type { BranchFilterValue } from '@/libs/features/branch/types';
 
 interface IBranchOption {
-  id: number;
+  id: BranchFilterValue;
   name: string;
 }
 interface ISelectTeamFilterToolbarProps {
@@ -70,15 +69,19 @@ export default function SelectTeamFilterToolbar({
               {...params}
               size="small"
               sx={{ '& .MuiOutlinedInput-root': { height: 35, fontSize: 13 } }}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {loadingBranches && (
-                      <CircularProgress color="inherit" size={14} />
-                    )}
-                  </>
-                ),
+              slotProps={{
+                ...params.slotProps,
+                input: {
+                  ...params.slotProps?.input,
+                  endAdornment: (
+                    <>
+                      {loadingBranches ? (
+                        <CircularProgress color="inherit" size={14} />
+                      ) : null}
+                      {params.slotProps?.input?.endAdornment}
+                    </>
+                  ),
+                },
               }}
             />
           )}
@@ -92,7 +95,9 @@ export default function SelectTeamFilterToolbar({
               {option.name}
             </Box>
           )}
-          ListboxProps={{ style: { maxHeight: 220 } }}
+          slotProps={{
+            listbox: { style: { maxHeight: 220 } },
+          }}
           isOptionEqualToValue={(opt, val) => opt.id === val.id}
         />
       </Box>

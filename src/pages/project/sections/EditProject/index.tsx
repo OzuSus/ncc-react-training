@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -19,7 +19,7 @@ import TabTeam from '@/libs/features/project/components/projectForm/Tab/TabTeam/
 import TabTasks from '@/libs/features/project/components/projectForm/Tab/TabTasks/TabTasks';
 import TabNotification from '@/libs/features/project/components/projectForm/Tab/TabNotification/TabNotification';
 import { notify } from '@/libs/constants/notify';
-import type { AxiosError } from 'axios';
+import axios from 'axios';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
 import useSnackbar from '@/libs/hooks/useSnackbar';
 import { MemberRole } from '@/libs/features/member/types';
@@ -93,8 +93,8 @@ export default function EditProjectModal({
       customerId: projectDetail.customerId,
       name: projectDetail.name,
       code: projectDetail.code,
-      timeStart: formatDateUKType(projectDetail.timeStart),
-      timeEnd: formatDateUKType(projectDetail.timeEnd),
+      timeStart: formatDateUKType(projectDetail.timeStart ?? ''),
+      timeEnd: formatDateUKType(projectDetail.timeEnd ?? ''),
       note: projectDetail.note ?? '',
       isAllUserBelongTo: projectDetail.isAllUserBelongTo,
       projectType: projectDetail.projectType,
@@ -135,7 +135,6 @@ export default function EditProjectModal({
     saveProject(
       {
         id: projectId!,
-        status: projectDetail?.status ?? 0,
         customerId: data.customerId as number,
         name: data.name,
         code: data.code,
@@ -145,7 +144,6 @@ export default function EditProjectModal({
         isAllUserBelongTo: data.isAllUserBelongTo,
         projectType: data.projectType,
         projectTargetUsers: [],
-        isNotifyToKomu: false,
         users: data.members.map((m) => ({
           userId: m.userId,
           type: m.type,
@@ -155,7 +153,7 @@ export default function EditProjectModal({
           taskId: t.taskId,
           billable: t.billable,
         })),
-        komuChannelId: data.komuChannelId || null,
+        komuChannelId: data.komuChannelId,
         isNoticeKMSubmitTS: data.isNoticeKMSubmitTS,
         isNoticeKMRequestOffDate: data.isNoticeKMRequestOffDate,
         isNoticeKMApproveRequestOffDate: data.isNoticeKMApproveRequestOffDate,
@@ -167,15 +165,21 @@ export default function EditProjectModal({
       {
         onSuccess: (res) => {
           if (res?.success === false) {
-            showError(res?.error?.message || notify.PROJECT.UPDATE_FAILED);
+            showError(res?.error?.message || notify.PROJECT.UPDATE_FAILDED);
             return;
           }
           showSuccess(notify.PROJECT.UPDATE_SUCCESS);
           handleClose();
         },
-        onError: (err: AxiosError) => {
-          const messageError = err.response?.data?.error?.message;
-          showError(messageError || notify.PROJECT.UPDATE_FAILED);
+        onError: (err: unknown) => {
+          if (axios.isAxiosError(err)) {
+            const messageError =
+              err.response?.data?.error?.message ??
+              notify.PROJECT.UPDATE_FAILDED;
+            showError(messageError);
+            return;
+          }
+          showError((err as Error)?.message || notify.PROJECT.UPDATE_FAILDED);
         },
       },
     );

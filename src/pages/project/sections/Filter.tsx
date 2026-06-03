@@ -37,7 +37,7 @@ export default function Filter({
   searchValue,
   onSearchChange,
 }: IFilterProps) {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const { data: quantities = [] } = useProjectQuantityQuery();
 
@@ -52,7 +52,7 @@ export default function Filter({
     });
   }, [quantities]);
   const selectedOption = filterOptions.find((o) => o.value === selectedValue);
-  const handleOpenMenu = (event) => {
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleCloseMenuSelect = () => {
@@ -130,7 +130,7 @@ export default function Filter({
             },
           }}
         >
-          {selectedOption.label} ({selectedOption.count})
+          {selectedOption?.label} ({selectedOption?.count})
         </CustomButton>
         <Menu
           anchorEl={anchorEl}

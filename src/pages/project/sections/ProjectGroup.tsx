@@ -2,7 +2,6 @@ import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { IProject } from '@/libs/features/project/types.ts';
-import React from 'react';
 import ProjectRow from '@/pages/project/sections/ProjectRow.tsx';
 
 interface IGroup {
@@ -14,7 +13,10 @@ interface IProjectGroupProps {
   group: IGroup;
   expanded: boolean;
   onToggle: () => void;
-  onOpenActions: (event, projectId: number) => void;
+  onOpenActions: (
+    event: { currentTarget: HTMLElement },
+    projectId: number,
+  ) => void;
 }
 
 export default function ProjectGroup({

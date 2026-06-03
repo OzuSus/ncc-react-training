@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Box, CircularProgress, Collapse } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -39,7 +39,8 @@ export default function TabTeam() {
   const [rightSearch, setRightSearch] = useState('');
   const debouncedRightSearch = useDebounce(rightSearch, 150);
 
-  const branchOptions = useMemo(
+  type BranchOption = { id: BranchFilterValue; name: string };
+  const branchOptions: BranchOption[] = useMemo(
     () => [
       { id: 'all', name: 'All' },
       ...branches.map((b) => ({ id: b.id, name: b.name })),

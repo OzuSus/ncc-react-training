@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Checkbox, FormControlLabel, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { CustomButton } from '@/libs/components/ui/Button';
@@ -70,12 +69,14 @@ export default function SelectedMemberFilterToolbar({
         placeholder="Search by name, email"
         value={leftSearch}
         onChange={(e) => onSearchChange(e.target.value)}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon sx={{ fontSize: 16, color: '#aaa' }} />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ fontSize: 16, color: '#aaa' }} />
+              </InputAdornment>
+            ),
+          },
         }}
         sx={{
           '& .MuiInputBase-root': {

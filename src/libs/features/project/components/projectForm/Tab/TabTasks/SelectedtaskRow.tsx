@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Box, Checkbox, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { CustomTypography } from '@/libs/components/ui/Typography';

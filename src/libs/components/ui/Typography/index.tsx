@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { memo } from 'react';
 import { Typography, TypographyProps } from '@mui/material';
 
@@ -16,7 +15,7 @@ export function CustomTypography({
           fontWeight: 400,
           color: color,
         },
-        sx,
+        ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
       ]}
       {...restProps}
     >

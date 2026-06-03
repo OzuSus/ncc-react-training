@@ -31,7 +31,7 @@ export function CustomButton({
             boxShadow: 'none',
           },
         },
-        sx,
+        ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
       ]}
       {...restProps}
     >

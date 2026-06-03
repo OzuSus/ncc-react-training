@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Checkbox,
@@ -64,19 +64,23 @@ export default function TabGeneral() {
                           ml: 0,
                         },
                       }}
-                      InputProps={{
-                        ...(params.InputProps ?? {}),
-                        endAdornment: (
-                          <>
-                            {isLoading ? (
-                              <CircularProgress
-                                color="inherit"
-                                size={16}
-                                sx={{ mr: 1 }}
-                              />
-                            ) : null}
-                          </>
-                        ),
+                      slotProps={{
+                        ...params.slotProps,
+                        input: {
+                          ...params.slotProps?.input,
+                          endAdornment: (
+                            <>
+                              {isLoading ? (
+                                <CircularProgress
+                                  color="inherit"
+                                  size={16}
+                                  sx={{ mr: 1 }}
+                                />
+                              ) : null}
+                              {params.slotProps?.input?.endAdornment}
+                            </>
+                          ),
+                        },
                       }}
                     />
                   )}

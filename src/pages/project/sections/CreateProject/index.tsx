@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -18,7 +18,7 @@ import { useCreateProjectMutation } from '@/libs/features/project/hooks/useCreat
 import TabGeneral from '@/libs/features/project/components/projectForm/Tab/TabGeneral/TabGeneral';
 import TabTeam from '@/libs/features/project/components/projectForm/Tab/TabTeam/TabTeam';
 import { notify } from '@/libs/constants/notify';
-import type { AxiosError } from 'axios';
+import axios from 'axios';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
 import useSnackbar from '@/libs/hooks/useSnackbar';
 import { MemberRole } from '@/libs/features/member/types.ts';
@@ -30,11 +30,14 @@ import TabNotification from '@/libs/features/project/components/projectForm/Tab/
 
 export interface IProjectMember {
   userId: number;
+  name: string;
   type: number;
   emailAddress: string;
   avatarFullPath: string;
   branchDisplayName: string;
+  branchColor: string;
   userType: number;
+  isTemp: boolean;
 }
 export interface IProjectTask {
   taskId: number;
@@ -160,9 +163,15 @@ export default function CreateProjectModal({
           showSuccess(notify.PROJECT.CREATE_SUCCESS);
           handleClose();
         },
-        onError: (err: AxiosError) => {
-          const messageError = err.response?.data?.error?.message;
-          showError(messageError || notify.PROJECT.CREATE_FAILED);
+        onError: (err: unknown) => {
+          if (axios.isAxiosError(err)) {
+            const messageError =
+              err.response?.data?.error?.message ??
+              notify.PROJECT.CREATE_FAILED;
+            showError(messageError);
+            return;
+          }
+          showError((err as Error)?.message || notify.PROJECT.CREATE_FAILED);
         },
       },
     );

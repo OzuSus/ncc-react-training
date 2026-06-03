@@ -1,11 +1,11 @@
 // eslint-disable-next-line storybook/no-renderer-packages
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { CustomCheckbox } from '@/libs/components/ui/CheckBox/index.tsx';
+import { CustomCheckbox as CheckboxComponent } from '@/libs/components/ui/CheckBox/index.tsx';
 
 const meta: Meta<typeof CheckboxComponent> = {
   title: 'Components/Checkbox',
-  component: CustomCheckbox,
+  component: CheckboxComponent,
   tags: ['autodocs'],
   argTypes: {
     checked: {
@@ -43,7 +43,7 @@ export const Disabled: Story = {
   },
 };
 
-export const Interac = {
+export const Interac: Story = {
   render: function Render(args) {
     const [checked, setChecked] = useState(args.checked ?? false);
 

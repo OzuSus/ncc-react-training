@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box } from '@mui/material';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import StatRow from '@/libs/features/project/components/viewProject/StatRow.tsx';

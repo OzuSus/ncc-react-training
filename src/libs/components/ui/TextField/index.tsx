@@ -1,7 +1,8 @@
 import { memo } from 'react';
-import { Box, TextField, TextFieldProps, Typography } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
+import type { ComponentProps } from 'react';
 
-interface ITextFieldProps extends TextFieldProps {
+interface ITextFieldProps extends ComponentProps<typeof TextField> {
   label?: string;
 }
 
@@ -33,7 +34,7 @@ export function CustomTextField({
               },
             },
           },
-          sx,
+          ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
         ]}
         slotProps={slotProps}
         {...restProps}

@@ -8,7 +8,7 @@ import { CustomTypography } from '@/libs/components/ui/Typography';
 import { ToggleActionStatus } from '@/libs/features/project/types.ts';
 
 interface ProjectActionsMenuProps {
-  anchorEl: null;
+  anchorEl: HTMLElement | null;
   open: boolean;
   onClose: () => void;
   onEdit: () => void;

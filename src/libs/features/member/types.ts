@@ -28,4 +28,4 @@ export enum MemberRole {
   Deactive = 3,
 }
 
-export const MemberLookupMap = Map<number, IMember>;
+export type MemberLookupMap = Map<number, IMember>;

@@ -1,10 +1,10 @@
 // eslint-disable-next-line storybook/no-renderer-packages
-import type { Meta, StoryObj } from '@storybook/react';
-import { CustomTypography } from '@/libs/components/ui/Typography';
+import type { StoryObj } from '@storybook/react';
+import { CustomTypography as TypographyComponent } from '@/libs/components/ui/Typography';
 
-const meta: Meta<typeof TypographyComponent> = {
+const meta = {
   title: 'Components/Typography',
-  component: CustomTypography,
+  component: TypographyComponent,
   tags: ['autodocs'],
   argTypes: {
     children: {
@@ -20,12 +20,6 @@ const meta: Meta<typeof TypographyComponent> = {
     align: {
       control: 'select',
       options: ['left', 'center', 'right'],
-    },
-    fontSize: {
-      control: 'text',
-    },
-    fontWeight: {
-      control: 'text',
     },
     sx: {
       control: 'object',
@@ -44,7 +38,6 @@ export const Default: Story = {
     align: 'right',
     color: '',
     sx: null,
-    fontSize: '',
   },
 };
 

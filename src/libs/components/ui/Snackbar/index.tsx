@@ -1,4 +1,3 @@
-import React from 'react';
 import { Alert, Snackbar, type AlertColor } from '@mui/material';
 
 export type SnackbarPosition = {

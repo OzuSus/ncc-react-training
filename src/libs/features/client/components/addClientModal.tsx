@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import {
   Box,
   Dialog,
@@ -16,9 +15,10 @@ import { CustomTextField } from '@/libs/components/ui/TextField';
 import { useCreateClientMutation } from '@/libs/features/client/hook/useClientQuery.ts';
 import { errorMessages } from '@/libs/constants/errors.ts';
 import { notify } from '@/libs/constants/notify.ts';
-import type { AxiosError } from 'axios';
+import axios from 'axios';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
 import useSnackbar from '@/libs/hooks/useSnackbar.ts';
+import { useEffect } from 'react';
 
 interface IAddClientModalProps {
   open: boolean;
@@ -68,9 +68,14 @@ export default function AddClientModal({
         showSuccess(notify.CLIENT.CREATE_SUCCESS);
         handleClose();
       },
-      onError: (err: AxiosError) => {
-        const messageError = err.response?.data?.error?.message;
-        showError(messageError || notify.CLIENT.CREATE_FAILED);
+      onError: (err: unknown) => {
+        if (axios.isAxiosError(err)) {
+          const messageError =
+            err.response?.data?.error?.message ?? notify.CLIENT.CREATE_FAILED;
+          showError(messageError);
+          return;
+        }
+        showError((err as Error)?.message || notify.CLIENT.CREATE_FAILED);
       },
     });
   };

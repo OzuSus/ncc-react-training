@@ -6,11 +6,13 @@ import { CustomTypography } from '@/libs/components/ui/Typography';
 import { BADGE_PROJECT_TYPE } from '@/libs/constants/projectType.ts';
 import { formatDateUKType } from '@/libs/utils/date/formatDateUKType.ts';
 import { IProject } from '@/libs/features/project/types.ts';
-import React from 'react';
 
 interface IProjectRowProps {
   project: IProject;
-  onOpenActions: (event, projectId: number) => void;
+  onOpenActions: (
+    event: { currentTarget: HTMLElement },
+    projectId: number,
+  ) => void;
 }
 
 export default function ProjectRow({
@@ -56,7 +58,7 @@ export default function ProjectRow({
       />
       <CustomBadge
         badgeVariant="rangeDate"
-        label={`${formatDateUKType(project.timeStart)} - ${formatDateUKType(project.timeEnd)}`}
+        label={`${formatDateUKType(project.timeStart ?? '')} - ${formatDateUKType(project.timeEnd ?? '')}`}
       />
 
       <Box sx={{ flex: 1 }} />

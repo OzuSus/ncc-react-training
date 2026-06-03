@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Box,
   Dialog,
@@ -25,6 +25,7 @@ import CustomTimeDialog from '@/libs/features/project/components/viewProject/Cus
 import ViewProjectTasksTab from '@/pages/project/sections/ViewProject/Tab/ViewProjectTasksTab.tsx';
 import ViewProjectTeamTab from '@/pages/project/sections/ViewProject/Tab/ViewProjectTeamTab.tsx';
 import { DATE_RANGE_FILTER_OPTIONS } from '@/libs/constants/dateRange';
+import { FilterDateRangeMode } from '@/libs/features/project/types.ts';
 
 interface IViewProjectModalProps {
   open: boolean;
@@ -38,7 +39,7 @@ export default function ViewProjectModal({
   onClose,
 }: IViewProjectModalProps) {
   const [activeTab, setActiveTab] = useState(0);
-  const [filterMode, setFilterMode] = useState('week');
+  const [filterMode, setFilterMode] = useState<FilterDateRangeMode>('week');
   const [offset, setOffset] = useState(0);
   const [customRange, setCustomRange] = useState<{
     start: string;
@@ -61,7 +62,7 @@ export default function ViewProjectModal({
   const { refetch: refetchExportExcel, isLoading: LoadingExport } =
     useExportExcelQuery(projectId, dateRange.startDate, dateRange.endDate);
 
-  const handleFilterChange = (mode: FilterMode) => {
+  const handleFilterChange = (mode: FilterDateRangeMode) => {
     if (mode === 'customTime') setOpenCustomDialog(true);
     setFilterMode(mode);
     setOffset(0);
@@ -162,7 +163,9 @@ export default function ViewProjectModal({
           <Select
             size="small"
             value={filterMode}
-            onChange={(e) => handleFilterChange(e.target.value as FilterMode)}
+            onChange={(e) =>
+              handleFilterChange(e.target.value as FilterDateRangeMode)
+            }
             sx={{ minWidth: 140, fontSize: 14, borderRadius: 1.5 }}
           >
             {DATE_RANGE_FILTER_OPTIONS.map((opt) => (
