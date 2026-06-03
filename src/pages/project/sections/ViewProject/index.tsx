@@ -39,7 +39,9 @@ export default function ViewProjectModal({
   onClose,
 }: IViewProjectModalProps) {
   const [activeTab, setActiveTab] = useState(0);
-  const [filterMode, setFilterMode] = useState<FilterDateRangeMode>('week');
+  const [filterMode, setFilterMode] = useState<FilterDateRangeMode>(
+    FilterDateRangeMode.Week,
+  );
   const [offset, setOffset] = useState(0);
   const [customRange, setCustomRange] = useState<{
     start: string;
