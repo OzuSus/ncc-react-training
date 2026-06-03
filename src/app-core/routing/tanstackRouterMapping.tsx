@@ -9,6 +9,14 @@ import Cookies from 'js-cookie';
 
 const rootRoute = createRootRoute({});
 export const tanstackRouterMapping = (routesConfig: AppRoutesConfig[]) => {
+  const indexRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/',
+    beforeLoad: () => {
+      throw redirect({ to: '/auth/sign-in' });
+    },
+  });
+
   const allRoutes = routesConfig.map((group) => {
     const layoutRoute = createRoute({
       getParentRoute: () => rootRoute,
@@ -35,7 +43,7 @@ export const tanstackRouterMapping = (routesConfig: AppRoutesConfig[]) => {
     return layoutRoute.addChildren(childRoutes);
   });
 
-  const routeTree = rootRoute.addChildren(allRoutes);
+  const routeTree = rootRoute.addChildren([indexRoute, ...allRoutes]);
   const router = createRouter({ routeTree });
 
   return { router };
