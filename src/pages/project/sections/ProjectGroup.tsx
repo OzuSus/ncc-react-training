@@ -14,7 +14,7 @@ interface IProjectGroupProps {
   group: IGroup;
   expanded: boolean;
   onToggle: () => void;
-  onOpenActions: () => void;
+  onOpenActions: (event, projectId: number) => void;
 }
 
 export default function ProjectGroup({

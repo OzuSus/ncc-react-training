@@ -51,3 +51,43 @@ export interface IProjectDetail {
   tasks: { taskId: number; billable: boolean; id: number }[];
   users: { userId: number; type: number; isTemp: boolean; id: number }[];
 }
+export enum FilterDateRangeMode {
+  Week = 'week',
+  Month = 'month',
+  Quarter = 'quarter',
+  Year = 'year',
+  AllTime = 'allTime',
+  CustomTime = 'customTime',
+}
+
+export interface IViewProjecttask {
+  taskId: number;
+  taskName: string;
+  totalWorkingTime: number;
+  billableWorkingTime: number;
+  billable: boolean;
+}
+export interface IViewProjectTeam {
+  userID: number;
+  userName: string;
+  projectUserType: number;
+  totalWorkingTime: number;
+  billableWorkingTime: number;
+}
+export interface IExportTimesheet {
+  userName: string;
+  dateAt: string;
+  typeOfWork: number;
+  taskName: string;
+  note: string;
+  workingTime: number;
+  targetUserWorkingTime: number;
+  targetUserName: string;
+  roleName: string;
+  isShadow: boolean;
+  id: number;
+}
+export enum ToggleActionStatus {
+  Active = 'active',
+  Deactive = 'deactive',
+}
