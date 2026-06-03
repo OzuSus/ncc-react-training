@@ -1,0 +1,45 @@
+trigger:
+  branches:
+    include:
+      - duocpv/timesheet_test_deploy_vercel
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: vercel-secrets
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '20.x'
+    displayName: Use Node.js
+
+  - script: npm ci
+    displayName: Install Dependencies
+
+  - script: npm install -g vercel
+    displayName: Install Vercel CLI
+
+  - script: |
+      mkdir -p .vercel
+      echo "{\"projectId\":\"$(VERCEL_PROJECT_ID)\",\"orgId\":\"$(VERCEL_ORG_ID)\"}" > .vercel/project.json
+    displayName: Create Vercel Config
+
+  - script: |
+      vercel pull \
+        --yes \
+        --environment=preview \
+        --token=$(VERCEL_TOKEN)
+    displayName: Pull Vercel Settings
+
+  - script: |
+      vercel build \
+        --token=$(VERCEL_TOKEN)
+    displayName: Build Application
+
+  - script: |
+      vercel deploy \
+        --prebuilt \
+        --token=$(VERCEL_TOKEN)
+    displayName: Deploy Preview
