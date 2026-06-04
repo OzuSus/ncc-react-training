@@ -34,7 +34,6 @@ import type {
   IProjectMember,
   IProjectTask,
 } from '@/pages/project/sections/CreateProject';
-import { formatDateUKType } from '@/libs/utils/date/formatDateUKType.ts';
 
 const TABS = ['General', 'Team', 'Task', 'Notification'];
 
@@ -89,12 +88,16 @@ export default function EditProjectModal({
         name: taskInfo?.name ?? `Task ${t.taskId}`,
       };
     });
+    const formatDate = (dateStr: string | null) => {
+      if (!dateStr) return '';
+      return dateStr.split('T')[0];
+    };
     methods.reset({
       customerId: projectDetail.customerId,
       name: projectDetail.name,
       code: projectDetail.code,
-      timeStart: formatDateUKType(projectDetail.timeStart ?? ''),
-      timeEnd: formatDateUKType(projectDetail.timeEnd ?? ''),
+      timeStart: formatDate(projectDetail.timeStart ?? ''),
+      timeEnd: formatDate(projectDetail.timeEnd ?? ''),
       note: projectDetail.note ?? '',
       isAllUserBelongTo: projectDetail.isAllUserBelongTo,
       projectType: projectDetail.projectType,
