@@ -40,10 +40,10 @@ export const httpRequest = {
     const { special, ...axiosConfig } = config || {};
     const response = await axiosInstance.get(url, axiosConfig);
     if (special) {
-      return response.data;
-    } else {
-      return response.data;
+      return response.data as S extends true ? T : IHttpResponse<T>;
     }
+
+    return response.data as S extends true ? T : IHttpResponse<T>;
   },
 
   post: async <T, S extends boolean = false>(
@@ -53,8 +53,11 @@ export const httpRequest = {
   ): Promise<S extends true ? T : IHttpResponse<T>> => {
     const { special, ...axiosConfig } = config || {};
     const response = await axiosInstance.post(url, data, axiosConfig);
-    if (special) return response.data;
-    return response.data;
+    if (special) {
+      return response.data as S extends true ? T : IHttpResponse<T>;
+    }
+
+    return response.data as S extends true ? T : IHttpResponse<T>;
   },
 
   delete: async <T, S extends boolean = false>(
