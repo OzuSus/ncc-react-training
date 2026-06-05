@@ -1,5 +1,40 @@
 {
   "project": {
     "title": "Quản lý dự án"
+  },
+  "sidebar": {
+    "myProfile": "Hồ sơ cá nhân",
+    "admin": "Quản trị",
+    "user": "Người dùng",
+    "role": "Vai trò",
+    "configuration": "Cấu hình",
+    "client": "Khách hàng",
+    "task": "Nhiệm vụ",
+    "leaveType": "Loại phép",
+    "branch": "Chi nhánh",
+    "position": "Vị trí",
+    "capabilities": "Tiêu chí",
+    "capabilitySetting": "Cài đặt tiêu chí",
+    "offDaySetting": "Cài đặt ngày nghỉ",
+    "overtimeSetting": "Cài đặt tăng ca",
+    "auditLog": "Nhật kí",
+    "backgroundJob": "Công việc nền",
+    "projects": "Dự án",
+    "myTimesheets": "Bảng chấm công của tôi",
+    "myRequest": "Yêu cầu của tôi",
+    "myWorkingTime": "Thời gian làm việc của tôi",
+    "manageTimesheet": "Quản lý bảng chấm công",
+    "manageRequest": "Quản lý yêu cầu",
+    "manageWorkingTime": "Quanr lý thời gian làm việc",
+    "teamWoringkingCalender": "Lịch làm việc của nhóm",
+    "timesheetsMonitoring": "Giám sát bảng chấm công",
+    "retro": "Retro",
+    "reviewIntern": "Đánh giá thực tập sinh",
+    "report": "Báo cáo",
+    "internInfo": "Thông tin thực tập sinh",
+    "normalWorking": "Làm việc bình thường",
+    "overTime": "Tăng ca",
+    "tardiness": "Chậm trễ",
+    "komuTracker": "Komu tracker"
   }
 }
