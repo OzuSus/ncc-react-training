@@ -92,30 +92,6 @@ export default function Sidebar({ permissions = [] }: ISidebarProps) {
     >
       <Box
         sx={{
-          flexShrink: 0,
-          display: 'flex',
-          alignItems: 'center',
-          pt: 1,
-          pb: 2,
-          px: 2,
-        }}
-      >
-        <Box
-          component="img"
-          src="https://cdn.mezon.ai/1831515885068619776/2055144527219396608.png"
-          alt="Logo"
-          sx={{
-            width: 100,
-            height: 'auto',
-            objectFit: 'contain',
-            mr: 'auto',
-            mt: 2,
-            pl: 2,
-          }}
-        />
-      </Box>
-      <Box
-        sx={{
           flex: 1,
           overflowY: 'auto',
           '&::-webkit-scrollbar': { width: 10 },

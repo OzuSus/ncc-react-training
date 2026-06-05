@@ -16,6 +16,7 @@ import ViewProjectModal from '@/pages/project/sections/ViewProject';
 import DeleteProjectModal from '@/libs/features/project/components/actionModal/DeleteProjectModal.tsx';
 import ActiveProjectModal from '@/libs/features/project/components/actionModal/ActiveProjectModal.tsx';
 import DeactiveProjectModal from '@/libs/features/project/components/actionModal/DeactiveProjectModal.tsx';
+import { useTranslation } from 'react-i18next';
 
 export default function ManageProjects() {
   const [actionMenu, setActionMenu] = useState<{
@@ -115,7 +116,7 @@ export default function ManageProjects() {
     }
     handleCloseMenu();
   };
-
+  const { t } = useTranslation();
   return (
     <Box sx={{ minHeight: '100vh', py: 3, bgcolor: '#f5f5f5' }}>
       <Container maxWidth="lg" sx={{ py: 2 }}>
@@ -133,7 +134,7 @@ export default function ManageProjects() {
             <CustomTypography
               sx={{ fontSize: 16, fontWeight: 600, color: '#222' }}
             >
-              Manage Projects
+              {t('project.title')}
             </CustomTypography>
           </Box>
 
