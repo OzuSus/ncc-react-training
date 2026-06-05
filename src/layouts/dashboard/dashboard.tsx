@@ -41,10 +41,7 @@ export default function DashboardLayout() {
       <Header />
       <Box sx={{ display: 'flex', flex: 1, minHeight: 0, overflow: 'hidden' }}>
         <Sidebar permissions={permissions} />
-        <Box
-          component="main"
-          sx={{ flex: 1, p: 3, overflow: 'auto', bgcolor: '#f8f9fa' }}
-        >
+        <Box sx={{ flex: 1, p: 3, overflow: 'auto', bgcolor: '#f8f9fa' }}>
           <Outlet />
         </Box>
       </Box>

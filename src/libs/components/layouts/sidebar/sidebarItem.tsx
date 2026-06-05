@@ -11,6 +11,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { ISidebarItem } from '@/config/sidebar';
+import { useTranslation } from 'react-i18next';
 
 interface ISidebarItemProps {
   item: ISidebarItem;
@@ -65,6 +66,8 @@ export function SidebarItem({
     }
     navigate({ to: fullPath });
   }, [hasChildren, onToggle, parentKey, item.key, navigate, fullPath]);
+
+  const { t } = useTranslation();
 
   return (
     <>
@@ -130,7 +133,7 @@ export function SidebarItem({
             },
           }}
         >
-          {item.text}
+          {t(item.text)}
         </ListItemText>
         {hasChildren &&
           (isOpen ? (

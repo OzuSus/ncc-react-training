@@ -131,13 +131,11 @@ export default function ManageProjects() {
               borderBottom: '1px solid #eee',
             }}
           >
-            {/*<Suspense fallback="loading">*/}
             <CustomTypography
               sx={{ fontSize: 16, fontWeight: 600, color: '#222' }}
             >
               {t('project.title')}
             </CustomTypography>
-            {/*</Suspense>*/}
           </Box>
 
           <Filter

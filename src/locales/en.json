@@ -1,0 +1,40 @@
+{
+  "project": {
+    "title": "Project Management"
+  },
+  "sidebar": {
+    "myProfile": "My Profile",
+    "admin": "Admin",
+    "user": "User",
+    "role": "Role",
+    "configuration": "Configuration",
+    "client": "Client",
+    "task": "Task",
+    "leaveType": "Leave Type",
+    "branch": "Branch",
+    "position": "Position",
+    "capabilities": "Capabilities",
+    "capabilitySetting": "Capability Setting",
+    "offDaySetting": "Off Day Setting",
+    "overtimeSetting": "Overtime Setting",
+    "auditLog": "Audit Log",
+    "backgroundJob": "Background Job",
+    "projects": "Projects",
+    "myTimesheets": "My Timesheets",
+    "myRequest": "My Request",
+    "myWorkingTime": "My Working Time",
+    "manageTimesheet": "Manage Timesheet",
+    "manageRequest": "Manage Request",
+    "manageWorkingTime": "Manage Working Time",
+    "teamWoringkingCalender": "Team Woringking Calender",
+    "timesheetsMonitoring": "Timesheets Monitoring",
+    "retro": "Retro",
+    "reviewIntern": "Review Intern",
+    "report": "Report",
+    "internInfo": "Intern Info",
+    "normalWorking": "Normal Working",
+    "overTime": "Over time",
+    "tardiness": "Tardiness",
+    "komuTracker": "Komu tracker"
+  }
+}
