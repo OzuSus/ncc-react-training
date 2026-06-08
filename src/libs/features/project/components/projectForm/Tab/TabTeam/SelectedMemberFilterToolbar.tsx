@@ -3,6 +3,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { CustomTextField } from '@/libs/components/ui/TextField';
+import { useTranslation } from 'react-i18next';
 
 interface ISelectedMemberFilterToolbarProps {
   showDeactive: boolean;
@@ -25,6 +26,7 @@ export default function SelectedMemberFilterToolbar({
   onSearchChange,
   onToggleAddPanel,
 }: ISelectedMemberFilterToolbarProps) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -46,7 +48,7 @@ export default function SelectedMemberFilterToolbar({
         }
         label={
           <CustomTypography sx={{ fontSize: 14 }}>
-            Show deactive member
+            {t('project.team.showDeactiveMember')}
           </CustomTypography>
         }
       />
@@ -60,13 +62,13 @@ export default function SelectedMemberFilterToolbar({
         }
         label={
           <CustomTypography sx={{ fontSize: 14 }}>
-            Show Inactive user
+            {t('project.team.showInactiveUser')}
           </CustomTypography>
         }
       />
       <CustomTextField
         size="small"
-        placeholder="Search by name, email"
+        placeholder={t('project.team.searchByNameEmail')}
         value={leftSearch}
         onChange={(e) => onSearchChange(e.target.value)}
         slotProps={{
@@ -97,7 +99,7 @@ export default function SelectedMemberFilterToolbar({
           height: 36,
         }}
       >
-        {showAddPanel ? 'Exit add' : 'Add users'}
+        {showAddPanel ? t('project.team.exitAdd') : t('project.team.addUsers')}
       </CustomButton>
     </Box>
   );

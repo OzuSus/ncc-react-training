@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { useCreateProjectMutation } from '@/libs/features/project/hooks/useCreateProjectQuery';
@@ -35,7 +36,7 @@ import type {
   IProjectTask,
 } from '@/pages/project/sections/CreateProject';
 
-const TABS = ['General', 'Team', 'Task', 'Notification'];
+const TABS = ['general', 'team', 'task', 'notification'];
 
 interface IEditProjectModalProps {
   open: boolean;
@@ -48,6 +49,7 @@ export default function EditProjectModal({
   projectId,
   onClose,
 }: IEditProjectModalProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(0);
   const { snackbar, close, showError, showSuccess } = useSnackbar();
   const { alert, showAlert, handleClose: handleAlertClose } = useAlertDialog();
@@ -206,7 +208,8 @@ export default function EditProjectModal({
           }}
         >
           <CustomTypography sx={{ fontSize: 18, fontWeight: 700 }}>
-            Edit Project{projectDetail ? ` : ${projectDetail.name}` : ''}
+            {t('project.editProject')}
+            {projectDetail ? ` : ${projectDetail.name}` : ''}
           </CustomTypography>
           <IconButton onClick={handleClose} size="small" disabled={isPending}>
             <CloseIcon />
@@ -230,7 +233,7 @@ export default function EditProjectModal({
               }}
             >
               {TABS.map((tab) => (
-                <Tab key={tab} label={tab} />
+                <Tab key={tab} label={t(`project.tabs.${tab}`)} />
               ))}
             </Tabs>
           </Box>
@@ -268,7 +271,7 @@ export default function EditProjectModal({
               disabled={isPending}
               sx={{ borderColor: '#4680ff', color: '#4680ff' }}
             >
-              Cancel
+              {t('project.cancel')}
             </CustomButton>
             <CustomButton
               variant="contained"
@@ -281,7 +284,7 @@ export default function EditProjectModal({
                 ) : undefined
               }
             >
-              Save
+              {t('project.save')}
             </CustomButton>
           </DialogActions>
         </FormProvider>

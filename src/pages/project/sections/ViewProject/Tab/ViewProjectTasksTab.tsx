@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import StatTable from '@/libs/features/project/components/viewProject/StatTable.tsx';
 
 export interface ITaskStatisticRow {
@@ -16,6 +17,7 @@ export default function ViewProjectTasksTab({
   loading,
   taskData,
 }: ProjectTasksTabProps) {
+  const { t } = useTranslation();
   const {
     billableTasks,
     nonBillableTasks,
@@ -51,9 +53,9 @@ export default function ViewProjectTasksTab({
   return (
     <Box>
       <StatTable
-        headerLeft="Billable Tasks"
-        headerHours="Hours"
-        headerRight="Billable Hours"
+        headerLeft={t('project.view.table.billableTasks')}
+        headerHours={t('project.view.table.hours')}
+        headerRight={t('project.view.table.billableHours')}
         showBillable
         totalTime={totalBillableTime}
         totalBillable={totalBillableHours}
@@ -67,8 +69,8 @@ export default function ViewProjectTasksTab({
       {nonBillableTasks.length > 0 && (
         <Box sx={{ mt: 2 }}>
           <StatTable
-            headerLeft="Non-billable Tasks"
-            headerHours="Hours"
+            headerLeft={t('project.view.table.nonBillableTasks')}
+            headerHours={t('project.view.table.hours')}
             headerRight=""
             showBillable={false}
             totalTime={nonBillableTasks.reduce(

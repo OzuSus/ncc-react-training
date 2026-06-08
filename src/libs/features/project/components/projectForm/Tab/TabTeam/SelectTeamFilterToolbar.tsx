@@ -6,6 +6,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { CustomTextField } from '@/libs/components/ui/TextField';
 import { MEMBER_TYPE_OPTIONS } from '@/libs/constants/member.ts';
@@ -36,6 +37,21 @@ export default function SelectTeamFilterToolbar({
   onTypeChange,
   onSearchChange,
 }: ISelectTeamFilterToolbarProps) {
+  const { t } = useTranslation();
+  const getMemberTypeLabel = (value: number) => {
+    switch (value) {
+      case -1:
+        return t('project.team.all');
+      case 0:
+        return t('project.team.memberTypes.staff');
+      case 1:
+        return t('project.team.memberTypes.internship');
+      case 2:
+        return t('project.team.memberTypes.collaborator');
+      default:
+        return '';
+    }
+  };
   return (
     <Box
       sx={{
@@ -49,7 +65,7 @@ export default function SelectTeamFilterToolbar({
     >
       <Box>
         <CustomTypography sx={{ fontSize: 11, color: '#888', mb: 0.3 }}>
-          Branch
+          {t('project.team.branch')}
         </CustomTypography>
         <Autocomplete
           size="small"
@@ -103,7 +119,7 @@ export default function SelectTeamFilterToolbar({
       </Box>
       <Box>
         <CustomTypography sx={{ fontSize: 11, color: '#888', mb: 0.3 }}>
-          Type
+          {t('project.team.type')}
         </CustomTypography>
         <Select
           size="small"
@@ -113,7 +129,7 @@ export default function SelectTeamFilterToolbar({
         >
           {MEMBER_TYPE_OPTIONS.map((opt) => (
             <MenuItem key={opt.value} value={opt.value} sx={{ fontSize: 13 }}>
-              {opt.label}
+              {getMemberTypeLabel(opt.value)}
             </MenuItem>
           ))}
         </Select>
@@ -121,7 +137,7 @@ export default function SelectTeamFilterToolbar({
       <Box sx={{ flex: 1, mt: 2 }}>
         <CustomTextField
           size="small"
-          placeholder="Search by name, email"
+          placeholder={t('project.team.searchByNameEmail')}
           value={rightSearch}
           onChange={(e) => onSearchChange(e.target.value)}
           sx={{

@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { Box, Checkbox } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 
 interface ITaskHeaderProps {
@@ -13,6 +14,8 @@ export function TaskHeader({
   isIndeterminate,
   onToggleAll,
 }: ITaskHeaderProps) {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -24,7 +27,7 @@ export function TaskHeader({
       }}
     >
       <CustomTypography sx={{ flex: 1, fontSize: 14, fontWeight: 600 }}>
-        Tasks
+        {t('project.task.taskName')}
       </CustomTypography>
       <Box
         sx={{
@@ -35,7 +38,7 @@ export function TaskHeader({
         }}
       >
         <CustomTypography sx={{ fontSize: 14, fontWeight: 600 }}>
-          Billable
+          {t('project.task.billable')}
         </CustomTypography>
         <Checkbox
           size="medium"

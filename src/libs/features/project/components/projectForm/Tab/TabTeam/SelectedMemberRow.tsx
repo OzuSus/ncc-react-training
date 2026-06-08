@@ -9,8 +9,9 @@ import {
   MEMBER_ROLE_OPTIONS,
   TEMP_OPTIONS,
   MEMBER_TYPE_COLOR,
-  MEMBER_TYPE_LABEL,
 } from '@/libs/constants/member.ts';
+import { MemberType } from '@/libs/features/member/types.ts';
+import { useTranslation } from 'react-i18next';
 
 export type MemberUpdateKey = 'type' | 'isTemp';
 export type MemberUpdateValue = number | boolean;
@@ -24,11 +25,24 @@ interface ISelectedMemberRowProps {
   ) => void;
 }
 
+const getMemberTypeLabel = (userType: number, t: (key: string) => string) => {
+  switch (userType) {
+    case MemberType.Staff:
+      return t('project.team.memberTypes.staff');
+    case MemberType.Internship:
+      return t('project.team.memberTypes.internship');
+    case MemberType.Collaborator:
+      return t('project.team.memberTypes.collaborator');
+    default:
+      return t('project.team.memberTypes.staff'); // fallback
+  }
+};
 export function SelectedMemberRow({
   member,
   onRemove,
   onUpdate,
 }: ISelectedMemberRowProps) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -75,7 +89,7 @@ export function SelectedMemberRow({
           />
           <CustomBadge
             badgeVariant="members"
-            label={MEMBER_TYPE_LABEL[member.userType] ?? 'Staff'}
+            label={getMemberTypeLabel(member.userType, t)}
             bgColor={MEMBER_TYPE_COLOR[member.userType] ?? '#4caf50'}
             sx={{ height: 18, fontSize: 11, borderRadius: 1, fontWeight: 600 }}
           />
@@ -94,7 +108,10 @@ export function SelectedMemberRow({
       >
         {MEMBER_ROLE_OPTIONS.map((opt) => (
           <MenuItem key={opt.value} value={opt.value} sx={{ fontSize: 12 }}>
-            {opt.label}
+            {opt.value === 0 && t('project.team.roles.member')}
+            {opt.value === 1 && t('project.team.roles.pm')}
+            {opt.value === 2 && t('project.team.roles.shadow')}
+            {opt.value === 3 && t('project.team.roles.deactive')}
           </MenuItem>
         ))}
       </Select>
@@ -119,7 +136,8 @@ export function SelectedMemberRow({
             value={String(opt.value)}
             sx={{ fontSize: 12 }}
           >
-            {opt.label}
+            {opt.value === false && t('project.team.tempOptions.official')}
+            {opt.value === true && t('project.team.tempOptions.temp')}
           </MenuItem>
         ))}
       </Select>

@@ -14,21 +14,30 @@ export interface IDateRange {
 export function getDateRange(
   mode: FilterDateRangeMode,
   offset: number,
+  t: (key: string) => string,
   customRange?: { start: string; end: string },
 ): IDateRange {
   const now = dayjs();
   if (mode === FilterDateRangeMode.AllTime) {
-    return { startDate: undefined, endDate: undefined, label: 'All Time' };
+    return {
+      startDate: undefined,
+      endDate: undefined,
+      label: t('project.view.dateRange.allTime'),
+    };
   }
   if (mode === FilterDateRangeMode.CustomTime) {
     if (customRange) {
       return {
         startDate: customRange.start,
         endDate: customRange.end,
-        label: 'Custom Time',
+        label: t('project.view.dateRange.customTime'),
       };
     }
-    return { startDate: undefined, endDate: undefined, label: 'Custom Time' };
+    return {
+      startDate: undefined,
+      endDate: undefined,
+      label: t('project.view.dateRange.customTime'),
+    };
   }
   if (mode === FilterDateRangeMode.Week) {
     const start = now.add(offset, 'week').startOf('isoWeek');
@@ -36,7 +45,7 @@ export function getDateRange(
     return {
       startDate: start.format('YYYY-MM-DD'),
       endDate: end.format('YYYY-MM-DD'),
-      label: `Week: ${start.format('D')} - ${end.format('D MMM YYYY')}`,
+      label: `${t('project.view.dateRange.week')} ${start.format('D')} - ${end.format('D MMM YYYY')}`,
     };
   }
   if (mode === FilterDateRangeMode.Month) {
@@ -45,7 +54,7 @@ export function getDateRange(
     return {
       startDate: start.format('YYYY-MM-DD'),
       endDate: end.format('YYYY-MM-DD'),
-      label: `Month: ${start.format('D')} - ${end.format('D MMM YYYY')}`,
+      label: `${t('project.view.dateRange.month')} ${start.format('D')} - ${end.format('D MMM YYYY')}`,
     };
   }
   if (mode === FilterDateRangeMode.Quarter) {
@@ -55,7 +64,7 @@ export function getDateRange(
     return {
       startDate: start.format('YYYY-MM-DD'),
       endDate: end.format('YYYY-MM-DD'),
-      label: `Quarter: ${start.format('D MMM')} - ${end.format('D MMM YYYY')}`,
+      label: `${t('project.view.dateRange.quarter')} ${start.format('D MMM')} - ${end.format('D MMM YYYY')}`,
     };
   }
   const start = now.add(offset, 'year').startOf('year');
@@ -63,7 +72,7 @@ export function getDateRange(
   return {
     startDate: start.format('YYYY-MM-DD'),
     endDate: end.format('YYYY-MM-DD'),
-    label: `Years: ${start.format('D MMM')} - ${end.format('D MMM YYYY')}`,
+    label: `${t('project.view.dateRange.year')} ${start.format('D MMM')} - ${end.format('D MMM YYYY')}`,
   };
 }
 

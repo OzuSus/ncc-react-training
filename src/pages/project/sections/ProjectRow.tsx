@@ -6,6 +6,7 @@ import { CustomTypography } from '@/libs/components/ui/Typography';
 import { BADGE_PROJECT_TYPE } from '@/libs/constants/projectType.ts';
 import { formatDateUKType } from '@/libs/utils/date/formatDateUKType.ts';
 import { IProject } from '@/libs/features/project/types.ts';
+import { useTranslation } from 'react-i18next';
 
 interface IProjectRowProps {
   project: IProject;
@@ -19,6 +20,7 @@ export default function ProjectRow({
   project,
   onOpenActions,
 }: IProjectRowProps) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -50,7 +52,7 @@ export default function ProjectRow({
       />
       <CustomBadge
         badgeVariant="members"
-        label={`${project.activeMember} members`}
+        label={`${project.activeMember} ${t('project.member')}`}
       />
       <CustomBadge
         badgeVariant="type"
@@ -88,7 +90,7 @@ export default function ProjectRow({
           },
         }}
       >
-        Actions
+        {t('project.action')}
       </CustomButton>
     </Box>
   );

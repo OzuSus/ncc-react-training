@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import StatTable from '@/libs/features/project/components/viewProject/StatTable.tsx';
 
 export interface ITeamStatisticRow {
@@ -15,6 +16,7 @@ export default function ViewProjectTeamTab({
   loading,
   teamData,
 }: ProjectTeamTabProps) {
+  const { t } = useTranslation();
   const { totalTeamTime, totalTeamBillable } = useMemo(() => {
     const totalTeamTime = teamData.reduce((s, t) => s + t.totalWorkingTime, 0);
     const totalTeamBillable = teamData.reduce(
@@ -33,9 +35,9 @@ export default function ViewProjectTeamTab({
   }
   return (
     <StatTable
-      headerLeft="Name"
-      headerHours="Hour"
-      headerRight="Billable Hour"
+      headerLeft={t('project.view.table.name')}
+      headerHours={t('project.view.table.hour')}
+      headerRight={t('project.view.table.billableHour')}
       showBillable
       totalTime={totalTeamTime}
       totalBillable={totalTeamBillable}

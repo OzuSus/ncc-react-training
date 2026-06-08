@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
@@ -27,9 +28,10 @@ export default function ActiveProjectModal({
   onClose,
   onProjectActivated,
 }: ActiveProjectModalProps) {
+  const { t } = useTranslation();
   const activeProjectMutation = useActiveProjectMutation();
   const { snackbar, showSuccess, showError, close } = useSnackbar();
-  const projectLabel = `project ${project?.name}`;
+  const projectName = project?.name?.trim() || '';
 
   const handleClose = () => {
     if (activeProjectMutation.isPending) return;
@@ -73,7 +75,7 @@ export default function ActiveProjectModal({
             <CustomTypography
               sx={{ fontSize: 22, fontWeight: 700, color: '#1d2630' }}
             >
-              Active Project
+              {t('project.modals.activeProject')}
             </CustomTypography>
             <CustomTypography
               sx={{
@@ -83,7 +85,7 @@ export default function ActiveProjectModal({
                 textAlign: 'center',
               }}
             >
-              Do you want to active {projectLabel}?
+              {t('project.modals.confirmActive', { projectName })}
             </CustomTypography>
           </Box>
         </DialogContent>
@@ -94,7 +96,7 @@ export default function ActiveProjectModal({
             disabled={activeProjectMutation.isPending}
             sx={{ minWidth: 100, color: '#555', borderColor: '#ccc' }}
           >
-            Cancel
+            {t('project.modals.cancel')}
           </CustomButton>
           <CustomButton
             variant="contained"
@@ -109,7 +111,7 @@ export default function ActiveProjectModal({
             {activeProjectMutation.isPending ? (
               <CircularProgress size={18} sx={{ color: '#fff' }} />
             ) : (
-              'Active'
+              t('project.modals.active')
             )}
           </CustomButton>
         </DialogActions>

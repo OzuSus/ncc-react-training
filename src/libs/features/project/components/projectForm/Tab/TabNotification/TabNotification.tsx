@@ -1,11 +1,13 @@
 import { Box, Checkbox, FormControlLabel } from '@mui/material';
 import { Controller, FieldPath, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { ICreateProjectForm } from '@/pages/project/sections/CreateProject';
 import { CustomTextField } from '@/libs/components/ui/TextField';
 import { NOTIFICATION_OPTIONS } from '@/libs/constants/notification.ts';
 
 export default function TabNotification() {
+  const { t } = useTranslation();
   const { control } = useFormContext<ICreateProjectForm>();
 
   return (
@@ -16,7 +18,11 @@ export default function TabNotification() {
         name="komuChannelId"
         control={control}
         render={({ field }) => (
-          <CustomTextField {...field} placeholder="Komu Channel Id" fullWidth />
+          <CustomTextField
+            {...field}
+            placeholder={t('project.notification.komuChannelIdPlaceholder')}
+            fullWidth
+          />
         )}
       />
       {NOTIFICATION_OPTIONS.map(({ label, field }) => (
@@ -42,7 +48,7 @@ export default function TabNotification() {
                 <CustomTypography
                   sx={{ fontSize: 14, fontWeight: 500, color: '#1D2630' }}
                 >
-                  {label}
+                  {t(label)}
                 </CustomTypography>
               }
             />

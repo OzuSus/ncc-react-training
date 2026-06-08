@@ -6,6 +6,7 @@ import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutli
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { ToggleActionStatus } from '@/libs/features/project/types.ts';
+import { useTranslation } from 'react-i18next';
 
 interface ProjectActionsMenuProps {
   anchorEl: HTMLElement | null;
@@ -28,8 +29,12 @@ export default function ProjectActionsMenu({
   onToggle,
   onDelete,
 }: ProjectActionsMenuProps) {
+  const { t } = useTranslation();
   const toggleLabel =
-    toggleAction === ToggleActionStatus.Active ? 'Active' : 'Deactive';
+    toggleAction === ToggleActionStatus.Active
+      ? t('project.actions.active')
+      : t('project.actions.deactive');
+
   const ToggleIcon =
     toggleAction === ToggleActionStatus.Active
       ? CheckCircleOutlineOutlinedIcon
@@ -55,14 +60,18 @@ export default function ProjectActionsMenu({
         <ListItemIcon sx={{ minWidth: 32 }}>
           <EditOutlinedIcon fontSize="small" sx={{ color: '#555' }} />
         </ListItemIcon>
-        <CustomTypography sx={{ fontSize: 14 }}>Edit</CustomTypography>
+        <CustomTypography sx={{ fontSize: 14 }}>
+          {t('project.actions.edit')}
+        </CustomTypography>
       </MenuItem>
 
       <MenuItem onClick={onView} sx={{ py: 1 }}>
         <ListItemIcon sx={{ minWidth: 32 }}>
           <VisibilityOutlinedIcon fontSize="small" sx={{ color: '#555' }} />
         </ListItemIcon>
-        <CustomTypography sx={{ fontSize: 14 }}>View</CustomTypography>
+        <CustomTypography sx={{ fontSize: 14 }}>
+          {t('project.actions.view')}
+        </CustomTypography>
       </MenuItem>
 
       <MenuItem onClick={onToggle} sx={{ py: 1 }}>
@@ -77,7 +86,7 @@ export default function ProjectActionsMenu({
           <DeleteIcon fontSize="small" />
         </ListItemIcon>
         <CustomTypography sx={{ color: '#dc2626', fontSize: 14 }}>
-          Delete
+          {t('project.actions.delete')}
         </CustomTypography>
       </MenuItem>
     </Menu>

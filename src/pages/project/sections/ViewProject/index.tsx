@@ -8,6 +8,7 @@ import {
   Tab,
   Tabs,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { CustomButton } from '@/libs/components/ui/Button';
@@ -38,6 +39,7 @@ export default function ViewProjectModal({
   projectId,
   onClose,
 }: IViewProjectModalProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(0);
   const [filterMode, setFilterMode] = useState<FilterDateRangeMode>(
     FilterDateRangeMode.Week,
@@ -50,8 +52,8 @@ export default function ViewProjectModal({
   const [openCustomDialog, setOpenCustomDialog] = useState(false);
 
   const dateRange = useMemo(
-    () => getDateRange(filterMode, offset, customRange),
-    [filterMode, offset, customRange],
+    () => getDateRange(filterMode, offset, t, customRange),
+    [filterMode, offset, t, customRange],
   );
 
   const { data: taskData = [], isLoading: loadingTasks } =
@@ -172,7 +174,7 @@ export default function ViewProjectModal({
           >
             {DATE_RANGE_FILTER_OPTIONS.map((opt) => (
               <MenuItem key={opt.value} value={opt.value} sx={{ fontSize: 14 }}>
-                {opt.label}
+                {t(`project.view.dateRange.${opt.value}`)}
               </MenuItem>
             ))}
           </Select>
@@ -187,7 +189,7 @@ export default function ViewProjectModal({
               borderRadius: 1.5,
             }}
           >
-            Export
+            {t('project.view.export')}
           </CustomButton>
         </Box>
 
@@ -205,8 +207,8 @@ export default function ViewProjectModal({
             '& .MuiTabs-indicator': { bgcolor: '#4680ff' },
           }}
         >
-          <Tab label="Tasks" />
-          <Tab label="Team" />
+          <Tab label={t('project.view.tabs.tasks')} />
+          <Tab label={t('project.view.tabs.team')} />
         </Tabs>
         <Box sx={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
           {activeTab === 0 && (

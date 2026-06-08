@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { CustomTextField } from '@/libs/components/ui/TextField';
@@ -35,6 +36,7 @@ export default function AddClientModal({
   open,
   onClose,
 }: IAddClientModalProps) {
+  const { t } = useTranslation();
   const { mutate: createClient, isPending } = useCreateClientMutation();
   const { snackbar, close, showError, showSuccess } = useSnackbar();
 
@@ -100,7 +102,7 @@ export default function AddClientModal({
             fontWeight: 600,
           }}
         >
-          New Client
+          {t('project.client.newClient')}
           <IconButton size="small" onClick={handleClose} disabled={isPending}>
             <CloseIcon fontSize="small" />
           </IconButton>
@@ -111,7 +113,8 @@ export default function AddClientModal({
               <CustomTypography
                 sx={{ fontSize: 16, color: '#5B6B79', mb: 0.5 }}
               >
-                Name <span style={{ color: '#e53935' }}>*</span>
+                {t('project.client.name')}{' '}
+                <span style={{ color: '#e53935' }}>*</span>
               </CustomTypography>
               <Controller
                 name="name"
@@ -127,7 +130,7 @@ export default function AddClientModal({
                     error={!!fieldState.error}
                     helperText={fieldState.error?.message}
                     size="small"
-                    placeholder="Enter client name"
+                    placeholder={t('project.client.namePlaceholder')}
                     sx={{
                       '& .MuiInputBase-root': {
                         minHeight: '45px',
@@ -145,7 +148,8 @@ export default function AddClientModal({
               <CustomTypography
                 sx={{ fontSize: 16, color: '#5B6B79', mb: 0.5 }}
               >
-                Code <span style={{ color: '#e53935' }}>*</span>
+                {t('project.client.code')}{' '}
+                <span style={{ color: '#e53935' }}>*</span>
               </CustomTypography>
               <Controller
                 name="code"
@@ -161,7 +165,7 @@ export default function AddClientModal({
                     error={!!fieldState.error}
                     helperText={fieldState.error?.message}
                     size="small"
-                    placeholder="Enter client code"
+                    placeholder={t('project.client.codePlaceholder')}
                     sx={{
                       '& .MuiInputBase-root': {
                         minHeight: '45px',
@@ -179,7 +183,7 @@ export default function AddClientModal({
               <CustomTypography
                 sx={{ fontSize: 16, color: '#5B6B79', mb: 0.5 }}
               >
-                Address
+                {t('project.client.address')}
               </CustomTypography>
               <Controller
                 name="address"
@@ -189,7 +193,7 @@ export default function AddClientModal({
                     {...field}
                     fullWidth
                     size="small"
-                    placeholder="Enter address"
+                    placeholder={t('project.client.addressPlaceholder')}
                     sx={{
                       '& .MuiInputBase-root': {
                         minHeight: '45px',
@@ -212,7 +216,7 @@ export default function AddClientModal({
             size="small"
             disabled={isPending}
           >
-            Cancel
+            {t('project.client.cancel')}
           </CustomButton>
           <CustomButton
             variant="contained"
@@ -230,7 +234,7 @@ export default function AddClientModal({
               boxShadow: 'none',
             }}
           >
-            Save
+            {t('project.client.save')}
           </CustomButton>
         </DialogActions>
       </Dialog>

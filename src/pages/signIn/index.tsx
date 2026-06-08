@@ -4,11 +4,11 @@ import { Controller, useForm } from 'react-hook-form';
 import { Box, Stack, IconButton, CircularProgress } from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import { useTranslation } from 'react-i18next';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { CustomTextField } from '@/libs/components/ui/TextField';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomCheckbox } from '@/libs/components/ui/CheckBox';
-import { errorMessages } from '@/libs/constants/errors.ts';
 import { useAuthMutation } from '@/libs/features/auth/hooks/useAuthQuery.ts';
 import { ErrorAlert } from '@/libs/components/share/errorNotify';
 
@@ -19,6 +19,7 @@ interface IPrefix {
 }
 
 export default function SignIn() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState<string>('');
@@ -44,7 +45,7 @@ export default function SignIn() {
       navigate({ to: '/app/home' });
     } catch (err) {
       console.error(err);
-      setAuthError(errorMessages.AUTH.INCORECT_EMAIL_OR_PASSWORD);
+      setAuthError(t('auth.errors.invalidCredentials'));
     }
   };
 
@@ -55,21 +56,21 @@ export default function SignIn() {
           <CustomTypography
             sx={{ fontSize: 25, fontWeight: 700, lineHeight: 1.2 }}
           >
-            Login
+            {t('auth.login')}
           </CustomTypography>
         </Box>
         <Controller
           name="email"
           control={control}
           rules={{
-            required: errorMessages.EMAIL.REQUIRED,
+            required: t('auth.errors.emailRequired'),
           }}
           render={({ field }) => (
             <CustomTextField
               {...field}
               type={'text'}
-              label="Email or Username"
-              placeholder="email or username"
+              label={t('auth.emailOrUsername')}
+              placeholder={t('auth.emailOrUsernamePlaceholder')}
               error={!!errors.email}
               helperText={errors.email?.message}
               fullWidth
@@ -81,13 +82,13 @@ export default function SignIn() {
         <Controller
           name="password"
           control={control}
-          rules={{ required: errorMessages.PASSWORD.REQUIRED }}
+          rules={{ required: t('auth.errors.passwordRequired') }}
           render={({ field }) => (
             <CustomTextField
               {...field}
-              label="Password"
+              label={t('auth.password')}
               type={showPassword ? 'text' : 'password'}
-              placeholder="Password"
+              placeholder={t('auth.passwordPlaceholder')}
               error={!!errors.password}
               helperText={errors.password?.message}
               fullWidth
@@ -125,7 +126,7 @@ export default function SignIn() {
             control={control}
             render={({ field }) => (
               <CustomCheckbox
-                label="Keep me sign in"
+                label={t('auth.keepMeSignIn')}
                 checked={field.value}
                 onChange={(checked) => field.onChange(checked)}
                 disabled={isPending}
@@ -151,7 +152,7 @@ export default function SignIn() {
               fontWeight: 600,
             }}
           >
-            Login
+            {t('auth.login')}
           </CustomButton>
         </Box>
       </Stack>

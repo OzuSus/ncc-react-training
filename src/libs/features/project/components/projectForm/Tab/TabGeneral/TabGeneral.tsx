@@ -16,22 +16,23 @@ import { CustomTextField } from '@/libs/components/ui/TextField';
 import FormRow from '@/libs/features/project/components/projectForm/Tab/TabGeneral/formRow.tsx';
 import { ICreateProjectForm } from '@/pages/project/sections/CreateProject';
 import { PROJECT_TYPES } from '@/libs/constants/projectType.ts';
-import { errorMessages } from '@/libs/constants/errors.ts';
 import AddClientModal from '@/libs/features/client/components/addClientModal.tsx';
+import { useTranslation } from 'react-i18next';
 
 export default function TabGeneral() {
   const [openCreateNewClient, setOpenCreateNewClient] = useState(false);
   const { data: clients = [], isLoading } = useClientQuery();
   const { control } = useFormContext<ICreateProjectForm>();
+  const { t } = useTranslation();
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, py: 1 }}>
-      <FormRow label="Client" required>
+      <FormRow label={t('project.fields.client')} required>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
           <Controller
             name="customerId"
             control={control}
-            rules={{ required: 'Project customer is required!' }}
+            rules={{ required: t('project.validation.clientRequired') }}
             render={({ field, fieldState }) => {
               const selectedClient = clients.find((c) => c.id === field.value);
               return (
@@ -50,7 +51,7 @@ export default function TabGeneral() {
                   renderInput={(params) => (
                     <CustomTextField
                       {...params}
-                      placeholder={'Choose a client...'}
+                      placeholder={t('project.placeholders.chooseClient')}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                       sx={{
@@ -121,21 +122,21 @@ export default function TabGeneral() {
               height: 40,
             }}
           >
-            New Client
+            {t('project.newClient')}
           </CustomButton>
         </Box>
       </FormRow>
 
-      <FormRow label="Project Name" required>
+      <FormRow label={t('project.fields.projectName')} required>
         <Controller
           name="name"
           control={control}
-          rules={{ required: errorMessages.PROJECT.NAME }}
+          rules={{ required: t('project.validation.projectNameRequired') }}
           render={({ field, fieldState }) => (
             <CustomTextField
               {...field}
               size="small"
-              placeholder="Project name"
+              placeholder={t('project.placeholders.projectName')}
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
               sx={{
@@ -148,16 +149,16 @@ export default function TabGeneral() {
           )}
         />
       </FormRow>
-      <FormRow label="Project Code" required>
+      <FormRow label={t('project.fields.projectCode')} required>
         <Controller
           name="code"
           control={control}
-          rules={{ required: errorMessages.PROJECT.CODE }}
+          rules={{ required: t('project.validation.projectCodeRequired') }}
           render={({ field, fieldState }) => (
             <CustomTextField
               {...field}
               size="small"
-              placeholder="Project code"
+              placeholder={t('project.placeholders.projectCode')}
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
               sx={{
@@ -170,7 +171,7 @@ export default function TabGeneral() {
           )}
         />
       </FormRow>
-      <FormRow label="Date">
+      <FormRow label={t('project.fields.date')}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Controller
             name="timeStart"
@@ -191,7 +192,7 @@ export default function TabGeneral() {
             )}
           />
           <CustomTypography sx={{ fontSize: 14, color: '#555' }}>
-            to
+            {t('project.to')}
           </CustomTypography>
           <Controller
             name="timeEnd"
@@ -213,7 +214,7 @@ export default function TabGeneral() {
           />
         </Box>
       </FormRow>
-      <FormRow label="Note">
+      <FormRow label={t('project.fields.note')}>
         <Controller
           name="note"
           control={control}
@@ -231,7 +232,7 @@ export default function TabGeneral() {
           )}
         />
       </FormRow>
-      <FormRow label="All User">
+      <FormRow label={t('project.fields.allUser')}>
         <Controller
           name="isAllUserBelongTo"
           control={control}
@@ -248,15 +249,14 @@ export default function TabGeneral() {
               }
               label={
                 <CustomTypography sx={{ fontSize: 13, color: '#333' }}>
-                  Auto add user as a member of this project when creating new
-                  user
+                  {t('project.fields.autoAddUser')}
                 </CustomTypography>
               }
             />
           )}
         />
       </FormRow>
-      <FormRow label="Project Type">
+      <FormRow label={t('project.fields.projectType')}>
         <Controller
           name="projectType"
           control={control}
