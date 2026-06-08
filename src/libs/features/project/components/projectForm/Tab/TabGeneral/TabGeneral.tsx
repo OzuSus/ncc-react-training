@@ -16,7 +16,6 @@ import { CustomTextField } from '@/libs/components/ui/TextField';
 import FormRow from '@/libs/features/project/components/projectForm/Tab/TabGeneral/formRow.tsx';
 import { ICreateProjectForm } from '@/pages/project/sections/CreateProject';
 import { PROJECT_TYPES } from '@/libs/constants/projectType.ts';
-import { errorMessages } from '@/libs/constants/errors.ts';
 import AddClientModal from '@/libs/features/client/components/addClientModal.tsx';
 import { useTranslation } from 'react-i18next';
 
@@ -33,7 +32,7 @@ export default function TabGeneral() {
           <Controller
             name="customerId"
             control={control}
-            rules={{ required: 'Project customer is required!' }}
+            rules={{ required: t('project.validation.clientRequired') }}
             render={({ field, fieldState }) => {
               const selectedClient = clients.find((c) => c.id === field.value);
               return (
@@ -132,7 +131,7 @@ export default function TabGeneral() {
         <Controller
           name="name"
           control={control}
-          rules={{ required: errorMessages.PROJECT.NAME }}
+          rules={{ required: t('project.validation.projectNameRequired') }}
           render={({ field, fieldState }) => (
             <CustomTextField
               {...field}
@@ -154,7 +153,7 @@ export default function TabGeneral() {
         <Controller
           name="code"
           control={control}
-          rules={{ required: errorMessages.PROJECT.CODE }}
+          rules={{ required: t('project.validation.projectCodeRequired') }}
           render={({ field, fieldState }) => (
             <CustomTextField
               {...field}
