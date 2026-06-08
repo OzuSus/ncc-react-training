@@ -1,19 +1,22 @@
 export const NOTIFICATION_OPTIONS = [
-  { label: 'Submit timesheet', field: 'isNoticeKMSubmitTS' },
   {
-    label: 'Request Off/Remote/Onsite/Đi muộn, về sớm',
+    label: 'project.notification.submitTimesheet',
+    field: 'isNoticeKMSubmitTS',
+  },
+  {
+    label: 'project.notification.requestOff',
     field: 'isNoticeKMRequestOffDate',
   },
   {
-    label: 'Approve/Reject Request Off/Remote/Onsite/Đi muộn, về sớm',
+    label: 'project.notification.approveRejectRequestOff',
     field: 'isNoticeKMApproveRequestOffDate',
   },
   {
-    label: 'Request Change Working Time',
+    label: 'project.notification.requestChangeWorkingTime',
     field: 'isNoticeKMRequestChangeWorkingTime',
   },
   {
-    label: 'Approve/Reject Change Working Time',
+    label: 'project.notification.approveRejectChangeWorkingTime',
     field: 'isNoticeKMApproveChangeWorkingTime',
   },
 ];

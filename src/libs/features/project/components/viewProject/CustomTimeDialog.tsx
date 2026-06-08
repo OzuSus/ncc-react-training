@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Box, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import { CustomTextField } from '@/libs/components/ui/TextField';
@@ -14,6 +15,7 @@ export default function CustomTimeDialog({
   onClose,
   onSave,
 }: ICustomTimeDialogProps) {
+  const { t } = useTranslation();
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
   const handleSave = () => {
@@ -34,7 +36,7 @@ export default function CustomTimeDialog({
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
           <Box>
             <CustomTypography sx={{ fontSize: 14, color: '#959595', mb: 0.5 }}>
-              From Date
+              {t('project.view.customTime.fromDate')}
             </CustomTypography>
             <CustomTextField
               fullWidth
@@ -46,7 +48,7 @@ export default function CustomTimeDialog({
           </Box>
           <Box>
             <CustomTypography sx={{ fontSize: 14, color: '#959595', mb: 0.5 }}>
-              To Date
+              {t('project.view.customTime.toDate')}
             </CustomTypography>
             <CustomTextField
               fullWidth
@@ -64,7 +66,7 @@ export default function CustomTimeDialog({
           onClick={onClose}
           sx={{ color: '#4680ff' }}
         >
-          Cancel
+          {t('project.cancel')}
         </CustomButton>
         <CustomButton
           variant="contained"
@@ -72,7 +74,7 @@ export default function CustomTimeDialog({
           disabled={!start || !end}
           sx={{ bgcolor: '#4680ff', boxShadow: 'none' }}
         >
-          Save
+          {t('project.save')}
         </CustomButton>
       </DialogActions>
     </Dialog>

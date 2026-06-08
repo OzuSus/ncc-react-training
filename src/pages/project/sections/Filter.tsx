@@ -8,6 +8,7 @@ import { CustomTypography } from '@/libs/components/ui/Typography';
 import { ProjectStatus } from '@/libs/features/project/types';
 import { useProjectQuantityQuery } from '@/libs/features/project/hooks/useProjectQuery';
 import CreateProjectModal from '@/pages/project/sections/CreateProject';
+import { useTranslation } from 'react-i18next';
 
 export interface IFilterOption {
   label: string;
@@ -19,9 +20,15 @@ export const statusFilterMap: Record<
   string,
   { label: string; status?: number }
 > = {
-  active: { label: 'Active Projects', status: ProjectStatus.Active },
-  deactive: { label: 'Deactive Projects', status: ProjectStatus.Deactive },
-  all: { label: 'All Projects', status: undefined },
+  active: {
+    label: 'project.filter.activeProjects',
+    status: ProjectStatus.Active,
+  },
+  deactive: {
+    label: 'project.filter.deactiveProjects',
+    status: ProjectStatus.Deactive,
+  },
+  all: { label: 'project.filter.allProjects', status: undefined },
 };
 
 interface IFilterProps {
@@ -40,17 +47,18 @@ export default function Filter({
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const { data: quantities = [] } = useProjectQuantityQuery();
+  const { t } = useTranslation();
 
   const filterOptions: IFilterOption[] = useMemo(() => {
     return Object.entries(statusFilterMap).map(([value, { label, status }]) => {
       if (status === undefined) {
         const total = quantities.reduce((sum, q) => sum + q.quantity, 0);
-        return { label, value, count: total };
+        return { label: t(label), value, count: total };
       }
       const count = quantities.find((q) => q.status === status)?.quantity ?? 0;
-      return { label, value, count };
+      return { label: t(label), value, count };
     });
-  }, [quantities]);
+  }, [quantities, t]);
   const selectedOption = filterOptions.find((o) => o.value === selectedValue);
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -95,7 +103,7 @@ export default function Filter({
             minHeight: 'unset',
           }}
         >
-          New Project
+          {t('project.newProject')}
         </CustomButton>
 
         <CustomButton
@@ -170,7 +178,7 @@ export default function Filter({
         <TextField
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search by client or project name"
+          placeholder={t('project.searchPlaceholder')}
           size="small"
           fullWidth
           slotProps={{

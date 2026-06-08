@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
@@ -27,9 +28,10 @@ export default function DeactiveProjectModal({
   onClose,
   onProjectDeactivated,
 }: DeactiveProjectModalProps) {
+  const { t } = useTranslation();
   const deactiveProjectMutation = useInactiveProjectMutation();
   const { snackbar, showSuccess, showError, close } = useSnackbar();
-  const projectLabel = `project ${project?.name}`;
+  const projectName = project?.name?.trim() || '';
 
   const handleClose = () => {
     if (deactiveProjectMutation.isPending) return;
@@ -73,7 +75,7 @@ export default function DeactiveProjectModal({
             <CustomTypography
               sx={{ fontSize: 22, fontWeight: 700, color: '#1d2630' }}
             >
-              Deactive Project
+              {t('project.modals.deactiveProject')}
             </CustomTypography>
             <CustomTypography
               sx={{
@@ -83,7 +85,7 @@ export default function DeactiveProjectModal({
                 textAlign: 'center',
               }}
             >
-              Do you want to deactive {projectLabel}?
+              {t('project.modals.confirmDeactive', { projectName })}
             </CustomTypography>
           </Box>
         </DialogContent>
@@ -94,7 +96,7 @@ export default function DeactiveProjectModal({
             disabled={deactiveProjectMutation.isPending}
             sx={{ minWidth: 100, color: '#555', borderColor: '#ccc' }}
           >
-            Cancel
+            {t('project.modals.cancel')}
           </CustomButton>
           <CustomButton
             variant="contained"
@@ -109,7 +111,7 @@ export default function DeactiveProjectModal({
             {deactiveProjectMutation.isPending ? (
               <CircularProgress size={18} sx={{ color: '#fff' }} />
             ) : (
-              'Deactive'
+              t('project.modals.deactive')
             )}
           </CustomButton>
         </DialogActions>

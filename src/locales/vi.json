@@ -1,6 +1,156 @@
 {
   "project": {
-    "title": "Quản lý dự án"
+    "title": "Quản lý dự án",
+    "newProject": "Dự án mới",
+    "searchPlaceholder": "Tìm kiếm theo tên khách hàng hoặc dự án",
+    "action": "Hành động",
+    "member": "Thành viên",
+    "createProject": "Tạo dự án",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "tabs": {
+      "general": "Thông tin chung",
+      "team": "Nhóm",
+      "task": "Công việc",
+      "notification": "Thông báo"
+    },
+    "filter": {
+      "activeProjects": "Dự án đang hoạt động",
+      "deactiveProjects": "Dự án không hoạt động",
+      "allProjects": "Tất cả dự án"
+    },
+    "actions": {
+      "edit": "Chỉnh sửa",
+      "view": "Xem",
+      "delete": "Xóa",
+      "active": "Kích hoạt",
+      "deactive": "Vô hiệu hóa"
+    },
+    "newClient": "Khách hàng mới",
+    "to": "đến",
+    "fields": {
+      "client": "Khách hàng",
+      "projectName": "Tên dự án",
+      "projectCode": "Mã dự án",
+      "date": "Ngày",
+      "note": "Ghi chú",
+      "allUser": "Tất cả người dùng",
+      "autoAddUser": "Tự động thêm người dùng làm thành viên của dự án này khi tạo người dùng mới",
+      "projectType": "Loại dự án"
+    },
+    "placeholders": {
+      "chooseClient": "Chọn khách hàng...",
+      "projectName": "Tên dự án",
+      "projectCode": "Mã dự án"
+    },
+    "client": {
+      "newClient": "Khách hàng mới",
+      "name": "Tên",
+      "code": "Mã",
+      "address": "Địa chỉ",
+      "namePlaceholder": "Nhập tên khách hàng",
+      "codePlaceholder": "Nhập mã khách hàng",
+      "addressPlaceholder": "Nhập địa chỉ",
+      "cancel": "Hủy",
+      "save": "Lưu"
+    },
+    "team": {
+      "roles": {
+        "member": "Thành viên",
+        "pm": "PM",
+        "shadow": "Shadow",
+        "deactive": "Không hoạt động"
+      },
+      "tempOptions": {
+        "official": "Chính thức",
+        "temp": "Tạm thời"
+      },
+      "memberTypes": {
+        "staff": "Nhân viên",
+        "internship": "Thực tập sinh",
+        "collaborator": "Cộng tác viên"
+      },
+      "selectedMember": "Thành viên đã chọn",
+      "selectTeamMember": "Chọn thành viên nhóm",
+      "all": "Tất cả",
+      "showDeactiveMember": "Hiển thị thành viên không hoạt động",
+      "showInactiveUser": "Hiển thị người dùng không kích hoạt",
+      "searchByNameEmail": "Tìm theo tên, email",
+      "exitAdd": "Thoát thêm",
+      "addUsers": "Thêm người dùng",
+      "branch": "Chi nhánh",
+      "type": "Loại"
+    },
+    "task": {
+      "selectTask": "Chọn công việc",
+      "taskName": "Tên công việc",
+      "billable": "Tính phí",
+      "taskTypes": {
+        "common": "Công việc chung",
+        "other": "Công việc khác"
+      }
+    },
+    "notification": {
+      "komuChannelIdPlaceholder": "ID kênh Komu",
+      "submitTimesheet": "Gửi bảng chấm công",
+      "requestOff": "Yêu cầu nghỉ/Từ xa/Tại chỗ/Đi muộn, về sớm",
+      "approveRejectRequestOff": "Phê duyệt/Từ chối yêu cầu nghỉ/Từ xa/Tại chỗ/Đi muộn, về sớm",
+      "requestChangeWorkingTime": "Yêu cầu thay đổi thời gian làm việc",
+      "approveRejectChangeWorkingTime": "Phê duyệt/Từ chối thay đổi thời gian làm việc"
+    },
+    "editProject": "Chỉnh sửa dự án",
+    "view": {
+      "export": "Xuất file",
+      "tabs": {
+        "tasks": "Công việc",
+        "team": "Nhóm"
+      },
+      "table": {
+        "billableTasks": "Công việc tính phí",
+        "nonBillableTasks": "Công việc không tính phí",
+        "hours": "Giờ",
+        "billableHours": "Giờ tính phí",
+        "name": "Tên",
+        "hour": "Giờ",
+        "billableHour": "Giờ tính phí"
+      },
+      "dateRange": {
+        "allTime": "Tất cả thời gian",
+        "customTime": "Tùy chỉnh",
+        "week": "Tuần",
+        "month": "Tháng",
+        "quarter": "Quý",
+        "year": "Năm"
+      },
+      "customTime": {
+        "fromDate": "Từ ngày",
+        "toDate": "Đến ngày"
+      }
+    },
+    "modals": {
+      "deleteProject": "Xóa dự án",
+      "confirmDelete": "Bạn có muốn xóa {{projectName}}?",
+      "cancel": "Hủy",
+      "delete": "Xóa",
+      "activeProject": "Kích hoạt dự án",
+      "confirmActive": "Bạn có muốn kích hoạt {{projectName}}?",
+      "active": "Kích hoạt",
+      "deactiveProject": "Vô hiệu hóa dự án",
+      "confirmDeactive": "Bạn có muốn vô hiệu hóa {{projectName}}?",
+      "deactive": "Vô hiệu hóa"
+    },
+    "validation": {
+      "clientRequired": "Khách hàng là bắt buộc",
+      "projectNameRequired": "Tên dự án là bắt buộc",
+      "projectCodeRequired": "Mã dự án là bắt buộc",
+      "team": {
+        "requiredAtLeastOne": "Dự án phải có ít nhất 1 thành viên",
+        "requiredPM": "Dự án phải có ít nhất 1 PM"
+      },
+      "task": {
+        "requiredAtLeastOne": "Dự án phải có ít nhất 1 công việc"
+      }
+    }
   },
   "sidebar": {
     "myProfile": "Hồ sơ cá nhân",
@@ -36,5 +186,21 @@
     "overTime": "Tăng ca",
     "tardiness": "Chậm trễ",
     "komuTracker": "Komu tracker"
+  },
+  "auth": {
+    "login": "Đăng nhập",
+    "emailOrUsername": "Email hoặc tên đăng nhập",
+    "emailOrUsernamePlaceholder": "email hoặc tên đăng nhập",
+    "password": "Mật khẩu",
+    "passwordPlaceholder": "Mật khẩu",
+    "keepMeSignIn": "Duy trì đăng nhập",
+    "errors": {
+      "emailRequired": "Email hoặc tên đăng nhập là bắt buộc",
+      "passwordRequired": "Mật khẩu là bắt buộc",
+      "invalidCredentials": "Email hoặc mật khẩu không đúng. Nếu bạn chưa đăng ký, vui lòng tạo tài khoản."
+    }
+  },
+  "common": {
+    "logout": "Đăng xuất"
   }
 }

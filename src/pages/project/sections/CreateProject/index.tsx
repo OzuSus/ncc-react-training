@@ -22,11 +22,11 @@ import axios from 'axios';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
 import useSnackbar from '@/libs/hooks/useSnackbar';
 import { MemberRole } from '@/libs/features/member/types.ts';
-import { errorMessages } from '@/libs/constants/errors.ts';
 import { useAlertDialog } from '@/libs/hooks/useAlert.ts';
 import AlertDialog from '@/libs/components/ui/Alert';
 import TabTasks from '@/libs/features/project/components/projectForm/Tab/TabTasks/TabTasks.tsx';
 import TabNotification from '@/libs/features/project/components/projectForm/Tab/TabNotification/TabNotification.tsx';
+import { useTranslation } from 'react-i18next';
 
 export interface IProjectMember {
   userId: number;
@@ -64,7 +64,7 @@ export interface ICreateProjectForm {
   isNoticeKMApproveChangeWorkingTime: boolean;
 }
 
-const TABS = ['General', 'Team', 'Task', 'Notification'];
+const TABS = ['general', 'team', 'task', 'notification'];
 
 interface ICreateProjectModalProps {
   open: boolean;
@@ -78,6 +78,7 @@ export default function CreateProjectModal({
   const [activeTab, setActiveTab] = useState(0);
   const { snackbar, close, showError, showSuccess } = useSnackbar();
   const { alert, showAlert, handleClose: handleAlertClose } = useAlertDialog();
+  const { t } = useTranslation();
 
   const methods = useForm<ICreateProjectForm>({
     mode: 'onBlur',
@@ -113,16 +114,16 @@ export default function CreateProjectModal({
 
   const onSubmit = async (data: ICreateProjectForm) => {
     if (!data.members || data.members.length === 0) {
-      showAlert(errorMessages.TEAM.REQUIRED_AT_LEAST_1);
+      showAlert(t('project.validation.team.requiredAtLeastOne'));
       return;
     }
     const hasPM = data.members.some((m) => m.type === MemberRole.PM);
     if (!hasPM) {
-      showAlert(errorMessages.TEAM.REQUIRED_PM);
+      showAlert(t('project.validation.team.requiredPM'));
       return;
     }
     if (!data.tasks || data.tasks.length === 0) {
-      showAlert(errorMessages.TASK.REQUIRED_AT_LEAST_1);
+      showAlert(t('project.validation.task.requiredAtLeastOne'));
       return;
     }
     saveProject(
@@ -200,7 +201,7 @@ export default function CreateProjectModal({
           }}
         >
           <CustomTypography sx={{ fontSize: 18, fontWeight: 700 }}>
-            Create Project
+            {t('project.createProject')}
           </CustomTypography>
           <IconButton onClick={handleClose} size="small" disabled={isPending}>
             <CloseIcon />
@@ -228,7 +229,7 @@ export default function CreateProjectModal({
               }}
             >
               {TABS.map((tab) => (
-                <Tab key={tab} label={tab} />
+                <Tab key={tab} label={t(`project.tabs.${tab}`)} />
               ))}
             </Tabs>
           </Box>
@@ -249,7 +250,7 @@ export default function CreateProjectModal({
               disabled={isPending}
               sx={{ borderColor: '#4680ff', color: '#4680ff' }}
             >
-              Cancel
+              {t('project.cancel')}
             </CustomButton>
             <CustomButton
               variant="contained"
@@ -262,7 +263,7 @@ export default function CreateProjectModal({
                 ) : undefined
               }
             >
-              Save
+              {t('project.save')}
             </CustomButton>
           </DialogActions>
         </FormProvider>

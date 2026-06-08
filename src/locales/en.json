@@ -1,6 +1,156 @@
 {
   "project": {
-    "title": "Project Management"
+    "title": "Project Management",
+    "newProject": "New Project",
+    "searchPlaceholder": "Search by client or project name",
+    "action": "Action",
+    "member": "Member",
+    "createProject": "Create Project",
+    "cancel": "Cancel",
+    "save": "Save",
+    "tabs": {
+      "general": "General",
+      "team": "Team",
+      "task": "Task",
+      "notification": "Notification"
+    },
+    "filter": {
+      "activeProjects": "Active Projects",
+      "deactiveProjects": "Deactive Projects",
+      "allProjects": "All Projects"
+    },
+    "actions": {
+      "edit": "Edit",
+      "view": "View",
+      "delete": "Delete",
+      "active": "Active",
+      "deactive": "Deactive"
+    },
+    "newClient": "New Client",
+    "to": "to",
+    "fields": {
+      "client": "Client",
+      "projectName": "Project Name",
+      "projectCode": "Project Code",
+      "date": "Date",
+      "note": "Note",
+      "allUser": "All User",
+      "autoAddUser": "Auto add user as a member of this project when creating new user",
+      "projectType": "Project Type"
+    },
+    "placeholders": {
+      "chooseClient": "Choose a client...",
+      "projectName": "Project name",
+      "projectCode": "Project code"
+    },
+    "client": {
+      "newClient": "New Client",
+      "name": "Name",
+      "code": "Code",
+      "address": "Address",
+      "namePlaceholder": "Enter client name",
+      "codePlaceholder": "Enter client code",
+      "addressPlaceholder": "Enter address",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "team": {
+      "roles": {
+        "member": "Member",
+        "pm": "PM",
+        "shadow": "Shadow",
+        "deactive": "Deactive"
+      },
+      "tempOptions": {
+        "official": "Official",
+        "temp": "Temp"
+      },
+      "memberTypes": {
+        "staff": "Staff",
+        "internship": "Internship",
+        "collaborator": "Collaborator"
+      },
+      "selectedMember": "Selected member",
+      "selectTeamMember": "Select team member",
+      "all": "All",
+      "showDeactiveMember": "Show deactive member",
+      "showInactiveUser": "Show Inactive user",
+      "searchByNameEmail": "Search by name, email",
+      "exitAdd": "Exit add",
+      "addUsers": "Add users",
+      "branch": "Branch",
+      "type": "Type"
+    },
+    "task": {
+      "selectTask": "Select task",
+      "taskName": "Task name",
+      "billable": "Billable",
+      "taskTypes": {
+        "common": "Common Task",
+        "other": "Other Task"
+      }
+    },
+    "notification": {
+      "komuChannelIdPlaceholder": "Komu Channel Id",
+      "submitTimesheet": "Submit timesheet",
+      "requestOff": "Request Off/Remote/Onsite/Leave early, come late",
+      "approveRejectRequestOff": "Approve/Reject Request Off/Remote/Onsite/Leave early, come late",
+      "requestChangeWorkingTime": "Request Change Working Time",
+      "approveRejectChangeWorkingTime": "Approve/Reject Change Working Time"
+    },
+    "editProject": "Edit Project",
+    "view": {
+      "export": "Export",
+      "tabs": {
+        "tasks": "Tasks",
+        "team": "Team"
+      },
+      "table": {
+        "billableTasks": "Billable Tasks",
+        "nonBillableTasks": "Non-billable Tasks",
+        "hours": "Hours",
+        "billableHours": "Billable Hours",
+        "name": "Name",
+        "hour": "Hour",
+        "billableHour": "Billable Hour"
+      },
+      "dateRange": {
+        "allTime": "All Time",
+        "customTime": "Custom Time",
+        "week": "Week",
+        "month": "Month",
+        "quarter": "Quarter",
+        "year": "Years"
+      },
+      "customTime": {
+        "fromDate": "From Date",
+        "toDate": "To Date"
+      }
+    },
+    "modals": {
+      "deleteProject": "Delete Project",
+      "confirmDelete": "Do you want to delete {{projectName}}?",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "activeProject": "Active Project",
+      "confirmActive": "Do you want to active {{projectName}}?",
+      "active": "Active",
+      "deactiveProject": "Deactive Project",
+      "confirmDeactive": "Do you want to deactive {{projectName}}?",
+      "deactive": "Deactive"
+    },
+    "validation": {
+      "clientRequired": "Client is required",
+      "projectNameRequired": "Project name is required",
+      "projectCodeRequired": "Project code is required",
+      "team": {
+        "requiredAtLeastOne": "Project must have at least 1 member",
+        "requiredPM": "Project must have at least 1 PM"
+      },
+      "task": {
+        "requiredAtLeastOne": "Project must have at least 1 task"
+      }
+    }
   },
   "sidebar": {
     "myProfile": "My Profile",
@@ -36,5 +186,21 @@
     "overTime": "Over time",
     "tardiness": "Tardiness",
     "komuTracker": "Komu tracker"
+  },
+  "auth": {
+    "login": "Login",
+    "emailOrUsername": "Email or Username",
+    "emailOrUsernamePlaceholder": "email or username",
+    "password": "Password",
+    "passwordPlaceholder": "Password",
+    "keepMeSignIn": "Keep me sign in",
+    "errors": {
+      "emailRequired": "Email or username is required",
+      "passwordRequired": "Password is required",
+      "invalidCredentials": "Invalid email or password. If you have not signed up yet, please create an account."
+    }
+  },
+  "common": {
+    "logout": "Logout"
   }
 }

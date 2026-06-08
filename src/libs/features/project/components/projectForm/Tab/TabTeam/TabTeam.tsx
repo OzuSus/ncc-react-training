@@ -18,8 +18,10 @@ import { SelectedMemberRow } from '@/libs/features/project/components/projectFor
 import { AvailableUserRow } from '@/libs/features/project/components/projectForm/Tab/TabTeam/AvailableUserRow.tsx';
 import SelectedMemberFilterToolbar from '@/libs/features/project/components/projectForm/Tab/TabTeam/SelectedMemberFilterToolbar.tsx';
 import SelectTeamFilterToolbar from '@/libs/features/project/components/projectForm/Tab/TabTeam/SelectTeamFilterToolbar.tsx';
+import { useTranslation } from 'react-i18next';
 
 export default function TabTeam() {
+  const { t } = useTranslation();
   const { control } = useFormContext<ICreateProjectForm>();
   const { field: membersField } = useController({ name: 'members', control });
   const members: IProjectMember[] = membersField.value || [];
@@ -42,10 +44,10 @@ export default function TabTeam() {
   type BranchOption = { id: BranchFilterValue; name: string };
   const branchOptions: BranchOption[] = useMemo(
     () => [
-      { id: 'all', name: 'All' },
+      { id: 'all', name: t('project.team.all') },
       ...branches.map((b) => ({ id: b.id, name: b.name })),
     ],
-    [branches],
+    [branches, t],
   );
 
   const memberByIdMap: MemberLookupMap = useMemo(() => {
@@ -151,7 +153,7 @@ export default function TabTeam() {
           onClick={() => setLeftOpen((p) => !p)}
         >
           <CustomTypography sx={{ fontSize: 14, fontWeight: 600 }}>
-            Selected member
+            {t('project.team.selectedMember')}
           </CustomTypography>
           {leftOpen ? (
             <KeyboardArrowUpIcon fontSize="small" />
@@ -196,7 +198,7 @@ export default function TabTeam() {
             onClick={() => setRightOpen((p) => !p)}
           >
             <CustomTypography sx={{ fontSize: 14, fontWeight: 600 }}>
-              Select team member
+              {t('project.team.selectTeamMember')}
             </CustomTypography>
             {rightOpen ? (
               <KeyboardArrowUpIcon fontSize="small" />

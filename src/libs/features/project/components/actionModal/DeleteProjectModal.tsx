@@ -6,6 +6,7 @@ import {
   DialogContent,
 } from '@mui/material';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import { useTranslation } from 'react-i18next';
 import { CustomButton } from '@/libs/components/ui/Button';
 import { CustomTypography } from '@/libs/components/ui/Typography';
 import CustomSnackbar from '@/libs/components/ui/Snackbar';
@@ -27,9 +28,9 @@ export default function DeleteProjectModal({
   onClose,
   onDeleted,
 }: DeleteProjectModalProps) {
+  const { t } = useTranslation();
   const deleteProjectMutation = useDeleteProjectMutation();
   const { snackbar, showSuccess, showError, close } = useSnackbar();
-  const projectLabel = `project ${project?.name}`;
 
   const handleClose = () => {
     if (deleteProjectMutation.isPending) return;
@@ -49,6 +50,7 @@ export default function DeleteProjectModal({
     });
   };
 
+  const projectName = project?.name || '';
   return (
     <>
       <Dialog
@@ -74,7 +76,7 @@ export default function DeleteProjectModal({
             <CustomTypography
               sx={{ fontSize: 22, fontWeight: 700, color: '#1d2630' }}
             >
-              Delete Project
+              {t('project.modals.deleteProject')}
             </CustomTypography>
             <CustomTypography
               sx={{
@@ -84,7 +86,7 @@ export default function DeleteProjectModal({
                 textAlign: 'center',
               }}
             >
-              Do you want to delete {projectLabel}?
+              {t('project.modals.confirmDelete', { projectName })}
             </CustomTypography>
           </Box>
         </DialogContent>
@@ -95,7 +97,7 @@ export default function DeleteProjectModal({
             disabled={deleteProjectMutation.isPending}
             sx={{ minWidth: 100, color: '#555', borderColor: '#ccc' }}
           >
-            Cancel
+            {t('project.modals.cancel')}
           </CustomButton>
           <CustomButton
             variant="contained"
@@ -110,7 +112,7 @@ export default function DeleteProjectModal({
             {deleteProjectMutation.isPending ? (
               <CircularProgress size={18} sx={{ color: '#fff' }} />
             ) : (
-              'Delete'
+              t('project.modals.delete')
             )}
           </CustomButton>
         </DialogActions>

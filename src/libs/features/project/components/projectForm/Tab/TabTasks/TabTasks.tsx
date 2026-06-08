@@ -12,10 +12,12 @@ import { useTaskQuery } from '@/libs/features/task/hooks/useTaskQuery';
 import { TaskHeader } from '@/libs/features/project/components/projectForm/Tab/TabTasks/TaskHeader.tsx';
 import { SelectedTaskRow } from '@/libs/features/project/components/projectForm/Tab/TabTasks/SelectedtaskRow.tsx';
 import AvailableTaskRow from '@/libs/features/project/components/projectForm/Tab/TabTasks/AvailableTaskRow.tsx';
+import { useTranslation } from 'react-i18next';
 
 export default function TabTasks() {
   const { control } = useFormContext<ICreateProjectForm>();
   const { field: tasksField } = useController({ name: 'tasks', control });
+  const { t } = useTranslation();
 
   const tasks: IProjectTask[] = tasksField.value || [];
 
@@ -101,7 +103,7 @@ export default function TabTasks() {
           }}
         >
           <CustomTypography sx={{ fontSize: 14, fontWeight: 500 }}>
-            Select task
+            {t('project.task.selectTask')}
           </CustomTypography>
           {selectOpen ? (
             <KeyboardArrowUpIcon fontSize="small" sx={{ color: '#777' }} />
